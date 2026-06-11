@@ -44,6 +44,11 @@
   .statbtn.aanw{background:#e7f4ec;color:#1c6b38;border-color:#bfe3cd}
   .statbtn.afw{background:#fdecec;color:#b53636;border-color:#f3c9c9}
   .statbtn.att{background:#e8eefc;color:#274bb5;border-color:#cdd9f6}
+  .gesbtn{font-size:12px;font-weight:700;border:1px solid var(--line);border-radius:8px;padding:8px 8px;cursor:pointer;flex-shrink:0;min-width:48px;text-align:center;color:var(--muted)}
+  .gesbtn.m{background:#fdeef6;border-color:#f3c2dc;color:#b5367f}
+  .gesbtn.j{background:#eaf1fd;border-color:#c2d4f3;color:#274bb5}
+  .metinput{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:16px;margin-top:4px}
+  .resline{font-size:12.5px;color:var(--ink);margin-top:8px;font-weight:600;line-height:1.4}
   .badge{font-size:13px;font-weight:700;padding:4px 9px;border-radius:9px;background:#eef1f5;color:var(--ink);min-width:70px;text-align:center}
   .badge.done{background:#e7f4ec;color:#1c6b38}
   .badge.afw{background:#fdecec;color:#b53636}
@@ -204,6 +209,7 @@ const KLEDIJ_BANDS = ["Geen sportkledij / werkt onveilig.","Wel kledij maar niet
 
 /* ---------- SPORTKLASSEN + RUBRIEKEN ---------- */
 const RUBRIEKEN = {
+  atletiek: {"label":"Atletiek","type":"meting","sporten":["Kogelstoten","Verspringen","Hoogspringen","Schaarsprong","60m sprint","Afstandslopen 1000m","Afstandslopen 2000m","Afstandslopen 3000m"],"onderdelen":{"Kogelstoten":{"eenheid":"m","techniek":[{"naam":"Uitgangshouding & greep","bands":["Houdt de kogel verkeerd vast of neemt een onveilige houding aan.","Correcte greep maar verkeerde uitgangshouding.","Correcte greep én uitgangshouding (kogel in de hals, lichaam zijwaarts).","Vlotte, stabiele uitgangshouding, klaar voor een krachtige afstoot."]},{"naam":"Stootbeweging (benen-romp-arm)","bands":["Gooit i.p.v. te stoten; geen krachtoverdracht.","Stoot, maar zonder beengebruik of juiste volgorde.","Gebruikt benen-romp-arm in de juiste volgorde.","Vloeiende stootketting met volledige strekking en polsklap."]},{"naam":"Veiligheid & uitvoering","bands":["Werkt onveilig of stoort de afspraken.","Volgt de afspraken enkel na aansporing.","Stoot veilig en respecteert de zone-afspraken.","Werkt veilig en zelfstandig en helpt mee bij de organisatie."]}],"M":[[10,8],[9.5,7.5],[9,7],[8.5,6.5],[8,6],[7.5,5.5],[7,5],[6.5,4.5],[6,4],[5.5,3.5],[5,3],[4.5,2.5],[4,2]],"J":[[10,10.5],[9.5,10],[9,9.5],[8.5,9],[8,8.5],[7.5,8],[7,7.5],[6.5,7],[6,6.5],[5.5,6],[5,5.5],[4.5,5],[4,4.5]]},"Verspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen ritme; stopt of remt af voor de afzet.","Loopt aan maar zonder versnelling.","Regelmatige aanloop met versnelling naar de balk.","Gecontroleerde, versnellende aanloop met juiste afzetpas."]},{"naam":"Afzet","bands":["Geen duidelijke of dubbele afzet.","Zet af, maar ver achter of over de balk.","Eenvoetige afzet kort bij de balk.","Krachtige eenvoetige afzet met duidelijke opwaartse impuls."]},{"naam":"Zweef & landing","bands":["Valt ongecontroleerd; landt op rug of handen achter.","Landt op twee voeten maar zakt achterover.","Landt gecontroleerd op twee voeten.","Actieve zweef en landing met voeten vooruit; gewicht volgt."]}],"M":[[10,3.5],[9.5,3.25],[9,3],[8.5,2.75],[8,2.5],[7.5,2.25],[7,2],[6.5,1.9],[6,1.8],[5.5,1.7],[5,1.6],[4.5,1.3],[4,1]],"J":[[10,4.5],[9.5,4.25],[9,4],[8.5,3.75],[8,3.5],[7.5,3.25],[7,3],[6.5,2.75],[6,2.5],[5.5,2.3],[5,2],[4.5,1.8],[4,1.6]]},"Hoogspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen aangepaste aanloop.","Rechte aanloop zonder ritme.","Aanloop met ritme richting de lat.","Aangepaste (gebogen) aanloop met versnelling en juiste afzetplaats."]},{"naam":"Afzet","bands":["Zet af met twee of de verkeerde voet; geen hoogte.","Eenvoetige afzet maar zonder opspring.","Eenvoetige afzet met opwaartse impuls.","Krachtige afzet met actief zwaaibeen; maximale hoogte."]},{"naam":"Zweeftechniek & landing","bands":["Raakt de lat of landt onveilig.","Over de lat maar met aanraking of onzuiver.","Zuivere overgang over de lat en veilige landing.","Vlotte techniek over de lat met gecontroleerde landing op de mat."]}],"M":[[10,1.45],[9.5,1.4],[9,1.35],[8.5,1.3],[8,1.25],[7.5,1.2],[7,1.15],[6.5,1.1],[6,1.05],[5.5,1],[5,0.95],[4.5,0.9],[4,0.85]],"J":[[10,1.6],[9.5,1.55],[9,1.5],[8.5,1.45],[8,1.4],[7.5,1.35],[7,1.3],[6.5,1.25],[6,1.2],[5.5,1.15],[5,1.1],[4.5,1.05],[4,1]]},"Schaarsprong":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen schuine aanloop.","Schuine aanloop zonder ritme.","Schuine aanloop met ritme.","Schuine, versnellende aanloop met juist afzetpunt."]},{"naam":"Afzet","bands":["Verkeerde afzetvoet of geen hoogte.","Afzet met het binnenste been.","Afzet met het verste been, opwaarts.","Krachtige afzet met knie/zwaaibeen actief omhoog."]},{"naam":"Schaarbeweging & landing","bands":["Geen schaarbeweging; raakt de lat.","Beperkte beenwissel over de lat.","Duidelijke schaarbeweging, beide benen over de lat.","Vloeiende schaar met rechte romp en veilige landing op de voeten."]}],"M":[[10,1.4],[9.5,1.35],[9,1.3],[8.5,1.25],[8,1.2],[7.5,1.15],[7,1.1],[6.5,1.05],[6,1],[5.5,0.95],[5,0.9],[4.5,0.85],[4,0.8]],"J":[[10,1.5],[9.5,1.45],[9,1.4],[8.5,1.35],[8,1.3],[7.5,1.25],[7,1.2],[6.5,1.15],[6,1.1],[5.5,1.05],[5,1],[4.5,0.95],[4,0.9]]},"60m sprint":{"eenheid":"sec","techniek":[{"naam":"Start / vertrek","bands":["Reageert traag of vertrekt vanuit een verkeerde houding.","Vertrekt rechtop, zonder versnelling.","Lage starthouding met duidelijke versnelling.","Explosieve start met geleidelijk oprichten."]},{"naam":"Loophouding & armzwaai","bands":["Stijve of voorovergebogen houding; geen armzwaai.","Onregelmatige armzwaai.","Rechte romp met actieve armzwaai.","Ontspannen, rechte sprinthouding met krachtige tegengestelde armzwaai."]},{"naam":"Snelheidsbehoud","bands":["Valt sterk terug of stopt voor de finish.","Vertraagt duidelijk in de tweede helft.","Behoudt de snelheid tot net voor de finish.","Loopt volgehouden/versneld door tot voorbij de finish."]}],"M":[[10,9],[9.5,9.4],[9,9.7],[8.5,10],[8,10.5],[7.5,11],[7,11.5],[6.5,12],[6,12.5],[5.5,13],[5,13.5],[4.5,14],[4,14.5]],"J":[[10,8],[9.5,8.3],[9,8.5],[8.5,8.8],[8,9],[7.5,9.3],[7,9.5],[6.5,9.8],[6,10],[5.5,10.3],[5,10.5],[4.5,10.8],[4,11]]},"Afstandslopen 1000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,6],[9.5,6.2],[9,6.4],[8.5,7],[8,7.2],[7.5,7.4],[7,8],[6.5,8.2],[6,8.4],[5.5,9],[5,9.2],[4.5,9.4],[4,10]],"J":[[10,4.5],[9.5,5.1],[9,5.3],[8.5,5.5],[8,6.1],[7.5,6.3],[7,6.5],[6.5,7.1],[6,7.3],[5.5,7.5],[5,8.1],[4.5,8.3],[4,8.5]]},"Afstandslopen 2000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,16],[9.5,16.25],[9,16.5],[8.5,16.75],[8,17],[7.5,17.25],[7,17.5],[6.5,17.75],[6,18],[5.5,19],[5,20],[4.5,21],[4,22]],"J":[[10,12],[9.5,12.25],[9,12.5],[8.5,12.75],[8,13],[7.5,13.25],[7,13.5],[6.5,13.75],[6,14],[5.5,15],[5,16],[4.5,17],[4,18]]},"Afstandslopen 3000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,22],[9.5,23],[9,24],[8.5,25],[8,26],[7.5,27],[7,28],[6.5,29],[6,30],[5.5,31],[5,32],[4.5,33],[4,34]],"J":[[10,17],[9.5,18],[9,19],[8.5,20],[8,21],[7.5,22],[7,23],[6.5,24],[6,25],[5.5,26],[5,27],[4.5,28],[4,29]]}}},
   trefspelen:{
     label:"Trefspelen",
     rubriek:"Tussen twee vuren",
@@ -302,11 +308,53 @@ function todayISO(){const d=new Date();const o=d.getTimezoneOffset();return new 
 function keyFor(klas,datum,label){return LS_PREFIX+klas+"|"+datum+"|"+(label||"").trim().toLowerCase().replace(/\s+/g,"_");}
 function statusLabel(v){const s=STATUS.find(x=>x.v===v);return s?s.l:"Aanwezig";}
 function curRubriek(){return RUBRIEKEN[state.categorie];}
-function crits(){return curRubriek().criteria;}
+function crits(){
+  const r=curRubriek();
+  if(r.type==="meting"){const od=r.onderdelen[state.sport];if(!od)return [];return od.techniek.map((t,i)=>({key:"t"+i,naam:t.naam,max:3,bands:t.bands}));}
+  return r.criteria;
+}
+function bandsFor(c){return c.bands?c.bands:curRubriek().bands[state.graad][c.key];}
 function sportLabel(){return state.sport+(state.spec?(" – "+state.spec):"");}
+/* geslacht per leerling (M = meisje, J = jongen) */
+const LS_GES="lo_tv_geslacht"; let GES={};
+function loadGes(){try{GES=JSON.parse(localStorage.getItem(LS_GES))||{};}catch(e){GES={};}}
+function getGes(naam){return GES[state.klas+"|"+naam]||"";}
+function setGes(naam,v){GES[state.klas+"|"+naam]=v;localStorage.setItem(LS_GES,JSON.stringify(GES));}
+/* meting parsen + atletiek-omzetting meting -> /10 (lineaire interpolatie + extrapolatie, clamp 0-10) */
+function parseMeting(str){
+  if(str==null)return null;
+  let s=(""+str).trim().toLowerCase().replace(",",".");
+  if(!s)return null;
+  let m=s.match(/^(\d+)\s*m\s*(\d+)$/); if(m)return parseFloat(m[1]+"."+m[2]);
+  m=s.match(/^(\d+)[:'](\d{1,2})$/); if(m)return parseInt(m[1],10)+parseInt(m[2],10)/60;
+  const f=parseFloat(s); return isNaN(f)?null:f;
+}
+function atlPunt(od,gesl,meting){
+  if(meting==null||!gesl)return null;
+  const rows=od[gesl]; if(!rows)return null;
+  const p=rows.map(r=>({punt:r[0],m:r[1]})).slice().sort((a,b)=>a.m-b.m);
+  const cl=x=>Math.max(0,Math.min(10,Math.round(x*10)/10));
+  if(meting<=p[0].m){const a=p[0],b=p[1];return cl(a.punt+(b.punt-a.punt)/(b.m-a.m)*(meting-a.m));}
+  for(let i=0;i<p.length-1;i++){const a=p[i],b=p[i+1];if(meting>=a.m&&meting<=b.m)return cl(a.punt+(b.punt-a.punt)/(b.m-a.m)*(meting-a.m));}
+  const a=p[p.length-2],b=p[p.length-1];return cl(b.punt+(b.punt-a.punt)/(b.m-a.m)*(meting-b.m));
+}
+function ensureStudent(st,naam){
+  if(!st.data[naam])st.data[naam]={};
+  const r=RUBRIEKEN[st.categorie];
+  if(r.type==="meting"){
+    if(st.data[naam].__meting===undefined)st.data[naam].__meting="";
+    for(let i=0;i<3;i++)if(st.data[naam]["t"+i]===undefined)st.data[naam]["t"+i]=null;
+  }else{
+    r.criteria.forEach(c=>{if(st.data[naam][c.key]===undefined)st.data[naam][c.key]=null;});
+  }
+  if(!st.status[naam])st.status[naam]="aanwezig";
+}
 function defaultEnabled(cat){
   try{const s=JSON.parse(localStorage.getItem(LS_ENABLED+"_"+cat));if(s)return Object.assign({},s);}catch(e){}
-  const en={};RUBRIEKEN[cat].criteria.forEach(c=>en[c.key]=true);return en;
+  const en={};const r=RUBRIEKEN[cat];
+  if(r.type==="meting"){for(let i=0;i<3;i++)en["t"+i]=true;}
+  else r.criteria.forEach(c=>en[c.key]=true);
+  return en;
 }
 function saveState(){
   if(!state)return;
@@ -321,20 +369,17 @@ function loadOrInit(){
   let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
   if(!st){
     st={klas,graad,categorie,sport,spec,datum,enabled:defaultEnabled(categorie),status:{},data:{}};
-    KLASSEN[klas].forEach(n=>{st.data[n]={};RUBRIEKEN[categorie].criteria.forEach(c=>st.data[n][c.key]=null);st.status[n]="aanwezig";});
   }else{
     if(!st.categorie)st.categorie=categorie;
     if(!st.enabled)st.enabled=defaultEnabled(st.categorie);
     if(!st.status)st.status={};
     if(st.spec===undefined)st.spec=spec;
-    RUBRIEKEN[st.categorie].criteria.forEach(c=>{if(st.enabled[c.key]===undefined)st.enabled[c.key]=true;});
-    KLASSEN[klas].forEach(n=>{
-      if(!st.data[n])st.data[n]={};
-      RUBRIEKEN[st.categorie].criteria.forEach(c=>{if(st.data[n][c.key]===undefined)st.data[n][c.key]=null;});
-      if(!st.status[n])st.status[n]="aanwezig";
-    });
     st.graad=graad;
   }
+  const r0=RUBRIEKEN[st.categorie];
+  if(r0.type==="meting"){for(let i=0;i<3;i++)if(st.enabled["t"+i]===undefined)st.enabled["t"+i]=true;}
+  else r0.criteria.forEach(c=>{if(st.enabled[c.key]===undefined)st.enabled[c.key]=true;});
+  KLASSEN[klas].forEach(n=>ensureStudent(st,n));
   state=st;
 }
 
@@ -342,6 +387,16 @@ function loadOrInit(){
 function scoreFor(naam){
   const stt=state.status[naam]||"aanwezig";
   if(stt!=="aanwezig")return {beh:0,max:0,count:0,pct:0,score10:0,status:stt};
+  if(curRubriek().type==="meting"){
+    let tb=0,tm=0,tc=0;
+    crits().forEach(c=>{if(!state.enabled[c.key])return;const v=state.data[naam][c.key];if(v==null)return;tb+=v;tm+=c.max;tc++;});
+    const techn10=tm>0?Math.round((tb/tm)*100)/10:null;
+    const od=curRubriek().onderdelen[state.sport];
+    const meting=parseMeting(state.data[naam].__meting);
+    const prest10=od?atlPunt(od,getGes(naam),meting):null;
+    const totaal=Math.round(((techn10||0)+(prest10||0))*10)/10;
+    return {type:"meting",techn10,prest10,meting,totaal,count:tc,status:"aanwezig"};
+  }
   let beh=0,max=0,count=0;
   crits().forEach(c=>{
     if(!state.enabled[c.key])return;
@@ -383,6 +438,15 @@ function renderStudents(){
     const nm=document.createElement("div");nm.className="nm";nm.textContent=naam;
     const right=document.createElement("div");right.className="right";
 
+    if(curRubriek().type==="meting"){
+      const g=getGes(naam);
+      const gb=document.createElement("div");
+      gb.className="gesbtn "+(g==="M"?"m":(g==="J"?"j":""));
+      gb.textContent=(g==="M"?"♀ M":(g==="J"?"♂ J":"M/J"));
+      gb.title="Geslacht: meisje/jongen (bepaalt de prestatietabel)";
+      gb.onclick=e=>{e.stopPropagation();const nx=(g===""?"M":(g==="M"?"J":"M"));setGes(naam,nx);renderStudents();renderOverview();const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
+      right.appendChild(gb);
+    }
     const att=document.createElement("div");att.className="attbtn";att.textContent="att";att.title="Doktersattest";
     att.onclick=e=>{e.stopPropagation();state.status[naam]="attest";saveState();renderStudents();renderOverview();};
     const tog=document.createElement("div");
@@ -397,8 +461,14 @@ function renderStudents(){
     right.appendChild(att);right.appendChild(tog);
     if(!absent){
       const bd=document.createElement("div");
-      bd.className="badge"+(sc.count>0?" done":"");
-      bd.textContent=sc.count>0?(sc.beh+"/"+sc.max+"  ("+sc.score10.toFixed(1)+")"):"–";
+      if(sc.type==="meting"){
+        const heeft=(sc.techn10!=null||sc.prest10!=null);
+        bd.className="badge"+(heeft?" done":"");
+        bd.textContent=heeft?(sc.totaal.toFixed(1)+"/20"):"–";
+      }else{
+        bd.className="badge"+(sc.count>0?" done":"");
+        bd.textContent=sc.count>0?(sc.beh+"/"+sc.max+"  ("+sc.score10.toFixed(1)+")"):"–";
+      }
       right.appendChild(bd);
     }
     head.appendChild(nm);head.appendChild(right);
@@ -419,7 +489,7 @@ function renderStudents(){
         const info=document.createElement("span");info.className="info";info.textContent="banden";
         const bands=document.createElement("div");bands.className="bands";
         const labels=c.max===3?LABELS3:LABELS2;
-        bands.innerHTML=curRubriek().bands[state.graad][c.key].map((tx,i)=>"<b>"+i+" "+labels[i]+":</b> "+tx).join("<br>");
+        bands.innerHTML=bandsFor(c).map((tx,i)=>"<b>"+i+" "+labels[i]+":</b> "+tx).join("<br>");
         info.onclick=()=>bands.classList.toggle("show");
         cn.appendChild(info);block.appendChild(cn);
 
@@ -440,6 +510,26 @@ function renderStudents(){
         block.appendChild(opts);block.appendChild(bands);
         body.appendChild(block);
       });
+      if(curRubriek().type==="meting"){
+        const od=curRubriek().onderdelen[state.sport];
+        const mb=document.createElement("div");mb.className="critblock";
+        const lab=document.createElement("label");lab.className="fld";lab.style.marginTop="0";lab.textContent="Meting ("+(od?od.eenheid:"")+")";
+        const inp=document.createElement("input");inp.type="text";inp.className="metinput";inp.value=state.data[naam].__meting||"";
+        inp.placeholder=(od&&od.eenheid==="m"?"bv. 4.80":(od&&od.eenheid==="sec"?"bv. 9.8":"bv. 6.30"));
+        inp.onclick=e=>e.stopPropagation();
+        inp.onchange=()=>{state.data[naam].__meting=inp.value.trim();saveState();renderStudents();renderOverview();const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
+        mb.appendChild(lab);mb.appendChild(inp);
+        const res=document.createElement("div");res.className="resline";
+        const g=getGes(naam);const parts=[];
+        parts.push("Techniek "+(sc.techn10!=null?sc.techn10.toFixed(1):"–")+"/10");
+        if(!g)parts.push("⚠ stel geslacht in");
+        else if(sc.prest10==null)parts.push("⚠ vul meting in");
+        else parts.push("Prestatie "+sc.prest10.toFixed(1)+"/10");
+        parts.push("Totaal "+((sc.techn10!=null||sc.prest10!=null)?sc.totaal.toFixed(1):"–")+"/20");
+        res.textContent=parts.join("   ·   ");
+        mb.appendChild(res);
+        body.appendChild(mb);
+      }
       const clr=document.createElement("button");clr.className="clearbtn";clr.textContent="leeg maken";
       clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);saveState();renderStudents();renderOverview();
         const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
@@ -452,6 +542,7 @@ function renderStudents(){
 
 function renderOverview(){
   const tbl=$("overview");tbl.innerHTML="";
+  const meting=curRubriek().type==="meting";
   let som=0,n=0;
   KLASSEN[state.klas].forEach(naam=>{
     const stt=state.status[naam]||"aanwezig";
@@ -460,11 +551,12 @@ function renderOverview(){
     const td1=document.createElement("td");td1.textContent=naam;
     const td2=document.createElement("td");
     if(stt!=="aanwezig")td2.textContent=statusLabel(stt);
-    else td2.textContent=sc.count>0?(sc.beh+"/"+sc.max):"–";
+    else if(meting){const heeft=(sc.techn10!=null||sc.prest10!=null);td2.textContent=heeft?(sc.totaal.toFixed(1)+"/20"):"–";if(heeft){som+=sc.totaal;n++;}}
+    else {td2.textContent=sc.count>0?(sc.beh+"/"+sc.max):"–";if(sc.count>0){som+=sc.pct;n++;}}
     tr.appendChild(td1);tr.appendChild(td2);tbl.appendChild(tr);
-    if(stt==="aanwezig"&&sc.count>0){som+=sc.pct;n++;}
   });
-  $("klasgem").textContent=n>0?("Klasgemiddelde: "+(Math.round(som/n*1000)/10)+"%  ·  "+n+" leerlingen gescoord"):"Nog niets ingevuld.";
+  if(meting)$("klasgem").textContent=n>0?("Klasgemiddelde: "+(Math.round(som/n*10)/10)+"/20  ·  "+n+" leerlingen gescoord"):"Nog niets ingevuld.";
+  else $("klasgem").textContent=n>0?("Klasgemiddelde: "+(Math.round(som/n*1000)/10)+"%  ·  "+n+" leerlingen gescoord"):"Nog niets ingevuld.";
 }
 
 /* ---------- EXPORT ---------- */
@@ -472,6 +564,36 @@ function csvEscape(v){v=(""+v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+
 function buildCSV(){
   const L=[];
   const push=arr=>L.push(arr.map(csvEscape).join(";"));
+  const R=curRubriek();
+  if(R.type==="meting"){
+    const od=R.onderdelen[state.sport];
+    push(["RUBRIEK","Atletiek – "+state.sport]);
+    push(["Klas",state.klas,"Datum",state.datum]);
+    push(["Details/periode",state.spec||""]);
+    push([]);
+    push(["Techniek-criteria (elk 0-3; samen herschaald naar /10)"]);
+    push(["Criterium","0","1","2","3"]);
+    od.techniek.forEach(t=>push([t.naam,"0 "+t.bands[0],"1 "+t.bands[1],"2 "+t.bands[2],"3 "+t.bands[3]]));
+    push([]);
+    push(["Prestatietabel "+state.sport+" (meting "+od.eenheid+" -> punt /10; tussenwaarden lineair)"]);
+    push(["Punt /10","Meisje","Jongen"]);
+    for(let i=0;i<od.M.length;i++)push([od.M[i][0],od.M[i][1],od.J[i][1]]);
+    push([]);
+    push(["Totaal /20 = techniek /10 + prestatie /10 (prestatie via tabel, per geslacht)"]);
+    push([]);
+    push(["SCORES"]);
+    push(["Leerling","Status","Geslacht"].concat(crits().map(c=>c.naam+(state.enabled[c.key]?"":" (uit)"))).concat(["Techniek/10","Meting ("+od.eenheid+")","Prestatie/10","Totaal/20"]));
+    KLASSEN[state.klas].forEach(naam=>{
+      const stt=state.status[naam]||"aanwezig";const absent=stt!=="aanwezig";const sc=scoreFor(naam);
+      const g=getGes(naam);const gl=g==="M"?"Meisje":(g==="J"?"Jongen":"");
+      const row=[naam,statusLabel(stt),gl];
+      crits().forEach(c=>{const v=absent?null:state.data[naam][c.key];row.push(v==null?"":v);});
+      if(absent)row.push("","","","");
+      else row.push(sc.techn10==null?"":sc.techn10,state.data[naam].__meting||"",sc.prest10==null?"":sc.prest10,(sc.techn10!=null||sc.prest10!=null)?sc.totaal:"");
+      push(row);
+    });
+    return "﻿"+L.join("\r\n");
+  }
   push(["RUBRIEK",curRubriek().rubriek+" — "+state.graad+" graad"]);
   push(["Sportklasse",curRubriek().label,"Sport",state.sport]);
   push(["Details/periode",state.spec||"","Klas",state.klas]);
@@ -594,6 +716,7 @@ function reloadEvaluation(){saveState();loadOrInit();refreshAll();}
 
 function init(){
   loadKlassen();
+  loadGes();
   fillKlas();
   const cs=$("categorie");Object.keys(RUBRIEKEN).forEach(id=>{const o=document.createElement("option");o.value=id;o.textContent=RUBRIEKEN[id].label;cs.appendChild(o);});
   cs.value="trefspelen";
@@ -616,7 +739,8 @@ function init(){
   $("copyss").onclick=()=>{
     let txt=state.klas+" · "+sportLabel()+" · "+state.datum+":\n";
     KLASSEN[state.klas].forEach(n=>{const s=scoreFor(n);const stt=state.status[n]||"aanwezig";
-      if(stt!=="aanwezig")txt+=n+": "+statusLabel(stt)+"\n";
+      if(stt!=="aanwezig"){txt+=n+": "+statusLabel(stt)+"\n";return;}
+      if(s.type==="meting"){if(s.techn10!=null||s.prest10!=null)txt+=n+": "+s.totaal+"\n";}
       else if(s.count>0)txt+=n+": "+s.beh+"\n";});
     if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast("Gekopieerd"),()=>alert(txt));}else alert(txt);
   };
