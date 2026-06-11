@@ -25,8 +25,9 @@
   .wrap{padding:12px;max-width:720px;margin:0 auto}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
   label.fld{display:block;font-size:12px;color:var(--muted);margin:8px 0 3px}
-  select,input[type=text],input[type=date]{width:100%;padding:11px;border:1px solid var(--line);
-    border-radius:10px;font-size:16px;background:#fff;color:var(--ink)}
+  select,input[type=text],input[type=date]{width:100%;max-width:100%;padding:11px;border:1px solid var(--line);
+    border-radius:10px;font-size:16px;background:#fff;color:var(--ink);box-sizing:border-box}
+  input[type=date]{-webkit-appearance:none;appearance:none;min-width:0}
   .row2{display:flex;gap:10px}.row2>div{flex:1}
   .crittoggles{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .pill{border:1px solid var(--line);border-radius:20px;padding:6px 11px;font-size:13px;background:#fff;
@@ -44,7 +45,7 @@
   .statbtn.aanw{background:#e7f4ec;color:#1c6b38;border-color:#bfe3cd}
   .statbtn.afw{background:#fdecec;color:#b53636;border-color:#f3c9c9}
   .statbtn.att{background:#e8eefc;color:#274bb5;border-color:#cdd9f6}
-  .gesbtn{font-size:11px;font-weight:700;border:1px solid var(--line);border-radius:7px;padding:6px 6px;cursor:pointer;flex-shrink:0;min-width:40px;text-align:center;color:var(--muted)}
+  .gesbtn{font-size:15px;font-weight:700;border:1px solid var(--line);border-radius:7px;padding:5px 7px;cursor:pointer;flex-shrink:0;min-width:30px;text-align:center;color:var(--muted);line-height:1.1}
   .gesbtn.m{background:#fdeef6;border-color:#f3c2dc;color:#b5367f}
   .gesbtn.j{background:#eaf1fd;border-color:#c2d4f3;color:#274bb5}
   .metinput{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:16px;margin-top:4px}
@@ -438,12 +439,13 @@ function renderStudents(){
 
     if(curRubriek().type==="meting"){
       const g=getGes(naam);
-      const gb=document.createElement("div");
-      gb.className="gesbtn "+(g==="M"?"m":(g==="J"?"j":""));
-      gb.textContent=(g==="M"?"♀ M":(g==="J"?"♂ J":"M/J"));
-      gb.title="Geslacht: meisje/jongen (bepaalt de prestatietabel)";
-      gb.onclick=e=>{e.stopPropagation();const nx=(g===""?"M":(g==="M"?"J":"M"));setGes(naam,nx);renderStudents();renderOverview();const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
-      right.appendChild(gb);
+      [["M","♀","m","Meisje"],["J","♂","j","Jongen"]].forEach(function(o){
+        const b=document.createElement("div");
+        b.className="gesbtn "+(g===o[0]?o[2]:"");
+        b.textContent=o[1]; b.title=o[3];
+        b.onclick=e=>{e.stopPropagation();setGes(naam,g===o[0]?"":o[0]);renderStudents();renderOverview();const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
+        right.appendChild(b);
+      });
     }
     const att=document.createElement("div");att.className="attbtn";att.textContent="att";att.title="Doktersattest";
     att.onclick=e=>{e.stopPropagation();state.status[naam]="attest";saveState();renderStudents();renderOverview();};
