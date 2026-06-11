@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="LO Evaluatie">
+<meta name="theme-color" content="#2f6fed">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>LO Evaluatie</title>
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#fff; --ink:#1f2733; --muted:#6b7280; --line:#e3e6ea;
+    --accent:#2f6fed; --b0:#e23b3b; --b1:#f0883e; --b2:#9bcb50; --b3:#2faa57; --off:#cfd4da;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px}
+  header{position:sticky;top:0;z-index:20;background:var(--accent);color:#fff;padding:10px 12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.15)}
+  header h1{margin:0;font-size:17px;font-weight:700}
+  header .sub{font-size:12px;opacity:.9;margin-top:2px}
+  .wrap{padding:12px;max-width:720px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+  label.fld{display:block;font-size:12px;color:var(--muted);margin:8px 0 3px}
+  select,input[type=text],input[type=date]{width:100%;padding:11px;border:1px solid var(--line);
+    border-radius:10px;font-size:16px;background:#fff;color:var(--ink)}
+  .row2{display:flex;gap:10px}.row2>div{flex:1}
+  .crittoggles{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .pill{border:1px solid var(--line);border-radius:20px;padding:6px 11px;font-size:13px;background:#fff;
+    color:var(--ink);cursor:pointer;user-select:none}
+  .pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .pill.off{opacity:.55;text-decoration:line-through}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+  .stud{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff}
+  .studhead{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;cursor:pointer;gap:8px}
+  .studhead .nm{font-weight:600;flex:1;min-width:0}
+  .studhead .right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .statsel{font-size:12px;padding:7px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:auto;max-width:140px}
+  .attbtn{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:8px 8px;cursor:pointer;flex-shrink:0;user-select:none}
+  .statbtn{font-size:13px;font-weight:700;border-radius:8px;padding:9px 12px;cursor:pointer;border:1px solid transparent;flex-shrink:0;min-width:88px;text-align:center;user-select:none}
+  .statbtn.aanw{background:#e7f4ec;color:#1c6b38;border-color:#bfe3cd}
+  .statbtn.afw{background:#fdecec;color:#b53636;border-color:#f3c9c9}
+  .statbtn.att{background:#e8eefc;color:#274bb5;border-color:#cdd9f6}
+  .badge{font-size:13px;font-weight:700;padding:4px 9px;border-radius:9px;background:#eef1f5;color:var(--ink);min-width:70px;text-align:center}
+  .badge.done{background:#e7f4ec;color:#1c6b38}
+  .badge.afw{background:#fdecec;color:#b53636}
+  .badge.att{background:#e8eefc;color:#274bb5}
+  .studbody{padding:0 12px 10px;display:none}
+  .stud.open .studbody{display:block}
+  .absnote{padding:11px 0;color:var(--muted);font-size:13px;line-height:1.4}
+  .critblock{border-top:1px solid var(--line);padding:9px 0}
+  .critname{font-size:13.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .critname .lpd{font-size:11px;color:var(--muted);font-weight:400}
+  .info{font-size:11px;color:var(--accent);cursor:pointer;white-space:nowrap}
+  .opts{display:flex;gap:6px;margin-top:7px}
+  .opt{flex:1;text-align:center;padding:9px 2px;border-radius:9px;border:1px solid var(--line);
+    font-size:12px;font-weight:600;cursor:pointer;background:#fff;line-height:1.15}
+  .opt small{display:block;font-weight:400;font-size:10px;color:var(--muted)}
+  .opt.sel{color:#fff;border-color:transparent}
+  .opt.sel small{color:rgba(255,255,255,.85)}
+  .opt[data-v="0"].sel{background:var(--b0)} .opt[data-v="1"].sel{background:var(--b1)}
+  .opt[data-v="2"].sel{background:var(--b2)} .opt[data-v="3"].sel{background:var(--b3)}
+  .bands{display:none;background:#fafbfc;border:1px dashed var(--line);border-radius:8px;
+    padding:8px;margin-top:7px;font-size:12px;line-height:1.45;color:#374151}
+  .bands.show{display:block}
+  .clearbtn{font-size:11px;color:var(--muted);background:none;border:none;margin-top:8px;text-decoration:underline;cursor:pointer}
+  .actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{flex:1;min-width:130px;padding:13px;border-radius:11px;border:none;font-size:15px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--accent);color:var(--accent)}
+  .btn.warn{background:#fff;border:1px solid #c33;color:#c33}
+  .smalltbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  .smalltbl td{padding:5px 4px;border-bottom:1px solid var(--line)}
+  .smalltbl td:last-child{text-align:right;font-weight:700}
+  .muted{color:var(--muted);font-size:12px}
+  details summary{cursor:pointer;font-weight:600;font-size:14px}
+  .savedrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .savedrow a{color:var(--accent);cursor:pointer;text-decoration:underline}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1f2733;color:#fff;
+    padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;z-index:50}
+  .toast.show{opacity:.95}
+</style>
+</head>
+<body>
+<header>
+  <h1>LO Evaluatie</h1>
+  <div class="sub" id="hsub"></div>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <div class="row2">
+      <div>
+        <label class="fld" for="klas">Klas</label>
+        <select id="klas"></select>
+      </div>
+      <div>
+        <label class="fld" for="graad">Graad (scorebanden)</label>
+        <select id="graad">
+          <option value="1ste">1ste graad</option>
+          <option value="2de" selected>2de graad</option>
+          <option value="3de">3de graad</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label class="fld" for="categorie">Sportklasse</label>
+        <select id="categorie"></select>
+      </div>
+      <div>
+        <label class="fld" for="sport">Sport</label>
+        <select id="sport"></select>
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label class="fld" for="datum">Datum</label>
+        <input type="date" id="datum">
+      </div>
+      <div>
+        <label class="fld" for="spec">Details / periode (optioneel)</label>
+        <input type="text" id="spec" placeholder="bv. 3-tegen-3, periode 2">
+      </div>
+    </div>
+    <label class="fld" style="margin-top:10px">Criteria meenemen in score (tik om aan/uit te zetten)</label>
+    <div class="crittoggles" id="toggles"></div>
+    <div class="hint">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu naast de naam; die krijgt dan geen score en de reden wordt bewaard.</div>
+  </div>
+
+  <div id="students"></div>
+
+  <div class="card">
+    <details>
+      <summary>Klasoverzicht &amp; scores</summary>
+      <table class="smalltbl" id="overview"></table>
+      <div class="muted" id="klasgem" style="margin-top:6px"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="actions">
+      <button class="btn primary" id="dlcsv">Download deze evaluatie (CSV)</button>
+      <button class="btn ghost" id="copyss">Kopieer scores voor Smartschool</button>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn ghost" id="dlall">Download alles (back-up)</button>
+      <button class="btn warn" id="reset">Wis deze evaluatie</button>
+    </div>
+    <div class="hint">De app onthoudt alles automatisch op dit toestel. Download wekelijks de CSV-bestanden om ze te bewaren voor de doorlichting of om door te geven. De volledige rubriek staat mee in elk CSV-bestand.</div>
+  </div>
+
+  <div class="card">
+    <details>
+      <summary>Klassen beheren</summary>
+      <div class="hint" style="margin-top:6px">Voeg je eigen klassen toe (klasnaam + leerlingen, één per lijn). Werkt enkel op dit toestel. Zo gebruikt elke collega hetzelfde bestand met de eigen klassen.</div>
+      <div id="klasbeheer" style="margin-top:8px"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <details>
+      <summary>Opgeslagen evaluaties op dit toestel</summary>
+      <div id="savedlist" style="margin-top:8px"></div>
+    </details>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ---------- KLASLIJSTEN (instelbaar via 'Klassen beheren'; standaard = voorbeeldklassen) ---------- */
+const DEFAULT_KLASSEN = {
+  "3HS1": ["Ahmed Adnan","Ahmed Emre","Akbulut Zeynep","Beyhan Okan","De Cubber Emma","Demirov Nedzhatin","Garcia Martinez Yana","Gezova Michaela","Köksoy Efe","Öngel Kübra","Simsek Fazli","Sirmov Rumen","Thienpont Xina","Zhekova Anelia"],
+  "3HS2": ["Alieva Nazli","Asenov Fernando Zhanov","De Schepper Navaro","Dobreva Gyoksel","Ignatov Behti","Ismailov Alish","Kizilkiliç Ravza","Krasimirova Valentina","Kucukkaya Ali-Naki","Mehmed Ayfer","Mustafa Andi","Nikolova Yordanka","Radoeva Aysemin","Ramkddam Salma","von der Crone Lisa"],
+  "3HS3": ["Batur Melek","Deleman Viktor","El Bachiri Noa","Gauwberg Jazzness","Incigüz Asya","Ivanov Orlin","Ivanov Zeki","Krokova Sanela","Miroslavov Svetoslav","Oduro Alycia Denise L.","Ognyanova Severina","Shefket Kader","Sultani Besmillah","Valerieva Azra","Vasviev Dzhan","Wittevrongel Febe"],
+  "3OL": ["Amiri Emranullah","Baddou Mohamed","Celik Melis","Evangelatos Selena","Hasan Omar Daniel","Horváth Nikolas","Maxamud Nuur Cali","Mutlu Azad","Nohut Zehra","Said Hila","Vermaerke Seppe","Yavuzey Irmak","Yordanova Marcela","Zbidi Rayane"],
+  "3RK": ["Balci Arda","Carrasco Jimenez Orlando","Cöris Nicholas","Deveci Yasin Halil","Gaspar Suzanna","Gurgul Radoslav","Hricko Alexander","Maes Milan","Naseri Mansoor Khan","Salim Kalonda Della-Lo Leeroy"],
+  "3ZW": ["Akay Dilara","Badová Gracie","Bolaboto-Mpembe Keithia","Branimirova Melisa","Celik Bedia","De Vriendt Laura","Florencio Joaquin Hulbelys","Kursun Umut","Meganck Aïfé","Shinwari Sabit","Shirzad Abdul","Sofi Zada Sharifa","Tiendrebeogo Nyron"],
+  "4OL1": ["Ahmedov Baran","Aliju Azize","Atanasova Ivelina","Avduli Bayram","Callaert Elias","Ciftci Süleyman","El Houari Enes","Janova Jessica","Kuru Kuzey","Logbo Lenny","Mollov Ersen","Papagianni Maria","Stoyanova Yordanka","Sultan Sacha","Victoriano Da Silva Demilson"],
+  "4OL2": ["Abujalhoum Omar","Almashharawi Firas","Arab Anamullah","Bayat Berranur","El Abid Ilham","Galabov Martin","Horvath Mathias","Mekov William","Metodiev Metodi","Mircheva Diana","Ramkddam Dina","Redessi Adem","Sargsyan Elen","Vispoel Fallou","Yeboah Bright"],
+  "4RK": ["Abuzarifa Kamal","Bagseven Kerem","Berkova Gloria","Brenner Talia","Brusseel Maxim","Kumari Sara","Matta Martin","Mehmed Denis","Muradi Sulaiman","Nikolov Nikola","Safi Bilal","Sana Dario","Serafimov Svetlin","Vereecken Zidane","Yonkova Danaya"],
+  "4ZW": ["Ali Maria","Arab Shafiullah","Arsamakova Medina","Bas Sena","De Vreese Cassidy","Jans Brith","Karani Selime","Madani Safa","MOHAMMADI Fazal","Mohammadi Obaidullah","Mohamud Ali Iqro","Peers Liebe","Rashkova Viktoria","Van den Bergh Lovely","Zia Mirab"],
+  "6SV": ["Akcinar Nur","Aleksandrova Valeriia","Chernovska Viktoriia","Cipolletta Nena","Dupré Zoë","Laroche Imani","Malik Khel Madina","Noa Anaïs"]
+};
+const LS_KLASSEN="lo_tv_klassen_v2";
+let KLASSEN={};
+function loadKlassen(){
+  try{const s=JSON.parse(localStorage.getItem(LS_KLASSEN));if(s&&Object.keys(s).length){KLASSEN=s;return;}}catch(e){}
+  KLASSEN=JSON.parse(JSON.stringify(DEFAULT_KLASSEN));
+  localStorage.setItem(LS_KLASSEN,JSON.stringify(KLASSEN));
+}
+function saveKlassen(){localStorage.setItem(LS_KLASSEN,JSON.stringify(KLASSEN));}
+
+const LABELS3 = ["Onvoldoende","Zwak","Goed","Zeer goed"];
+const LABELS2 = ["Niet in orde","Deels in orde","In orde"];
+const STATUS  = [{v:"aanwezig",l:"Aanwezig"},{v:"afwezig",l:"Afwezig"},{v:"attest",l:"Doktersattest"}];
+const KLEDIJ_BANDS = ["Geen sportkledij / werkt onveilig.","Wel kledij maar niet van de school.","Sportkledij van de school en werkt veilig."];
+
+/* ---------- SPORTKLASSEN + RUBRIEKEN ---------- */
+const RUBRIEKEN = {
+  trefspelen:{
+    label:"Trefspelen",
+    rubriek:"Tussen twee vuren",
+    sporten:["Tussen twee vuren"],
+    criteria:[
+      {key:"werpen",      naam:"Werpen & mikken",                   lpd:"LPD 1",        max:3},
+      {key:"vangen",      naam:"Vangen & ontwijken",                lpd:"LPD 1",        max:3},
+      {key:"samenspel",   naam:"Samenspel & aanvallend spel",       lpd:"LPD 2",        max:3},
+      {key:"inzicht",     naam:"Spelinzicht, regels & tactiek",     lpd:"LPD 2, 8",     max:3},
+      {key:"samenwerken", naam:"Samenwerken, fair play & coaching", lpd:"LPD 8, 11, 12",max:3},
+      {key:"inzet",       naam:"Inzet & attitude",                  lpd:"LPD 8, 13",    max:3},
+      {key:"kledij",      naam:"Kledij & veiligheid",               lpd:"",             max:2}
+    ],
+    bands:{
+      "1ste":{
+        werpen:["Werpt de bal niet of zonder richting.","Werpt de bal maar raakt zelden een tegenstander.","Werpt gericht en raakt af en toe een tegenstander (onder de schouders).","Werpt krachtig en gericht en raakt regelmatig raak."],
+        vangen:["Probeert de bal niet te vangen of te ontwijken.","Ontwijkt soms maar vangt de bal niet.","Ontwijkt geworpen ballen en probeert te vangen.","Ontwijkt vlot en vangt de bal om een tegenstander te neutraliseren."],
+        samenspel:["Speelt de bal niet door.","Houdt de bal te lang vast.","Speelt de bal door naar een medespeler.","Speelt samen met het veld én het vuur om kansen te maken."],
+        inzicht:["Kent de basisregels niet.","Kent enkele regels maar past ze nauwelijks toe.","Kent en past de basisregels toe (raken, gevangen bal, lijnen, naar het vuur).","Past de regels vlot toe en speelt eenvoudig tactisch."],
+        samenwerken:["Werkt niet samen en geeft niet toe dat hij geraakt is.","Speelt samen maar discussieert over treffers.","Werkt samen en geeft eerlijk toe wanneer hij geraakt is.","Werkt samen, speelt eerlijk en moedigt medeleerlingen aan."],
+        inzet:["Toont weinig inzet en haakt af.","Wisselende inzet.","Doet actief en gemotiveerd mee.","Toont voortdurend inzet en blijft positief, ook na een treffer."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        werpen:["Mikt niet doelgericht.","Mikt enkel op dichte, stilstaande tegenstanders.","Mikt gericht op bewegende tegenstanders.","Mikt snel en gericht op de zwakst gedekte tegenstander."],
+        vangen:["Wordt voortdurend geraakt en reageert niet.","Ontwijkt enkel eenvoudige ballen.","Ontwijkt en vangt gericht om medespelers vrij te spelen.","Leest de worp en kiest bewust tussen vangen en ontwijken om het spel te kantelen."],
+        samenspel:["Werkt niet samen met het team of het vuur.","Speelt soms samen maar zonder plan.","Speelt de bal snel rond en betrekt het vuur.","Combineert veld en vuur om tegenstanders in te sluiten en te raken."],
+        inzicht:["Speelt zonder inzicht of tactiek.","Volgt de regels maar speelt voorspelbaar.","Speelt tactisch (zwakke posities mikken, het vuur inschakelen).","Doorziet het spel en kiest steeds de juiste tactische oplossing."],
+        samenwerken:["Werkt niet samen.","Speelt samen maar stuurt of helpt niet.","Speelt samen en past spontaan de afspraken toe.","Stuurt het team, neemt en aanvaardt leiding en speelt steeds fair."],
+        inzet:["Respecteert de afspraken niet.","Heeft het moeilijk met winst en verlies.","Zet zich in en gaat correct om met winst en verlies.","Toont voortdurend inzet, blijft sportief en stimuleert anderen."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        werpen:["Zet zijn worp niet in voor het team.","Werpt vooral individueel, zonder plan.","Kiest het juiste moment en doel om te werpen.","Werpt tactisch (afleiden, samen mikken) om het team punten te laten maken."],
+        vangen:["Heeft geen oog voor de baldreiging.","Reageert traag op de bal.","Anticipeert op worpen en kiest tussen vangen en ontwijken.","Anticipeert, vangt onder druk en zet de bal meteen om in een tegenactie."],
+        samenspel:["Draagt niet bij aan de teamaanval.","Neemt deel maar zonder samenspel.","Bouwt samen met het team aanvallen op via veld en vuur.","Stuurt het samenspel, zet tegenstanders onder druk en creëert scoringskansen voor het team."],
+        inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen sturende rol op.","Past de regels toe en denkt mee over tactiek en varianten.","Leidt het spel mee, legt regels en varianten uit en arbitreert."],
+        samenwerken:["Neemt geen ondersteunende rol op.","Helpt enkel na aansturing.","Coacht medeleerlingen en houdt het spel eerlijk.","Leidt en coacht het team zelfstandig en geeft inzichten door aan minder ervaren spelers."],
+        inzet:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en draagt bij tot een positieve sfeer."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
+  },
+  balsporten:{
+    label:"Balsporten (doelspelen)",
+    rubriek:"Balsporten (doelspelen)",
+    sporten:["Voetbal","Basketbal","Handbal","Floorbal","Frisbee","Flag-rugby"],
+    criteria:[
+      {key:"balvaardigheid",naam:"Balvaardigheid & balcontrole",    lpd:"LPD 1",         max:3},
+      {key:"aanvallend",    naam:"Aanvallend spel & scoren",         lpd:"LPD 2",         max:3},
+      {key:"verdedigend",   naam:"Verdedigend spel & omschakelen",   lpd:"LPD 2",         max:3},
+      {key:"inzicht",       naam:"Spelinzicht, regels & rollen",     lpd:"LPD 2, 8",      max:3},
+      {key:"samenwerken",   naam:"Samenwerken, coachen & spelleiding",lpd:"LPD 8, 10-12", max:3},
+      {key:"fairplay",      naam:"Fair play, inzet & attitude",      lpd:"LPD 8, 11, 13", max:3},
+      {key:"kledij",        naam:"Kledij & veiligheid",              lpd:"",              max:2}
+    ],
+    bands:{
+      "1ste":{
+        balvaardigheid:["Beheerst de basistechniek (dribbelen, passen, vangen) niet.","Voert de basistechniek enkel uit in een stilstaande oefenvorm.","Dribbelt, past en vangt correct in een eenvoudige spelvorm.","Beheerst de basistechniek vlot en voegt een afwerking toe (setshot/slagworp)."],
+        aanvallend:["Loopt zich niet vrij en onderneemt geen doelpoging.","Staat stil maar onderneemt af en toe een doelpoging.","Loopt zich vrij in een 3-tegen-3 en onderneemt doelpogingen.","Loopt zich gericht vrij, vraagt de bal en komt tot scoren."],
+        verdedigend:["Verdedigt niet mee.","Verdedigt met minimale inzet en blijft staan.","Verdedigt mee en probeert de bal te onderscheppen.","Neemt positie tussen tegenstander en doel en verovert de bal."],
+        inzicht:["Kent de speelregels niet en neemt geen gepaste beslissingen.","Kent enkele regels maar past ze nauwelijks toe.","Past de speelregels en een basistactiek toe.","Past regels en basistactiek vlot toe en kiest gepaste oplossingen."],
+        samenwerken:["Speelt individueel en werkt niet samen.","Speelt soms samen maar communiceert nauwelijks.","Speelt samen, luistert en toont oefenbereidheid.","Speelt samen, moedigt aan en neemt een begeleide scheidsrechterrol op."],
+        fairplay:["Houdt zich niet aan de afspraken en toont weinig inzet.","Wisselende inzet; gaat in discussie over fouten.","Zet zich in, speelt fair en gaat respectvol om met het materiaal.","Toont voortdurend inzet, geeft eigen fouten toe en werkt positief op de groep."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        balvaardigheid:["Heeft weinig balcontrole in beweging.","Neemt de bal aan maar verliest controle onder lichte druk.","Neemt gecontroleerd aan, speelt in en werkt af in beweging (lay-up/sprongworp).","Combineert techniek vlot in beweging (give & go) en blijft in balbezit onder druk."],
+        aanvallend:["Creëert geen kansen en gebruikt de ruimte niet.","Speelt vooral individueel, creëert zelden een kans.","Gebruikt de ruimte, past give & go toe en creëert doelkansen.","Creëert kansen voor zichzelf en medespelers (give & go, vrijlopen in & out) en scoort."],
+        verdedigend:["Heeft geen verdedigende positie.","Verdedigt passief, verliest de bal of de man uit het oog.","Stelt zich op tussen man en doel en verdedigt actief.","Schakelt tussen man- en zoneverdediging en onderschept doelgericht."],
+        inzicht:["Past de spelregels niet toe.","Kent de regels maar past ze inconsistent toe.","Past de spelregels toe en kan een wedstrijd mee leiden als scheidsrechter.","Past regels en tactiek vlot toe en leidt zelfstandig een wedstrijd als scheidsrechter."],
+        samenwerken:["Werkt niet samen en coacht niet.","Speelt samen maar stuurt of helpt medeleerlingen niet.","Speelt samen en stuurt medeleerlingen tijdens oefenmomenten.","Neemt de rol van coach op en stuurt/motiveert het team gericht."],
+        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en gaat correct om met winst/verlies.","Toont voortdurend inzet, blijft sportief bij winst én verlies en stimuleert anderen."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        balvaardigheid:["Kan de bal niet gecontroleerd hanteren in het volledige spel.","Hanteert de bal enkel in eenvoudige situaties zonder verdediger.","Gaat gecontroleerd met de bal om volgens de eigen mogelijkheden en werkt af.","Beheerst techniek en afwerking (lay-up, gesprongen shot, smash) ook tegen actieve tegenstand."],
+        aanvallend:["Draagt niet bij aan de opbouw van het spel.","Neemt deel maar speelt voorspelbaar, zonder de verdediging te ontwrichten.","Bouwt mee op, stelt zich breed en diep op en omspeelt een verdediger.","Bouwt op, omspeelt verdedigers, speelt medespelers vrij en schakelt snel om naar de aanval."],
+        verdedigend:["Onderneemt geen verdedigende acties.","Verdedigt enkel in de buurt van de bal.","Verdedigt georganiseerd (man/zone) en bewaakt het doelgebied.","Verovert de bal en organiseert vanuit balwinst meteen een tegenaanval (omschakelen)."],
+        inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over organisatie (teams, timing, materiaal).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi."],
+        samenwerken:["Neemt geen ondersteunende rol op.","Helpt enkel na aansturing.","Coacht medeleerlingen en geeft eigen inzichten door.","Coacht, leidt het spel zelfstandig en geeft inzichten door aan minder ervaren spelers."],
+        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en toont een houding gericht op levenslang bewegen."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
+  }
+};
+
+/* ---------- STATE & STORAGE ---------- */
+const LS_PREFIX="lo_tv_v1_";
+const LS_ENABLED="lo_tv_enabled_default";
+const $=id=>document.getElementById(id);
+let state=null;
+
+function todayISO(){const d=new Date();const o=d.getTimezoneOffset();return new Date(d-o*60000).toISOString().slice(0,10);}
+function keyFor(klas,datum,label){return LS_PREFIX+klas+"|"+datum+"|"+(label||"").trim().toLowerCase().replace(/\s+/g,"_");}
+function statusLabel(v){const s=STATUS.find(x=>x.v===v);return s?s.l:"Aanwezig";}
+function curRubriek(){return RUBRIEKEN[state.categorie];}
+function crits(){return curRubriek().criteria;}
+function sportLabel(){return state.sport+(state.spec?(" – "+state.spec):"");}
+function defaultEnabled(cat){
+  try{const s=JSON.parse(localStorage.getItem(LS_ENABLED+"_"+cat));if(s)return Object.assign({},s);}catch(e){}
+  const en={};RUBRIEKEN[cat].criteria.forEach(c=>en[c.key]=true);return en;
+}
+function saveState(){
+  if(!state)return;
+  localStorage.setItem(keyFor(state.klas,state.datum,sportLabel()),JSON.stringify(state));
+  localStorage.setItem(LS_ENABLED+"_"+state.categorie,JSON.stringify(state.enabled));
+}
+function loadOrInit(){
+  const klas=$("klas").value,graad=$("graad").value,categorie=$("categorie").value,
+        sport=$("sport").value,spec=$("spec").value,datum=$("datum").value;
+  const label=sport+(spec?(" – "+spec):"");
+  const k=keyFor(klas,datum,label);
+  let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
+  if(!st){
+    st={klas,graad,categorie,sport,spec,datum,enabled:defaultEnabled(categorie),status:{},data:{}};
+    KLASSEN[klas].forEach(n=>{st.data[n]={};RUBRIEKEN[categorie].criteria.forEach(c=>st.data[n][c.key]=null);st.status[n]="aanwezig";});
+  }else{
+    if(!st.categorie)st.categorie=categorie;
+    if(!st.enabled)st.enabled=defaultEnabled(st.categorie);
+    if(!st.status)st.status={};
+    if(st.spec===undefined)st.spec=spec;
+    RUBRIEKEN[st.categorie].criteria.forEach(c=>{if(st.enabled[c.key]===undefined)st.enabled[c.key]=true;});
+    KLASSEN[klas].forEach(n=>{
+      if(!st.data[n])st.data[n]={};
+      RUBRIEKEN[st.categorie].criteria.forEach(c=>{if(st.data[n][c.key]===undefined)st.data[n][c.key]=null;});
+      if(!st.status[n])st.status[n]="aanwezig";
+    });
+    st.graad=graad;
+  }
+  state=st;
+}
+
+/* ---------- SCORING ---------- */
+function scoreFor(naam){
+  const stt=state.status[naam]||"aanwezig";
+  if(stt!=="aanwezig")return {beh:0,max:0,count:0,pct:0,score10:0,status:stt};
+  let beh=0,max=0,count=0;
+  crits().forEach(c=>{
+    if(!state.enabled[c.key])return;
+    const v=state.data[naam][c.key];
+    if(v===null||v===undefined)return;
+    beh+=v;max+=c.max;count++;
+  });
+  const pct=max>0?beh/max:0;
+  return {beh,max,count,pct,score10:Math.round(pct*1000)/100,status:"aanwezig"};
+}
+
+/* ---------- RENDER ---------- */
+function renderToggles(){
+  const t=$("toggles");t.innerHTML="";
+  crits().forEach(c=>{
+    const on=state.enabled[c.key];
+    const el=document.createElement("div");
+    el.className="pill "+(on?"on":"off");
+    el.textContent=c.naam;
+    el.onclick=()=>{state.enabled[c.key]=!state.enabled[c.key];saveState();renderToggles();renderStudents();renderOverview();};
+    t.appendChild(el);
+  });
+}
+
+function renderStudents(){
+  const wrap=$("students");
+  const openNow={};
+  document.querySelectorAll(".stud.open").forEach(e=>openNow[e.dataset.n]=true);
+  wrap.innerHTML="";
+  KLASSEN[state.klas].forEach(naam=>{
+    const stt=state.status[naam]||"aanwezig";
+    const absent=(stt!=="aanwezig");
+    const sc=scoreFor(naam);
+    const stud=document.createElement("div");
+    stud.className="stud"+(openNow[naam]?" open":"");
+    stud.dataset.n=naam;
+
+    const head=document.createElement("div");head.className="studhead";
+    const nm=document.createElement("div");nm.className="nm";nm.textContent=naam;
+    const right=document.createElement("div");right.className="right";
+
+    const att=document.createElement("div");att.className="attbtn";att.textContent="att";att.title="Doktersattest";
+    att.onclick=e=>{e.stopPropagation();state.status[naam]="attest";saveState();renderStudents();renderOverview();};
+    const tog=document.createElement("div");
+    tog.className="statbtn "+(stt==="afwezig"?"afw":(stt==="attest"?"att":"aanw"));
+    tog.textContent=(stt==="afwezig"?"Afwezig":(stt==="attest"?"Attest":"Aanwezig"));
+    tog.onclick=e=>{
+      e.stopPropagation();
+      state.status[naam]=(stt==="aanwezig")?"afwezig":"aanwezig"; // 1 tik: aanwezig<->afwezig (attest->aanwezig)
+      saveState();renderStudents();renderOverview();
+      const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");
+    };
+    right.appendChild(att);right.appendChild(tog);
+    if(!absent){
+      const bd=document.createElement("div");
+      bd.className="badge"+(sc.count>0?" done":"");
+      bd.textContent=sc.count>0?(sc.beh+"/"+sc.max+"  ("+sc.score10.toFixed(1)+")"):"–";
+      right.appendChild(bd);
+    }
+    head.appendChild(nm);head.appendChild(right);
+    head.onclick=()=>stud.classList.toggle("open");
+    stud.appendChild(head);
+
+    const body=document.createElement("div");body.className="studbody";
+    if(absent){
+      const note=document.createElement("div");note.className="absnote";
+      note.textContent=statusLabel(stt)+" — geen score voor deze leerling. Zet de keuze terug op 'Aanwezig' om te scoren.";
+      body.appendChild(note);
+    }else{
+      crits().forEach(c=>{
+        if(!state.enabled[c.key])return;
+        const block=document.createElement("div");block.className="critblock";
+        const cn=document.createElement("div");cn.className="critname";
+        cn.innerHTML='<span>'+c.naam+(c.lpd?' <span class="lpd">'+c.lpd+'</span>':'')+'</span>';
+        const info=document.createElement("span");info.className="info";info.textContent="banden";
+        const bands=document.createElement("div");bands.className="bands";
+        const labels=c.max===3?LABELS3:LABELS2;
+        bands.innerHTML=curRubriek().bands[state.graad][c.key].map((tx,i)=>"<b>"+i+" "+labels[i]+":</b> "+tx).join("<br>");
+        info.onclick=()=>bands.classList.toggle("show");
+        cn.appendChild(info);block.appendChild(cn);
+
+        const opts=document.createElement("div");opts.className="opts";
+        labels.forEach((lab,i)=>{
+          const o=document.createElement("div");
+          o.className="opt"+(state.data[naam][c.key]===i?" sel":"");
+          o.dataset.v=i;
+          o.innerHTML=i+'<small>'+lab+'</small>';
+          o.onclick=()=>{
+            state.data[naam][c.key]=(state.data[naam][c.key]===i)?null:i; // nogmaals tikken = wissen
+            saveState();renderStudents();renderOverview();
+            const reopened=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');
+            if(reopened)reopened.classList.add("open");
+          };
+          opts.appendChild(o);
+        });
+        block.appendChild(opts);block.appendChild(bands);
+        body.appendChild(block);
+      });
+      const clr=document.createElement("button");clr.className="clearbtn";clr.textContent="leeg maken";
+      clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);saveState();renderStudents();renderOverview();
+        const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
+      body.appendChild(clr);
+    }
+    stud.appendChild(body);
+    wrap.appendChild(stud);
+  });
+}
+
+function renderOverview(){
+  const tbl=$("overview");tbl.innerHTML="";
+  let som=0,n=0;
+  KLASSEN[state.klas].forEach(naam=>{
+    const stt=state.status[naam]||"aanwezig";
+    const sc=scoreFor(naam);
+    const tr=document.createElement("tr");
+    const td1=document.createElement("td");td1.textContent=naam;
+    const td2=document.createElement("td");
+    if(stt!=="aanwezig")td2.textContent=statusLabel(stt);
+    else td2.textContent=sc.count>0?(sc.beh+"/"+sc.max):"–";
+    tr.appendChild(td1);tr.appendChild(td2);tbl.appendChild(tr);
+    if(stt==="aanwezig"&&sc.count>0){som+=sc.pct;n++;}
+  });
+  $("klasgem").textContent=n>0?("Klasgemiddelde: "+(Math.round(som/n*1000)/10)+"%  ·  "+n+" leerlingen gescoord"):"Nog niets ingevuld.";
+}
+
+/* ---------- EXPORT ---------- */
+function csvEscape(v){v=(""+v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function buildCSV(){
+  const L=[];
+  const push=arr=>L.push(arr.map(csvEscape).join(";"));
+  push(["RUBRIEK",curRubriek().rubriek+" — "+state.graad+" graad"]);
+  push(["Sportklasse",curRubriek().label,"Sport",state.sport]);
+  push(["Details/periode",state.spec||"","Klas",state.klas]);
+  push(["Datum",state.datum]);
+  push([]);
+  push(["Beoordelingscriteria — scorebanden (referentie)"]);
+  push(["Criterium","Meegerekend","0","1","2","3"]);
+  crits().forEach(c=>{
+    const labels=c.max===3?LABELS3:LABELS2;
+    const bands=curRubriek().bands[state.graad][c.key];
+    const cells=["","","",""];
+    for(let i=0;i<4;i++){cells[i]=bands[i]?(i+" "+labels[i]+": "+bands[i]):"";}
+    push([c.naam,state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]);
+  });
+  push([]);
+  push(["Legende: cijfer per criterium = behaalde score. Leeg = niet beoordeeld. Afwezig/Doktersattest = geen score."]);
+  push([]);
+  push(["SCORES"]);
+  const cols=["Leerling","Status"]
+    .concat(crits().map(c=>c.naam+(state.enabled[c.key]?"":" (uit)")))
+    .concat(["Behaald","Max","%","Score/10"]);
+  push(cols);
+  KLASSEN[state.klas].forEach(naam=>{
+    const stt=state.status[naam]||"aanwezig";
+    const absent=(stt!=="aanwezig");
+    const sc=scoreFor(naam);
+    const row=[naam,statusLabel(stt)];
+    crits().forEach(c=>{
+      const v=absent?null:state.data[naam][c.key];
+      row.push(v===null||v===undefined?"":v);
+    });
+    if(absent)row.push("","","","");
+    else row.push(sc.count>0?sc.beh:"",sc.count>0?sc.max:"",sc.count>0?(Math.round(sc.pct*1000)/10):"",sc.count>0?sc.score10.toFixed(1):"");
+    push(row);
+  });
+  return "﻿"+L.join("\r\n");
+}
+function download(name,text,type){
+  const blob=new Blob([text],{type:type||"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},400);
+}
+function fname(){return ("Evaluatie_"+sportLabel().replace(/[^\w]+/g,"-")+"_"+state.klas+"_"+state.datum+".csv");}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
+
+/* ---------- SAVED LIST ---------- */
+function renderSaved(){
+  const box=$("savedlist");box.innerHTML="";
+  const items=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k.indexOf(LS_PREFIX)!==0)continue;
+    try{const st=JSON.parse(localStorage.getItem(k));items.push({k,st});}catch(e){}
+  }
+  items.sort((a,b)=>(b.st.datum||"").localeCompare(a.st.datum||""));
+  if(!items.length){box.innerHTML='<div class="muted">Nog geen opgeslagen evaluaties.</div>';return;}
+  items.forEach(it=>{
+    const row=document.createElement("div");row.className="savedrow";
+    const lbl=document.createElement("div");
+    const sp=it.st.sport||"";
+    lbl.textContent=it.st.datum+" · "+it.st.klas+" · "+sp+(it.st.spec?(" – "+it.st.spec):"");
+    const acts=document.createElement("div");
+    const dl=document.createElement("a");dl.textContent="download";dl.style.marginRight="12px";
+    dl.onclick=()=>{const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";download(fname(),buildCSV());state=cur;};
+    const del=document.createElement("a");del.textContent="wis";del.style.color="#c33";
+    del.onclick=()=>{if(confirm("Deze evaluatie wissen?")){localStorage.removeItem(it.k);renderSaved();}};
+    acts.appendChild(dl);acts.appendChild(del);
+    row.appendChild(lbl);row.appendChild(acts);box.appendChild(row);
+  });
+}
+
+/* ---------- INIT / EVENTS ---------- */
+function fillSport(cat){
+  const s=$("sport");s.innerHTML="";
+  RUBRIEKEN[cat].sporten.forEach(sp=>{const o=document.createElement("option");o.textContent=sp;s.appendChild(o);});
+}
+function fillKlas(preserve){
+  const ks=$("klas");const cur=preserve||ks.value;ks.innerHTML="";
+  Object.keys(KLASSEN).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=k;ks.appendChild(o);});
+  if(cur&&KLASSEN[cur])ks.value=cur;
+}
+function openKlasForm(k){const a=$("kbnaam"),b=$("kbnamen");if(!a||!b)return;a.value=k;b.value=KLASSEN[k].join("\n");a.scrollIntoView({behavior:"smooth",block:"center"});}
+function renderKlasBeheer(){
+  const box=$("klasbeheer");if(!box)return;box.innerHTML="";
+  Object.keys(KLASSEN).forEach(k=>{
+    const row=document.createElement("div");row.className="savedrow";
+    const lbl=document.createElement("div");lbl.textContent=k+" · "+KLASSEN[k].length+" lln";
+    const acts=document.createElement("div");
+    const ed=document.createElement("a");ed.textContent="bewerken";ed.style.marginRight="12px";
+    ed.onclick=()=>openKlasForm(k);
+    const del=document.createElement("a");del.textContent="verwijder";del.style.color="#c33";
+    del.onclick=()=>{
+      if(Object.keys(KLASSEN).length<=1){alert("Je moet minstens één klas houden.");return;}
+      if(confirm("Klas '"+k+"' uit de lijst verwijderen? Eerder ingevoerde scores blijven bewaard.")){
+        delete KLASSEN[k];saveKlassen();fillKlas();renderKlasBeheer();reloadEvaluation();
+      }
+    };
+    acts.appendChild(ed);acts.appendChild(del);row.appendChild(lbl);row.appendChild(acts);box.appendChild(row);
+  });
+  const form=document.createElement("div");form.style.marginTop="10px";
+  form.innerHTML='<label class="fld" for="kbnaam">Klasnaam</label>'+
+    '<input type="text" id="kbnaam" placeholder="bv. 3HS4">'+
+    '<label class="fld" for="kbnamen" style="margin-top:6px">Leerlingen (één naam per lijn)</label>'+
+    '<textarea id="kbnamen" rows="6" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit"></textarea>'+
+    '<div class="actions" style="margin-top:8px"><button class="btn primary" id="kbsave">Klas opslaan</button></div>'+
+    '<div class="hint">Bestaande klasnaam? Dan wordt die lijst overschreven. Tik ‘bewerken’ om een klas in dit formulier te laden.</div>';
+  box.appendChild(form);
+  $("kbsave").onclick=()=>{
+    const naam=$("kbnaam").value.trim();
+    const namen=$("kbnamen").value.split("\n").map(s=>s.trim()).filter(Boolean);
+    if(!naam){alert("Geef een klasnaam.");return;}
+    if(!namen.length){alert("Voeg minstens één leerling toe.");return;}
+    KLASSEN[naam]=namen;saveKlassen();fillKlas(naam);renderKlasBeheer();reloadEvaluation();toast("Klas '"+naam+"' opgeslagen");
+  };
+}
+function refreshAll(){renderToggles();renderStudents();renderOverview();renderSaved();
+  $("hsub").textContent=curRubriek().label+" · "+sportLabel()+" · "+state.klas+" · "+state.graad+" graad";}
+function reloadEvaluation(){saveState();loadOrInit();refreshAll();}
+
+function init(){
+  loadKlassen();
+  fillKlas();
+  const cs=$("categorie");Object.keys(RUBRIEKEN).forEach(id=>{const o=document.createElement("option");o.value=id;o.textContent=RUBRIEKEN[id].label;cs.appendChild(o);});
+  cs.value="trefspelen";
+  fillSport("trefspelen");
+  $("datum").value=todayISO();
+  loadOrInit();refreshAll();renderKlasBeheer();
+
+  $("klas").onchange=reloadEvaluation;
+  $("categorie").onchange=()=>{fillSport($("categorie").value);reloadEvaluation();};
+  $("sport").onchange=reloadEvaluation;
+  $("spec").onchange=reloadEvaluation;
+  $("datum").onchange=reloadEvaluation;
+  $("graad").onchange=()=>{state.graad=$("graad").value;saveState();refreshAll();};
+
+  $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
+  $("dlall").onclick=()=>{
+    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0)all[k]=localStorage.getItem(k);}
+    download("LO_evaluaties_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
+  };
+  $("copyss").onclick=()=>{
+    let txt=state.klas+" · "+sportLabel()+" · "+state.datum+":\n";
+    KLASSEN[state.klas].forEach(n=>{const s=scoreFor(n);const stt=state.status[n]||"aanwezig";
+      if(stt!=="aanwezig")txt+=n+": "+statusLabel(stt)+"\n";
+      else if(s.count>0)txt+=n+": "+s.beh+"\n";});
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast("Gekopieerd"),()=>alert(txt));}else alert(txt);
+  };
+  $("reset").onclick=()=>{
+    if(confirm("Alle scores en statussen van deze evaluatie wissen?")){
+      KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);state.status[n]="aanwezig";});
+      saveState();refreshAll();toast("Gewist");
+    }
+  };
+}
+init();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+}
+</script>
+</body>
+</html>
