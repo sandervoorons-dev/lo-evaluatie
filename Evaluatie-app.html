@@ -6,88 +6,106 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="LO Evaluatie">
-<meta name="theme-color" content="#2f6fed">
+<meta name="theme-color" content="#cfe3f1">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>LO Evaluatie</title>
 <style>
   :root{
-    --bg:#f4f5f7; --card:#fff; --ink:#1f2733; --muted:#6b7280; --line:#e3e6ea;
-    --accent:#2f6fed; --b0:#e23b3b; --b1:#f0883e; --b2:#9bcb50; --b3:#2faa57; --off:#cfd4da;
+    --accent:#0e8a78; --ink:#16302a; --muted:#5a6a52; --line:rgba(120,140,120,.22);
+    --glass:rgba(255,255,255,.6); --glassb:rgba(255,255,255,.65);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px}
-  header{position:sticky;top:0;z-index:20;background:var(--accent);color:#fff;padding:10px 12px;
-    box-shadow:0 2px 6px rgba(0,0,0,.15)}
-  header h1{margin:0;font-size:17px;font-weight:700}
-  header .sub{font-size:12px;opacity:.9;margin-top:2px}
-  .wrap{padding:12px;max-width:720px;margin:0 auto}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
-  label.fld{display:block;font-size:12px;color:var(--muted);margin:8px 0 3px}
-  select,input[type=text],input[type=date]{width:100%;max-width:100%;padding:11px;border:1px solid var(--line);
-    border-radius:10px;font-size:16px;background:#fff;color:var(--ink);box-sizing:border-box}
+  html{min-height:100%}
+  body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;
+    background:linear-gradient(180deg,#cfe3f1 0%,#cfe0d2 46%,#bcd6a2 100%);background-attachment:fixed;min-height:100vh}
+  header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.5);padding:10px 14px}
+  header h1{margin:0;font-size:17px;font-weight:600;color:var(--ink)}
+  header .sub{font-size:12px;color:var(--muted);margin-top:1px}
+  .wrap{padding:13px;max-width:720px;margin:0 auto}
+  .card{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glassb);
+    border-radius:16px;padding:13px;margin-bottom:13px;box-shadow:0 6px 18px rgba(50,80,55,.12)}
+  label.fld{display:block;font-size:11.5px;color:var(--muted);margin:8px 0 3px;font-weight:500}
+  select,input[type=text],input[type=date]{width:100%;max-width:100%;padding:10px;border:1px solid rgba(120,140,120,.3);
+    border-radius:11px;font-size:16px;background:rgba(255,255,255,.7);color:var(--ink);box-sizing:border-box}
   input[type=date]{-webkit-appearance:none;appearance:none;min-width:0}
   .row2{display:flex;gap:10px}.row2>div{flex:1}
-  .crittoggles{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .pill{border:1px solid var(--line);border-radius:20px;padding:6px 11px;font-size:13px;background:#fff;
+  .crittoggles{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .pill{border:1px solid rgba(120,140,120,.3);border-radius:20px;padding:6px 11px;font-size:12.5px;background:rgba(255,255,255,.6);
     color:var(--ink);cursor:pointer;user-select:none}
-  .pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  .pill.off{opacity:.55;text-decoration:line-through}
-  .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
-  .stud{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff}
-  .studhead{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;gap:6px}
-  .studhead .nm{font-weight:600;flex:1;min-width:0;cursor:pointer}
-  .studhead .right{display:flex;align-items:center;gap:6px;flex-shrink:0}
-  .statsel{font-size:12px;padding:7px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:auto;max-width:140px}
-  .attbtn{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:7px;padding:6px 6px;cursor:pointer;flex-shrink:0;user-select:none}
-  .statbtn{font-size:11px;font-weight:700;border-radius:7px;padding:6px 9px;cursor:pointer;border:1px solid transparent;flex-shrink:0;min-width:54px;text-align:center;user-select:none}
-  .statbtn.aanw{background:#e7f4ec;color:#1c6b38;border-color:#bfe3cd}
-  .statbtn.afw{background:#fdecec;color:#b53636;border-color:#f3c9c9}
-  .statbtn.att{background:#e8eefc;color:#274bb5;border-color:#cdd9f6}
-  .gesbtn{font-size:15px;font-weight:700;border:1px solid var(--line);border-radius:7px;padding:5px 7px;cursor:pointer;flex-shrink:0;min-width:30px;text-align:center;color:var(--muted);line-height:1.1}
-  .gesbtn.m{background:#fdeef6;border-color:#f3c2dc;color:#b5367f}
-  .gesbtn.j{background:#eaf1fd;border-color:#c2d4f3;color:#274bb5}
-  .metinput{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:16px;margin-top:4px}
-  .resline{font-size:12.5px;color:var(--ink);margin-top:8px;font-weight:600;line-height:1.4}
-  .badge{font-size:13px;font-weight:700;padding:4px 9px;border-radius:9px;background:#eef1f5;color:var(--ink);min-width:70px;text-align:center}
-  .badge.done{background:#e7f4ec;color:#1c6b38}
-  .badge.afw{background:#fdecec;color:#b53636}
-  .badge.att{background:#e8eefc;color:#274bb5}
-  .studbody{padding:0 12px 10px;display:none}
-  .stud.open .studbody{display:block}
-  .absnote{padding:11px 0;color:var(--muted);font-size:13px;line-height:1.4}
-  .critblock{border-top:1px solid var(--line);padding:9px 0}
-  .critname{font-size:13.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:center}
-  .critname .lpd{font-size:11px;color:var(--muted);font-weight:400}
-  .info{font-size:11px;color:var(--accent);cursor:pointer;white-space:nowrap}
+  .pill.on{border-color:transparent;color:#fff;background:var(--accent)}
+  .pill.on:nth-of-type(5n+2){background:#13a08b}
+  .pill.on:nth-of-type(5n+3){background:#2fb3a0;color:#06463a}
+  .pill.on:nth-of-type(5n+4){background:#5ec7b6;color:#06463a}
+  .pill.on:nth-of-type(5n){background:#83d3c5;color:#06463a}
+  .pill.off{opacity:.55;text-decoration:line-through;color:var(--muted)}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.45}
+  .studlist{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glassb);
+    border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(50,80,55,.12);margin-bottom:13px}
+  .srow{display:flex;align-items:center;gap:11px;padding:10px 12px;cursor:pointer;border-top:1px solid var(--line)}
+  .srow:first-child{border-top:none}
+  .av{width:32px;height:32px;border-radius:50%;background:rgba(14,138,120,.16);color:#0e6b5e;font-size:11.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .snm{flex:1;font-size:14px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .strail{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .scorebadge{font-size:12px;font-weight:500;border-radius:8px;padding:3px 9px}
+  .scorebadge.vold{color:#1c7a45;background:rgba(46,170,110,.18)}
+  .scorebadge.onv{color:#bb3326;background:rgba(214,80,60,.18)}
+  .chip{font-size:11.5px;font-weight:500;border-radius:8px;padding:3px 9px}
+  .chip.afw{color:#bb3326;background:rgba(214,80,60,.16)}
+  .chip.att{color:#7a5b1f;background:rgba(214,170,40,.2)}
+  .todo{font-size:11.5px;color:var(--muted)}
+  .chev{font-size:20px;color:#9aa897;line-height:1}
+  .backdrop{position:fixed;inset:0;background:rgba(20,40,30,.28);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+  .backdrop.open{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;transform:translateY(100%);transition:transform .28s cubic-bezier(.3,.7,.3,1)}
+  .sheet.open{transform:translateY(0)}
+  .sheet-inner{max-width:720px;margin:0 auto;background:rgba(255,255,255,.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-top:1px solid rgba(255,255,255,.7);border-radius:20px 20px 0 0;padding:12px 14px calc(18px + env(safe-area-inset-bottom));
+    max-height:86vh;overflow-y:auto;box-shadow:0 -6px 24px rgba(40,70,50,.18)}
+  .grab{width:38px;height:5px;border-radius:3px;background:rgba(80,100,80,.3);margin:2px auto 12px}
+  .sheethead{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+  .sheethead .av{width:34px;height:34px}
+  .sheetnm{flex:1;font-size:15px;font-weight:600;color:var(--ink)}
+  .doneBtn{background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:600;padding:7px 13px;cursor:pointer}
+  .seg{background:rgba(255,255,255,.55);border:1px solid rgba(120,140,120,.2);border-radius:11px;padding:3px;display:flex;gap:3px;margin-bottom:12px}
+  .segopt{flex:1;text-align:center;font-size:12.5px;color:var(--muted);padding:7px 4px;border-radius:8px;cursor:pointer;font-weight:500}
+  .segopt.on{background:var(--accent);color:#fff}
+  .seglabel{font-size:11.5px;color:var(--muted);font-weight:500;margin:2px 0 5px}
+  .sheetnote{font-size:13px;color:var(--muted);padding:8px 0 4px;line-height:1.4}
+  .critblock{padding:9px 0;border-top:1px solid var(--line)}
+  .crit-label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink)}
+  .crit-label .lpd{font-size:10.5px;color:var(--muted);font-weight:400}
+  .info{font-size:11px;color:var(--accent);cursor:pointer;white-space:nowrap;font-weight:500}
   .opts{display:flex;gap:6px;margin-top:7px}
-  .opt{flex:1;text-align:center;padding:9px 2px;border-radius:9px;border:1px solid var(--line);
-    font-size:12px;font-weight:600;cursor:pointer;background:#fff;line-height:1.15}
-  .opt small{display:block;font-weight:400;font-size:10px;color:var(--muted)}
-  .opt.sel{color:#fff;border-color:transparent}
-  .opt.sel small{color:rgba(255,255,255,.85)}
-  .opt[data-v="0"].sel{background:var(--b0)} .opt[data-v="1"].sel{background:var(--b1)}
-  .opt[data-v="2"].sel{background:var(--b2)} .opt[data-v="3"].sel{background:var(--b3)}
-  .bands{display:none;background:#fafbfc;border:1px dashed var(--line);border-radius:8px;
-    padding:8px;margin-top:7px;font-size:12px;line-height:1.45;color:#374151}
+  .opt{flex:1;text-align:center;padding:10px 0;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer}
+  .opt.v0{background:#e7a59e;color:#6e241d}
+  .opt.v1{background:#eebf85;color:#6e4a12}
+  .opt.v2{background:#bdd79b;color:#3c581d}
+  .opt.v3{background:#8cc6a6;color:#1f5a3e}
+  .opt.sel{box-shadow:inset 0 0 0 2.5px rgba(20,50,30,.5)}
+  .bands{display:none;background:rgba(255,255,255,.6);border:1px dashed rgba(120,140,120,.4);border-radius:9px;
+    padding:8px;margin-top:7px;font-size:12px;line-height:1.45;color:#374B3F}
   .bands.show{display:block}
-  .clearbtn{font-size:11px;color:var(--muted);background:none;border:none;margin-top:8px;text-decoration:underline;cursor:pointer}
+  .metinput{margin-top:0}
+  .resline{font-size:12.5px;color:var(--ink);margin-top:9px;font-weight:600;line-height:1.4}
+  .clearbtn{display:block;width:100%;background:none;border:none;color:var(--muted);font-size:12px;margin-top:13px;text-decoration:underline;cursor:pointer}
   .actions{display:flex;gap:10px;flex-wrap:wrap}
-  .btn{flex:1;min-width:130px;padding:13px;border-radius:11px;border:none;font-size:15px;font-weight:700;cursor:pointer}
+  .btn{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;font-size:14px;font-weight:600;cursor:pointer}
   .btn.primary{background:var(--accent);color:#fff}
-  .btn.ghost{background:#fff;border:1px solid var(--accent);color:var(--accent)}
-  .btn.warn{background:#fff;border:1px solid #c33;color:#c33}
+  .btn.ghost{background:rgba(255,255,255,.6);border:1px solid var(--accent);color:#0c6b5c}
+  .btn.warn{background:rgba(255,255,255,.6);border:1px solid #c0493a;color:#a23b30}
   .smalltbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
   .smalltbl td{padding:5px 4px;border-bottom:1px solid var(--line)}
-  .smalltbl td:last-child{text-align:right;font-weight:700}
+  .smalltbl td:last-child{text-align:right;font-weight:600}
   .muted{color:var(--muted);font-size:12px}
-  details summary{cursor:pointer;font-weight:600;font-size:14px}
+  details summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--ink)}
   .savedrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
-  .savedrow a{color:var(--accent);cursor:pointer;text-decoration:underline}
-  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1f2733;color:#fff;
-    padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;z-index:50}
-  .toast.show{opacity:.95}
+  .savedrow a{color:#0c6b5c;cursor:pointer;text-decoration:underline}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(22,48,42,.94);color:#fff;
+    padding:10px 16px;border-radius:11px;font-size:14px;opacity:0;transition:opacity .25s;z-index:60}
+  .toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -173,6 +191,8 @@
   </div>
 </div>
 
+<div id="backdrop" class="backdrop"></div>
+<div id="sheet" class="sheet"><div class="sheet-inner" id="sheetbody"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -420,120 +440,105 @@ function renderToggles(){
   });
 }
 
+let sheetNaam=null;
+function initials(naam){const p=(""+naam).trim().split(/\s+/);return (((p[0]||"")[0]||"")+((p[1]||"")[0]||"")).toUpperCase();}
+function pctOf(sc){if(sc.type==="meting"){return (sc.techn10!=null||sc.prest10!=null)?(sc.totaal/20):null;}return (sc.count>0)?(sc.beh/sc.max):null;}
 function renderStudents(){
-  const wrap=$("students");
-  const openNow={};
-  document.querySelectorAll(".stud.open").forEach(e=>openNow[e.dataset.n]=true);
-  wrap.innerHTML="";
+  const wrap=$("students");wrap.innerHTML="";
+  const card=document.createElement("div");card.className="studlist";
   KLASSEN[state.klas].forEach(naam=>{
     const stt=state.status[naam]||"aanwezig";
-    const absent=(stt!=="aanwezig");
     const sc=scoreFor(naam);
-    const stud=document.createElement("div");
-    stud.className="stud"+(openNow[naam]?" open":"");
-    stud.dataset.n=naam;
-
-    const head=document.createElement("div");head.className="studhead";
-    const nm=document.createElement("div");nm.className="nm";nm.textContent=naam;
-    const right=document.createElement("div");right.className="right";
-
-    if(curRubriek().type==="meting"){
-      const g=getGes(naam);
-      [["M","♀","m","Meisje"],["J","♂","j","Jongen"]].forEach(function(o){
-        const b=document.createElement("div");
-        b.className="gesbtn "+(g===o[0]?o[2]:"");
-        b.textContent=o[1]; b.title=o[3];
-        b.onclick=e=>{e.stopPropagation();setGes(naam,g===o[0]?"":o[0]);renderStudents();renderOverview();const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
-        right.appendChild(b);
-      });
+    const row=document.createElement("div");row.className="srow";
+    row.onclick=()=>openSheet(naam);
+    const av=document.createElement("div");av.className="av";av.textContent=initials(naam);
+    const nm=document.createElement("div");nm.className="snm";nm.textContent=naam;
+    const tr=document.createElement("div");tr.className="strail";
+    if(stt!=="aanwezig"){const c=document.createElement("span");c.className="chip "+(stt==="attest"?"att":"afw");c.textContent=(stt==="attest"?"Attest":"Afwezig");tr.appendChild(c);}
+    else{
+      const p=pctOf(sc);
+      if(p==null){const s=document.createElement("span");s.className="todo";s.textContent="Nog te scoren";tr.appendChild(s);}
+      else{const b=document.createElement("span");b.className="scorebadge "+(p<0.5?"onv":"vold");b.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max);tr.appendChild(b);}
     }
-    const att=document.createElement("div");att.className="attbtn";att.textContent="att";att.title="Doktersattest";
-    att.onclick=e=>{e.stopPropagation();state.status[naam]="attest";saveState();renderStudents();renderOverview();};
-    const tog=document.createElement("div");
-    tog.className="statbtn "+(stt==="afwezig"?"afw":(stt==="attest"?"att":"aanw"));
-    tog.textContent=(stt==="afwezig"?"Afw":(stt==="attest"?"Att":"Aanw"));
-    tog.onclick=e=>{
-      e.stopPropagation();
-      state.status[naam]=(stt==="aanwezig")?"afwezig":"aanwezig"; // 1 tik: aanwezig<->afwezig (attest->aanwezig)
-      saveState();renderStudents();renderOverview();
-      const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");
-    };
-    right.appendChild(att);right.appendChild(tog);
-    if(!absent){
-      const heeft=(sc.type==="meting")?(sc.techn10!=null||sc.prest10!=null):(sc.count>0);
-      if(heeft){
-        const bd=document.createElement("div");bd.className="badge done";
-        bd.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max+"  ("+sc.score10.toFixed(1)+")");
-        right.appendChild(bd);
-      }
-    }
-    nm.onclick=()=>stud.classList.toggle("open");
-    head.appendChild(nm);head.appendChild(right);
-    stud.appendChild(head);
-
-    const body=document.createElement("div");body.className="studbody";
-    if(absent){
-      const note=document.createElement("div");note.className="absnote";
-      note.textContent=statusLabel(stt)+" — geen score voor deze leerling. Zet de keuze terug op 'Aanwezig' om te scoren.";
-      body.appendChild(note);
-    }else{
-      crits().forEach(c=>{
-        if(!state.enabled[c.key])return;
-        const block=document.createElement("div");block.className="critblock";
-        const cn=document.createElement("div");cn.className="critname";
-        cn.innerHTML='<span>'+c.naam+(c.lpd?' <span class="lpd">'+c.lpd+'</span>':'')+'</span>';
-        const info=document.createElement("span");info.className="info";info.textContent="banden";
-        const bands=document.createElement("div");bands.className="bands";
-        const labels=c.max===3?LABELS3:LABELS2;
-        bands.innerHTML=bandsFor(c).map((tx,i)=>"<b>"+i+" "+labels[i]+":</b> "+tx).join("<br>");
-        info.onclick=()=>bands.classList.toggle("show");
-        cn.appendChild(info);block.appendChild(cn);
-
-        const opts=document.createElement("div");opts.className="opts";
-        labels.forEach((lab,i)=>{
-          const o=document.createElement("div");
-          o.className="opt"+(state.data[naam][c.key]===i?" sel":"");
-          o.dataset.v=i;
-          o.innerHTML=i+'<small>'+lab+'</small>';
-          o.onclick=()=>{
-            state.data[naam][c.key]=(state.data[naam][c.key]===i)?null:i; // nogmaals tikken = wissen
-            saveState();renderStudents();renderOverview();
-            const reopened=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');
-            if(reopened)reopened.classList.add("open");
-          };
-          opts.appendChild(o);
-        });
-        block.appendChild(opts);block.appendChild(bands);
-        body.appendChild(block);
-      });
-      if(curRubriek().type==="meting"){
-        const od=curRubriek().onderdelen[state.sport];
-        const mb=document.createElement("div");mb.className="critblock";
-        const lab=document.createElement("label");lab.className="fld";lab.style.marginTop="0";lab.textContent="Meting ("+(od?od.eenheid:"")+")";
-        const inp=document.createElement("input");inp.type="text";inp.className="metinput";inp.value=state.data[naam].__meting||"";
-        inp.placeholder=(od&&od.eenheid==="m"?"bv. 4.80":(od&&od.eenheid==="sec"?"bv. 9.8":"bv. 6.30"));
-        inp.onclick=e=>e.stopPropagation();
-        inp.onchange=()=>{state.data[naam].__meting=inp.value.trim();saveState();renderStudents();renderOverview();const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
-        mb.appendChild(lab);mb.appendChild(inp);
-        const res=document.createElement("div");res.className="resline";
-        const g=getGes(naam);const parts=[];
-        parts.push("Techniek "+(sc.techn10!=null?sc.techn10.toFixed(1):"–")+"/10");
-        if(!g)parts.push("⚠ stel geslacht in");
-        else if(sc.prest10==null)parts.push("⚠ vul meting in");
-        else parts.push("Prestatie "+sc.prest10.toFixed(1)+"/10");
-        parts.push("Totaal "+((sc.techn10!=null||sc.prest10!=null)?sc.totaal.toFixed(1):"–")+"/20");
-        res.textContent=parts.join("   ·   ");
-        mb.appendChild(res);
-        body.appendChild(mb);
-      }
-      const clr=document.createElement("button");clr.className="clearbtn";clr.textContent="leeg maken";
-      clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);saveState();renderStudents();renderOverview();
-        const r=document.querySelector('.stud[data-n="'+CSS.escape(naam)+'"]');if(r)r.classList.add("open");};
-      body.appendChild(clr);
-    }
-    stud.appendChild(body);
-    wrap.appendChild(stud);
+    const ch=document.createElement("span");ch.className="chev";ch.textContent="›";tr.appendChild(ch);
+    row.appendChild(av);row.appendChild(nm);row.appendChild(tr);
+    card.appendChild(row);
   });
+  wrap.appendChild(card);
+}
+function openSheet(naam){sheetNaam=naam;buildSheet();$("backdrop").classList.add("open");$("sheet").classList.add("open");}
+function closeSheet(){sheetNaam=null;$("backdrop").classList.remove("open");$("sheet").classList.remove("open");}
+function buildSheet(){
+  const naam=sheetNaam; if(naam==null)return;
+  const box=$("sheetbody");box.innerHTML="";
+  const stt=state.status[naam]||"aanwezig";
+  const sc=scoreFor(naam);
+  const grab=document.createElement("div");grab.className="grab";box.appendChild(grab);
+  const head=document.createElement("div");head.className="sheethead";
+  const av=document.createElement("div");av.className="av";av.textContent=initials(naam);
+  const nm=document.createElement("div");nm.className="sheetnm";nm.textContent=naam;
+  head.appendChild(av);head.appendChild(nm);
+  const p=pctOf(sc);
+  if(stt==="aanwezig"&&p!=null){const bd=document.createElement("span");bd.className="scorebadge "+(p<0.5?"onv":"vold");bd.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max);head.appendChild(bd);}
+  const done=document.createElement("button");done.className="doneBtn";done.textContent="Gereed";done.onclick=closeSheet;
+  head.appendChild(done);
+  box.appendChild(head);
+  const seg=document.createElement("div");seg.className="seg";
+  STATUS.forEach(s=>{const o=document.createElement("div");o.className="segopt"+(stt===s.v?" on":"");o.textContent=s.l;
+    o.onclick=()=>{state.status[naam]=s.v;saveState();buildSheet();renderStudents();renderOverview();};seg.appendChild(o);});
+  box.appendChild(seg);
+  if(stt!=="aanwezig"){const note=document.createElement("div");note.className="sheetnote";note.textContent=statusLabel(stt)+" — geen score voor deze leerling.";box.appendChild(note);return;}
+  if(curRubriek().type==="meting"){
+    const gl=document.createElement("div");gl.className="seglabel";gl.textContent="Geslacht (voor de prestatietabel)";box.appendChild(gl);
+    const g=getGes(naam);
+    const gseg=document.createElement("div");gseg.className="seg";
+    [["M","♀ Meisje"],["J","♂ Jongen"]].forEach(o=>{const b=document.createElement("div");b.className="segopt"+(g===o[0]?" on":"");b.textContent=o[1];
+      b.onclick=()=>{setGes(naam,g===o[0]?"":o[0]);buildSheet();renderStudents();renderOverview();};gseg.appendChild(b);});
+    box.appendChild(gseg);
+  }
+  crits().forEach(c=>{
+    if(!state.enabled[c.key])return;
+    const block=document.createElement("div");block.className="critblock";
+    const cn=document.createElement("div");cn.className="crit-label";
+    cn.innerHTML='<span>'+c.naam+(c.lpd?' <span class="lpd">'+c.lpd+'</span>':'')+'</span>';
+    const info=document.createElement("span");info.className="info";info.textContent="banden";
+    const bands=document.createElement("div");bands.className="bands";
+    const labels=c.max===3?LABELS3:LABELS2;
+    bands.innerHTML=bandsFor(c).map((tx,i)=>"<b>"+i+" "+labels[i]+":</b> "+tx).join("<br>");
+    info.onclick=()=>bands.classList.toggle("show");
+    cn.appendChild(info);block.appendChild(cn);
+    const opts=document.createElement("div");opts.className="opts";
+    labels.forEach((lab,i)=>{
+      const o=document.createElement("div");
+      const cc=(c.max===2)?["v0","v1","v3"][i]:("v"+i);
+      o.className="opt "+cc+(state.data[naam][c.key]===i?" sel":"");
+      o.textContent=i; o.title=lab;
+      o.onclick=()=>{state.data[naam][c.key]=(state.data[naam][c.key]===i)?null:i;saveState();buildSheet();renderStudents();renderOverview();};
+      opts.appendChild(o);
+    });
+    block.appendChild(opts);block.appendChild(bands);
+    box.appendChild(block);
+  });
+  if(curRubriek().type==="meting"){
+    const od=curRubriek().onderdelen[state.sport];
+    const ml=document.createElement("div");ml.className="seglabel";ml.style.marginTop="9px";ml.textContent="Meting ("+(od?od.eenheid:"")+")";box.appendChild(ml);
+    const inp=document.createElement("input");inp.type="text";inp.className="metinput";inp.value=state.data[naam].__meting||"";
+    inp.placeholder=(od&&od.eenheid==="m"?"bv. 4.80":(od&&od.eenheid==="sec"?"bv. 9.8":"bv. 6.30"));
+    inp.onchange=()=>{state.data[naam].__meting=inp.value.trim();saveState();buildSheet();renderStudents();renderOverview();};
+    box.appendChild(inp);
+    const res=document.createElement("div");res.className="resline";
+    const g=getGes(naam);const parts=[];
+    parts.push("Techniek "+(sc.techn10!=null?sc.techn10.toFixed(1):"–")+"/10");
+    if(!g)parts.push("⚠ stel geslacht in");
+    else if(sc.prest10==null)parts.push("⚠ vul meting in");
+    else parts.push("Prestatie "+sc.prest10.toFixed(1)+"/10");
+    parts.push("Totaal "+((sc.techn10!=null||sc.prest10!=null)?sc.totaal.toFixed(1):"–")+"/20");
+    res.textContent=parts.join("   ·   ");
+    box.appendChild(res);
+  }
+  const clr=document.createElement("button");clr.className="clearbtn";clr.textContent="scores leeg maken";
+  clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);if(curRubriek().type==="meting")state.data[naam].__meting="";saveState();buildSheet();renderStudents();renderOverview();};
+  box.appendChild(clr);
 }
 
 function renderOverview(){
@@ -708,7 +713,7 @@ function renderKlasBeheer(){
 }
 function refreshAll(){renderToggles();renderStudents();renderOverview();renderSaved();
   $("hsub").textContent=curRubriek().label+" · "+sportLabel()+" · "+state.klas+" · "+state.graad+" graad";}
-function reloadEvaluation(){saveState();loadOrInit();refreshAll();}
+function reloadEvaluation(){closeSheet();saveState();loadOrInit();refreshAll();}
 
 function init(){
   loadKlassen();
@@ -726,6 +731,7 @@ function init(){
   $("spec").onchange=reloadEvaluation;
   $("datum").onchange=reloadEvaluation;
   $("graad").onchange=()=>{state.graad=$("graad").value;saveState();refreshAll();};
+  $("backdrop").onclick=closeSheet;
 
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
   $("dlall").onclick=()=>{
