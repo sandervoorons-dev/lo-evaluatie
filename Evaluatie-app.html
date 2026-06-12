@@ -460,16 +460,12 @@ function renderStudents(){
     };
     right.appendChild(att);right.appendChild(tog);
     if(!absent){
-      const bd=document.createElement("div");
-      if(sc.type==="meting"){
-        const heeft=(sc.techn10!=null||sc.prest10!=null);
-        bd.className="badge"+(heeft?" done":"");
-        bd.textContent=heeft?(sc.totaal.toFixed(1)+"/20"):"–";
-      }else{
-        bd.className="badge"+(sc.count>0?" done":"");
-        bd.textContent=sc.count>0?(sc.beh+"/"+sc.max+"  ("+sc.score10.toFixed(1)+")"):"–";
+      const heeft=(sc.type==="meting")?(sc.techn10!=null||sc.prest10!=null):(sc.count>0);
+      if(heeft){
+        const bd=document.createElement("div");bd.className="badge done";
+        bd.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max+"  ("+sc.score10.toFixed(1)+")");
+        right.appendChild(bd);
       }
-      right.appendChild(bd);
     }
     nm.onclick=()=>stud.classList.toggle("open");
     head.appendChild(nm);head.appendChild(right);
