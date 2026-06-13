@@ -159,8 +159,14 @@
   .ovd{width:13px;height:13px;border-radius:50%;display:inline-block}
   .crithead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .critttl{font-size:12.5px;font-weight:600;color:var(--ink)}
+  .critttl.clkbl{cursor:pointer;user-select:none}
   .uitlegtoggle{font-size:11px;color:#0c6b5c;cursor:pointer;user-select:none}
   .hint.collapsed{display:none}
+  #critBody.collapsed{display:none}
+  .sheetnav{display:flex;gap:10px;margin-top:14px}
+  .navbtn{flex:1;height:46px;border:none;border-radius:14px;font-size:15px;font-weight:600;background:rgba(14,138,120,.1);color:var(--accent);cursor:pointer}
+  .navbtn.primary{background:var(--accent);color:#fff}
+  .navbtn:disabled{opacity:.4;cursor:default}
   .pickrow{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-top:1px solid var(--line);cursor:pointer;font-size:15px;color:var(--ink)}
   .pickrow:first-child{border-top:none}
   .pickrow.on{color:var(--accent);font-weight:600}
@@ -185,9 +191,11 @@
       <div class="grow"><span class="glabel">Onderwerp</span><input type="text" id="spec" class="ginput" placeholder="optioneel"></div>
     </div>
     <div class="card">
-      <div class="crithead"><span class="critttl">Criteria meenemen</span><span class="uitlegtoggle" id="critUitlegBtn">uitleg ▾</span></div>
-      <div class="crittoggles" id="toggles"></div>
-      <div class="hint collapsed" id="critUitleg">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu in het focuspaneel; die krijgt dan geen score.</div>
+      <div class="crithead"><span class="critttl clkbl" id="critCollapseBtn">Criteria meenemen <span id="critChev">▾</span></span><span class="uitlegtoggle" id="critUitlegBtn">uitleg ▾</span></div>
+      <div id="critBody">
+        <div class="crittoggles" id="toggles"></div>
+        <div class="hint collapsed" id="critUitleg">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu in het focuspaneel; die krijgt dan geen score.</div>
+      </div>
     </div>
     <div id="students"></div>
     <div class="card">
@@ -538,6 +546,11 @@ function renderStudents(){
 }
 function openSheet(naam){sheetNaam=naam;buildSheet();$("backdrop").classList.add("open");$("sheet").classList.add("open");}
 function closeSheet(){sheetNaam=null;$("backdrop").classList.remove("open");$("sheet").classList.remove("open");}
+function gotoStudent(delta){const list=KLASSEN[state.klas];if(!list||sheetNaam==null){closeSheet();return;}let i=list.indexOf(sheetNaam);if(i<0){closeSheet();return;}i+=delta;if(i<0||i>=list.length){closeSheet();return;}openSheet(list[i]);}
+function addSheetNav(box){const list=KLASSEN[state.klas]||[];const i=list.indexOf(sheetNaam);const nav=document.createElement("div");nav.className="sheetnav";
+  const prev=document.createElement("button");prev.className="navbtn";prev.textContent="‹ Vorige";prev.disabled=(i<=0);prev.onclick=()=>gotoStudent(-1);
+  const next=document.createElement("button");next.className="navbtn primary";next.textContent=(i>=list.length-1?"Klaar":"Volgende ›");next.onclick=()=>gotoStudent(1);
+  nav.appendChild(prev);nav.appendChild(next);box.appendChild(nav);}
 function buildSheet(){
   const naam=sheetNaam; if(naam==null)return;
   const box=$("sheetbody");box.innerHTML="";
@@ -555,9 +568,9 @@ function buildSheet(){
   box.appendChild(head);
   const seg=document.createElement("div");seg.className="seg";
   STATUS.forEach(s=>{const o=document.createElement("div");o.className="segopt"+(stt===s.v?" on":"");o.textContent=s.l;
-    o.onclick=()=>{state.status[naam]=s.v;saveState();buildSheet();renderStudents();renderOverview();};seg.appendChild(o);});
+    o.onclick=()=>{state.status[naam]=s.v;saveState();renderStudents();renderOverview();if(s.v!=="aanwezig"){closeSheet();}else{buildSheet();}};seg.appendChild(o);});
   box.appendChild(seg);
-  if(stt!=="aanwezig"){const note=document.createElement("div");note.className="sheetnote";note.textContent=statusLabel(stt)+" — geen score voor deze leerling.";box.appendChild(note);return;}
+  if(stt!=="aanwezig"){const note=document.createElement("div");note.className="sheetnote";note.textContent=statusLabel(stt)+" — geen score voor deze leerling.";box.appendChild(note);addSheetNav(box);return;}
   if(curRubriek().type==="meting"){
     const gl=document.createElement("div");gl.className="seglabel";gl.textContent="Geslacht (voor de prestatietabel)";box.appendChild(gl);
     const g=getGes(naam);
@@ -609,6 +622,7 @@ function buildSheet(){
   const clr=document.createElement("button");clr.className="clearbtn";clr.textContent="scores leeg maken";
   clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);if(curRubriek().type==="meting")state.data[naam].__meting="";saveState();buildSheet();renderStudents();renderOverview();};
   box.appendChild(clr);
+  addSheetNav(box);
 }
 
 function renderOverview(){
@@ -927,6 +941,8 @@ function init(){
   $("spec").onchange=reloadEvaluation;
   $("backdrop").onclick=closeSheet;
   $("critUitlegBtn").onclick=()=>{$("critUitleg").classList.toggle("collapsed");};
+  if(localStorage.getItem("lo_crit_collapsed")==="1"){$("critBody").classList.add("collapsed");$("critChev").textContent="▸";}
+  $("critCollapseBtn").onclick=()=>{const c=$("critBody").classList.toggle("collapsed");$("critChev").textContent=c?"▸":"▾";localStorage.setItem("lo_crit_collapsed",c?"1":"0");};
 
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
   $("dlall").onclick=()=>{
