@@ -9,6 +9,9 @@
 <meta name="theme-color" content="#FBF6EA">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 <title>LO Evaluatie</title>
 <style>
   :root{
@@ -29,7 +32,7 @@
   .card{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glassb);
     border-radius:16px;padding:13px;margin-bottom:13px;box-shadow:0 6px 18px rgba(50,80,55,.12)}
   label.fld{display:block;font-size:11.5px;color:var(--muted);margin:8px 0 3px;font-weight:500}
-  select,input[type=text],input[type=date]{width:100%;max-width:100%;padding:10px;border:1px solid rgba(120,140,120,.3);
+  select,input[type=text],input[type=date]{width:100%;max-width:100%;padding:10px;border:1px solid rgba(120,100,60,.28);
     border-radius:11px;font-size:16px;background:rgba(255,255,255,.7);color:var(--ink);box-sizing:border-box}
   input[type=date]{-webkit-appearance:none;appearance:none;min-width:0}
   .row2{display:flex;gap:10px}.row2>div{flex:1}
@@ -120,7 +123,7 @@
   .tabview{display:none}
   .tabview.on{display:block}
   .apphead{display:flex;justify-content:space-between;align-items:center;margin:2px 0 11px;gap:8px}
-  .apptitle{font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-.4px}
+  .apptitle{font-family:"Fraunces",Georgia,"Times New Roman",serif;font-size:26px;font-weight:600;color:var(--ink);letter-spacing:-.2px}
   .klaschip{font-size:13px;font-weight:600;color:var(--accent-ink);background:var(--accent);border-radius:20px;padding:6px 13px;cursor:pointer;white-space:nowrap;flex-shrink:0}
   .klaschip .cv{opacity:.8;font-size:11px;margin-left:4px}
   .datestrip{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;margin-bottom:12px;padding-bottom:2px}
@@ -140,8 +143,9 @@
     text-align:right;text-align-last:right;color:var(--muted);font-size:14px;padding:12px 20px 12px 8px;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2390a08c' stroke-width='3' stroke-linecap='round'><polyline points='9 18 15 12 9 6'/></svg>");
     background-repeat:no-repeat;background-position:right 2px center}
-  .ginput{flex:1;width:auto;min-width:0;border:none;border-radius:0;background:transparent;-webkit-appearance:none;appearance:none;box-shadow:none;outline:none;text-align:right;color:var(--ink);font-size:14px;padding:12px 4px}
-  .ginput::placeholder{color:var(--muted)}
+  .grow .ginput{flex:1;width:auto;min-width:0;border:0;border-radius:0;background:transparent;background-color:transparent;-webkit-appearance:none;appearance:none;box-shadow:none;outline:none;text-align:right;color:var(--ink);font-size:14px;padding:12px 4px}
+  .grow .ginput:focus{border:0;box-shadow:none;outline:none;background:transparent}
+  .grow .ginput::placeholder{color:var(--muted)}
   .gdiv{height:1px;background:var(--line);margin-left:13px}
   .regrow{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid var(--line)}
   .regrow:first-child{border-top:none}
@@ -571,7 +575,7 @@ function buildSheet(){
   box.appendChild(head);
   const seg=document.createElement("div");seg.className="seg";
   STATUS.forEach(s=>{const o=document.createElement("div");o.className="segopt"+(stt===s.v?" on":"");o.textContent=s.l;
-    o.onclick=()=>{state.status[naam]=s.v;saveState();renderStudents();renderOverview();if(s.v!=="aanwezig"){closeSheet();}else{buildSheet();}};seg.appendChild(o);});
+    o.onclick=()=>{state.status[naam]=s.v;saveState();renderStudents();renderOverview();if(s.v!=="aanwezig"){gotoStudent(1);}else{buildSheet();}};seg.appendChild(o);});
   box.appendChild(seg);
   if(stt!=="aanwezig"){const note=document.createElement("div");note.className="sheetnote";note.textContent=statusLabel(stt)+" — geen score voor deze leerling.";box.appendChild(note);addSheetNav(box);return;}
   if(curRubriek().type==="meting"){
