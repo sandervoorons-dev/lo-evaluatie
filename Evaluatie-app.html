@@ -103,13 +103,18 @@
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(22,48,42,.94);color:#fff;
     padding:10px 16px;border-radius:11px;font-size:14px;opacity:0;transition:opacity .25s;z-index:60}
   .toast.show{opacity:1}
-  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:rgba(255,255,255,.72);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.6);
-    padding:7px 0 calc(8px + env(safe-area-inset-bottom))}
-  .tabitem{flex:1;text-align:center;color:#8a948c;cursor:pointer;font-size:10px;line-height:1.25;user-select:none}
-  .tabitem .ic{font-size:21px;display:block;margin-bottom:1px}
-  .tabitem.on{color:var(--accent);font-weight:600}
-  .wrap{padding-bottom:76px}
+  .tabbar{position:fixed;left:14px;right:14px;bottom:calc(11px + env(safe-area-inset-bottom));z-index:30;
+    display:flex;align-items:center;justify-content:space-around;gap:6px;
+    background:rgba(255,255,255,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.7);border-radius:34px;padding:8px;box-shadow:0 12px 30px rgba(18,70,58,.18)}
+  .tabitem{display:flex;align-items:center;justify-content:center;gap:7px;height:50px;min-width:50px;
+    border-radius:26px;background:rgba(255,255,255,.62);color:#5a6b66;cursor:pointer;user-select:none;
+    font-size:13px;font-weight:600;transition:background .2s,color .2s,padding .2s}
+  .tabitem .ic{display:flex;align-items:center;justify-content:center}
+  .tabitem .lbl{display:none;white-space:nowrap}
+  .tabitem.on{background:var(--accent);color:#fff;padding:0 20px}
+  .tabitem.on .lbl{display:inline}
+  .wrap{padding-bottom:92px}
   .tabview{display:none}
   .tabview.on{display:block}
   .apphead{display:flex;justify-content:space-between;align-items:center;margin:2px 0 11px;gap:8px}
@@ -118,16 +123,16 @@
   .klaschip .cv{opacity:.8;font-size:11px;margin-left:4px}
   .datestrip{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;margin-bottom:12px;padding-bottom:2px}
   .datestrip::-webkit-scrollbar{display:none}
-  .day{flex:1 0 13.2%;min-width:40px;text-align:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:12px;padding:6px 0;cursor:pointer}
+  .day{flex:1 0 13.2%;min-width:40px;text-align:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:14px;padding:12px 0;cursor:pointer;display:flex;flex-direction:column;gap:4px}
   .day .dw{font-size:9.5px;color:var(--muted)}
-  .day .dn{font-size:14px;font-weight:600;color:var(--ink)}
+  .day .dn{font-size:15px;font-weight:600;color:var(--ink)}
   .day.sel{background:var(--accent);border-color:var(--accent)}
   .day.sel .dw{color:#bdeee4}.day.sel .dn{color:#fff}
   .day.today .dn{text-decoration:underline}
-  .daycal{flex:0 0 auto;width:42px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:12px;color:#0e6b5e;position:relative;overflow:hidden;font-size:18px}
+  .daycal{flex:0 0 auto;width:42px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:14px;color:#0e6b5e;position:relative;overflow:hidden;font-size:18px}
   .daycal input{position:absolute;inset:0;opacity:0;cursor:pointer}
   .grouped{padding:0;overflow:hidden}
-  .grow{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 13px}
+  .grow{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 13px;gap:16px}
   .glabel{font-size:13.5px;color:var(--ink)}
   .gsel{flex:1;width:auto;min-width:0;border:none;background-color:transparent;-webkit-appearance:none;appearance:none;
     text-align:right;text-align-last:right;color:var(--muted);font-size:14px;padding:12px 20px 12px 8px;
@@ -177,7 +182,7 @@
       <div class="gdiv"></div>
       <div class="grow"><span class="glabel">Sport</span><select id="sport" class="gsel"></select></div>
       <div class="gdiv"></div>
-      <div class="grow"><span class="glabel">Details</span><input type="text" id="spec" class="ginput" placeholder="optioneel"></div>
+      <div class="grow"><span class="glabel">Onderwerp</span><input type="text" id="spec" class="ginput" placeholder="optioneel"></div>
     </div>
     <div class="card">
       <div class="crithead"><span class="critttl">Criteria meenemen</span><span class="uitlegtoggle" id="critUitlegBtn">uitleg ▾</span></div>
@@ -250,11 +255,11 @@
 
 <div class="tabbar">
   <div class="tabitem" id="tabbtn-evaluaties" onclick="switchTab('evaluaties')">
-    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v2.5h-5z"/><path d="M9 13l2 2 4-4.5"/></svg></span>Evaluaties</div>
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v2.5h-5z"/><path d="M9 13l2 2 4-4.5"/></svg></span><span class="lbl">Evaluaties</span></div>
   <div class="tabitem" id="tabbtn-afwezigheden" onclick="switchTab('afwezigheden')">
-    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.4l2.4 2.4 4.7-5.2"/></svg></span>Afwezigheden</div>
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.4l2.4 2.4 4.7-5.2"/></svg></span><span class="lbl">Afwezigheden</span></div>
   <div class="tabitem" id="tabbtn-meer" onclick="switchTab('meer')">
-    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></span>Meer</div>
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></span><span class="lbl">Meer</span></div>
 </div>
 <div id="backdrop" class="backdrop"></div>
 <div id="sheet" class="sheet"><div class="sheet-inner" id="sheetbody"></div></div>
