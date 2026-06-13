@@ -125,6 +125,12 @@
   .apphead{display:flex;justify-content:space-between;align-items:center;margin:2px 0 11px;gap:8px}
   .apptitle{font-family:"Fraunces",Georgia,"Times New Roman",serif;font-size:26px;font-weight:600;color:var(--ink);letter-spacing:-.2px}
   .klaschip{font-size:13px;font-weight:600;color:var(--accent-ink);background:var(--accent);border-radius:20px;padding:6px 13px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+  .bubanner{display:flex;align-items:center;gap:10px;background:rgba(244,194,74,.22);border:1px solid rgba(244,194,74,.55);border-radius:14px;padding:10px 12px;margin:0 0 12px}
+  .butxt{flex:1;display:flex;flex-direction:column;font-size:12px;color:var(--accent-ink);line-height:1.35}
+  .butxt b{font-size:13px}
+  .bubtns{display:flex;align-items:center;gap:4px;flex-shrink:0}
+  #bunow{background:var(--dark);color:var(--dark-ink);border:none;border-radius:10px;font-size:12.5px;font-weight:600;padding:8px 12px;cursor:pointer}
+  .bubanner .x{background:transparent;border:none;color:var(--accent-ink);font-size:14px;cursor:pointer;padding:4px 6px}
   .klaschip .cv{opacity:.8;font-size:11px;margin-left:4px}
   .datestrip{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;margin-bottom:12px;padding-bottom:2px}
   .datestrip::-webkit-scrollbar{display:none}
@@ -181,6 +187,10 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="bubanner" id="bubanner" style="display:none">
+    <div class="butxt"><b>Tijd voor een back-up</b><span id="butxtsub"></span></div>
+    <div class="bubtns"><button id="bunow">Nu back-uppen</button><button id="budismiss" class="x" aria-label="sluiten">✕</button></div>
+  </div>
   <div class="apphead">
     <div class="apptitle" id="apptitle">Afwezigheden</div>
     <div class="klaschip" id="klaschip"></div>
@@ -251,8 +261,11 @@
     <div class="card">
       <div class="actions">
         <button class="btn ghost" id="dlall">Download alles (back-up)</button>
+        <button class="btn ghost" id="restorebtn">Herstel uit back-up</button>
         <button class="btn warn" id="reset">Wis deze evaluatie</button>
       </div>
+      <input type="file" id="restorefile" accept="application/json,.json" style="display:none">
+      <div class="muted" id="bustatus" style="margin-top:9px"></div>
     </div>
     <div class="card">
       <details>
@@ -808,6 +821,15 @@ let currentTab="afwezigheden";
 function graadVoorKlas(k){const m=(""+k).match(/\d/);const y=m?parseInt(m[0],10):3;return y<=2?"1ste":(y<=4?"2de":"3de");}
 function parseISO(s){if(!s)return null;const d=new Date(s+"T12:00:00");return isNaN(d.getTime())?null:d;}
 function localISO(d){const o=d.getTimezoneOffset();return new Date(d.getTime()-o*60000).toISOString().slice(0,10);}
+function daysSince(iso){const d=parseISO(iso);if(!d)return null;return Math.floor((parseISO(todayISO())-d)/86400000);}
+function updateBackupStatus(){const el=$("bustatus");if(!el)return;const last=localStorage.getItem("lo_last_backup");const n=daysSince(last);
+  if(n==null)el.textContent="Nog geen back-up gemaakt op dit toestel.";
+  else if(n===0)el.textContent="Laatste back-up: vandaag.";
+  else el.textContent="Laatste back-up: "+n+" "+(n===1?"dag":"dagen")+" geleden.";}
+function checkBackupReminder(){const last=localStorage.getItem("lo_last_backup");const n=daysSince(last);const due=(n==null||n>=7);
+  if(due&&localStorage.getItem("lo_bu_snooze")!==todayISO()){
+    $("butxtsub").textContent=(n==null)?"Je maakte nog geen back-up op dit toestel.":("Je laatste back-up was "+n+" dagen geleden.");
+    $("bubanner").style.display="flex";}else $("bubanner").style.display="none";}
 
 function renderDateStrip(){
   const strip=$("strip");if(!strip)return;strip.innerHTML="";
@@ -956,7 +978,19 @@ function init(){
   $("dlall").onclick=()=>{
     const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0)all[k]=localStorage.getItem(k);}
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
+    localStorage.setItem("lo_last_backup",todayISO());updateBackupStatus();$("bubanner").style.display="none";
   };
+  $("bunow").onclick=()=>{switchTab("meer");$("dlall").click();};
+  $("restorebtn").onclick=()=>$("restorefile").click();
+  $("restorefile").onchange=(e)=>{const f=e.target.files[0];if(!f){return;}const r=new FileReader();
+    r.onload=()=>{let obj;try{obj=JSON.parse(r.result);}catch(err){obj=null;}
+      if(!obj||typeof obj!=="object"||Array.isArray(obj)){alert("Dit bestand is geen geldige back-up.");return;}
+      if(!confirm("Back-up terugzetten? De huidige gegevens op dit toestel worden vervangen door wat in de back-up staat.")){return;}
+      Object.keys(obj).forEach(k=>{try{localStorage.setItem(k,obj[k]);}catch(err){}});
+      toast("Back-up teruggezet");setTimeout(()=>location.reload(),700);};
+    r.readAsText(f);e.target.value="";};
+  $("budismiss").onclick=()=>{$("bubanner").style.display="none";localStorage.setItem("lo_bu_snooze",todayISO());};
+  updateBackupStatus();checkBackupReminder();
   $("copyss").onclick=()=>{
     let txt=state.klas+" · "+sportLabel()+" · "+state.datum+":\n";
     KLASSEN[state.klas].forEach(n=>{const s=scoreFor(n);const stt=state.status[n]||"aanwezig";
