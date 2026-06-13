@@ -32,14 +32,11 @@
   input[type=date]{-webkit-appearance:none;appearance:none;min-width:0}
   .row2{display:flex;gap:10px}.row2>div{flex:1}
   .crittoggles{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
-  .pill{border:1px solid rgba(120,140,120,.3);border-radius:20px;padding:6px 11px;font-size:12.5px;background:rgba(255,255,255,.6);
-    color:var(--ink);cursor:pointer;user-select:none}
-  .pill.on{border-color:transparent;color:#fff;background:var(--accent)}
-  .pill.on:nth-of-type(5n+2){background:#13a08b}
-  .pill.on:nth-of-type(5n+3){background:#2fb3a0;color:#06463a}
-  .pill.on:nth-of-type(5n+4){background:#5ec7b6;color:#06463a}
-  .pill.on:nth-of-type(5n){background:#83d3c5;color:#06463a}
-  .pill.off{opacity:.55;text-decoration:line-through;color:var(--muted)}
+  .pill{border:1px solid rgba(120,140,120,.3);border-radius:10px;padding:5px 10px;font-size:12px;background:rgba(255,255,255,.55);
+    color:#9aa897;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:5px}
+  .pill.on{border-color:rgba(14,138,120,.35);background:rgba(14,138,120,.14);color:#0c6b5c}
+  .pill.on::before{content:"✓";font-weight:700}
+  .pill.off{color:#9aa897}
   .hint{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.45}
   .studlist{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glassb);
     border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(50,80,55,.12);margin-bottom:13px}
@@ -106,91 +103,159 @@
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(22,48,42,.94);color:#fff;
     padding:10px 16px;border-radius:11px;font-size:14px;opacity:0;transition:opacity .25s;z-index:60}
   .toast.show{opacity:1}
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:rgba(255,255,255,.72);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.6);
+    padding:7px 0 calc(8px + env(safe-area-inset-bottom))}
+  .tabitem{flex:1;text-align:center;color:#8a948c;cursor:pointer;font-size:10px;line-height:1.25;user-select:none}
+  .tabitem .ic{font-size:21px;display:block;margin-bottom:1px}
+  .tabitem.on{color:var(--accent);font-weight:600}
+  .wrap{padding-bottom:76px}
+  .tabview{display:none}
+  .tabview.on{display:block}
+  .apphead{display:flex;justify-content:space-between;align-items:center;margin:2px 0 11px;gap:8px}
+  .apptitle{font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-.4px}
+  .klaschip{font-size:13px;font-weight:600;color:#fff;background:var(--accent);border-radius:20px;padding:6px 13px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+  .klaschip .cv{opacity:.8;font-size:11px;margin-left:4px}
+  .datestrip{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;margin-bottom:12px;padding-bottom:2px}
+  .datestrip::-webkit-scrollbar{display:none}
+  .day{flex:1 0 13.2%;min-width:40px;text-align:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:12px;padding:6px 0;cursor:pointer}
+  .day .dw{font-size:9.5px;color:var(--muted)}
+  .day .dn{font-size:14px;font-weight:600;color:var(--ink)}
+  .day.sel{background:var(--accent);border-color:var(--accent)}
+  .day.sel .dw{color:#bdeee4}.day.sel .dn{color:#fff}
+  .day.today .dn{text-decoration:underline}
+  .daycal{flex:0 0 auto;width:42px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:12px;color:#0e6b5e;position:relative;overflow:hidden;font-size:18px}
+  .daycal input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .grouped{padding:0;overflow:hidden}
+  .grow{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 13px}
+  .glabel{font-size:13.5px;color:var(--ink)}
+  .gsel{flex:1;width:auto;min-width:0;border:none;background-color:transparent;-webkit-appearance:none;appearance:none;
+    text-align:right;text-align-last:right;color:var(--muted);font-size:14px;padding:12px 20px 12px 8px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2390a08c' stroke-width='3' stroke-linecap='round'><polyline points='9 18 15 12 9 6'/></svg>");
+    background-repeat:no-repeat;background-position:right 2px center}
+  .ginput{flex:1;width:auto;min-width:0;border:none;background:transparent;text-align:right;color:var(--muted);font-size:14px;padding:12px 4px}
+  .gdiv{height:1px;background:var(--line);margin-left:13px}
+  .regrow{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid var(--line)}
+  .regrow:first-child{border-top:none}
+  .regrow .rn{flex:1;font-size:13.5px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .regdots{display:flex;align-items:center;gap:7px;flex-shrink:0}
+  .rdot{width:22px;height:22px;border-radius:50%;border:2px solid;cursor:pointer;background:transparent}
+  .rdot.g{border-color:#2faa57}.rdot.g.on{background:#2faa57}
+  .rdot.r{border-color:#d6483c}.rdot.r.on{background:#d6483c}
+  .rbtn{min-width:24px;height:24px;border:1px solid rgba(120,140,120,.3);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;color:#7a818a;background:rgba(255,255,255,.5);padding:0 6px}
+  .rbtn.aon{background:#7a818a;color:#fff;border-color:#7a818a}
+  .rbtn.don{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .ovwrap{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+  .ovwrap::-webkit-scrollbar{display:none}
+  .ovtbl{border-collapse:collapse;width:100%;font-size:12.5px;min-width:340px}
+  .ovtbl th{font-weight:500;color:var(--muted);font-size:11px;padding:8px 3px}
+  .ovtbl td{padding:8px 3px;border-top:1px solid var(--line);text-align:center}
+  .ovtbl td.nm,.ovtbl th.nm{text-align:left;padding-left:11px;color:var(--ink)}
+  .ovd{width:13px;height:13px;border-radius:50%;display:inline-block}
+  .crithead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .critttl{font-size:12.5px;font-weight:600;color:var(--ink)}
+  .uitlegtoggle{font-size:11px;color:#0c6b5c;cursor:pointer;user-select:none}
+  .hint.collapsed{display:none}
+  .pickrow{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-top:1px solid var(--line);cursor:pointer;font-size:15px;color:var(--ink)}
+  .pickrow:first-child{border-top:none}
+  .pickrow.on{color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
-<header>
-  <h1>LO Evaluatie</h1>
-  <div class="sub" id="hsub"></div>
-</header>
-
 <div class="wrap">
-  <div class="card">
-    <div class="row2">
-      <div>
-        <label class="fld" for="klas">Klas</label>
-        <select id="klas"></select>
-      </div>
-      <div>
-        <label class="fld" for="graad">Graad (scorebanden)</label>
-        <select id="graad">
-          <option value="1ste">1ste graad</option>
-          <option value="2de" selected>2de graad</option>
-          <option value="3de">3de graad</option>
-        </select>
+  <div class="apphead">
+    <div class="apptitle" id="apptitle">Afwezigheden</div>
+    <div class="klaschip" id="klaschip"></div>
+  </div>
+  <select id="klas" style="display:none"></select>
+
+  <div class="datestrip" id="strip"></div>
+
+  <div id="tab-evaluaties" class="tabview">
+    <div class="card grouped">
+      <div class="grow"><span class="glabel">Bewegingsdomein</span><select id="categorie" class="gsel"></select></div>
+      <div class="gdiv"></div>
+      <div class="grow"><span class="glabel">Sport</span><select id="sport" class="gsel"></select></div>
+      <div class="gdiv"></div>
+      <div class="grow"><span class="glabel">Details</span><input type="text" id="spec" class="ginput" placeholder="optioneel"></div>
+    </div>
+    <div class="card">
+      <div class="crithead"><span class="critttl">Criteria meenemen</span><span class="uitlegtoggle" id="critUitlegBtn">uitleg ▾</span></div>
+      <div class="crittoggles" id="toggles"></div>
+      <div class="hint collapsed" id="critUitleg">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu in het focuspaneel; die krijgt dan geen score.</div>
+    </div>
+    <div id="students"></div>
+    <div class="card">
+      <details>
+        <summary>Klasoverzicht &amp; scores</summary>
+        <table class="smalltbl" id="overview"></table>
+        <div class="muted" id="klasgem" style="margin-top:6px"></div>
+      </details>
+    </div>
+    <div class="card">
+      <div class="actions">
+        <button class="btn primary" id="dlcsv">Download (CSV)</button>
+        <button class="btn ghost" id="copyss">Kopieer voor Smartschool</button>
       </div>
     </div>
-    <div class="row2">
-      <div>
-        <label class="fld" for="categorie">Sportklasse</label>
-        <select id="categorie"></select>
-      </div>
-      <div>
-        <label class="fld" for="sport">Sport</label>
-        <select id="sport"></select>
-      </div>
-    </div>
-    <div>
-      <label class="fld" for="datum">Datum</label>
-      <input type="date" id="datum">
-    </div>
-    <div>
-      <label class="fld" for="spec">Details / periode (optioneel)</label>
-      <input type="text" id="spec" placeholder="bv. 3-tegen-3, periode 2">
-    </div>
-    <label class="fld" style="margin-top:10px">Criteria meenemen in score (tik om aan/uit te zetten)</label>
-    <div class="crittoggles" id="toggles"></div>
-    <div class="hint">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu naast de naam; die krijgt dan geen score en de reden wordt bewaard.</div>
   </div>
 
-  <div id="students"></div>
-
-  <div class="card">
-    <details>
-      <summary>Klasoverzicht &amp; scores</summary>
-      <table class="smalltbl" id="overview"></table>
-      <div class="muted" id="klasgem" style="margin-top:6px"></div>
-    </details>
-  </div>
-
-  <div class="card">
-    <div class="actions">
-      <button class="btn primary" id="dlcsv">Download deze evaluatie (CSV)</button>
-      <button class="btn ghost" id="copyss">Kopieer scores voor Smartschool</button>
+  <div id="tab-afwezigheden" class="tabview">
+    <div class="card" style="padding:0"><div id="reglist"></div></div>
+    <div class="actions" style="margin-bottom:13px">
+      <button class="btn ghost" id="regovbtn">Overzicht &amp; scores</button>
+      <button class="btn primary" id="regcsv">Download (CSV)</button>
     </div>
-    <div class="actions" style="margin-top:10px">
-      <button class="btn ghost" id="dlall">Download alles (back-up)</button>
-      <button class="btn warn" id="reset">Wis deze evaluatie</button>
+    <div class="card" id="regovcard" style="display:none">
+      <div class="critttl" style="margin-bottom:8px">Overzicht periode</div>
+      <div class="ovwrap"><table class="ovtbl" id="regov"></table></div>
+      <div class="hint">Score /10 = (in orde + D) ÷ deelname × 10, en pas vanaf 50% deelname.</div>
     </div>
-    <div class="hint">De app onthoudt alles automatisch op dit toestel. Download wekelijks de CSV-bestanden om ze te bewaren voor de doorlichting of om door te geven. De volledige rubriek staat mee in elk CSV-bestand.</div>
+    <div class="hint" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:11px;height:11px;border-radius:50%;background:#2faa57;display:inline-block"></span>in orde</span>
+      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:11px;height:11px;border-radius:50%;background:#d6483c;display:inline-block"></span>niet in orde</span>
+      <span><b style="color:#7a818a">A</b> afwezig</span>
+      <span><b style="color:#0e8a78">D</b> attest</span>
+    </div>
   </div>
 
-  <div class="card">
-    <details>
-      <summary>Klassen beheren</summary>
-      <div class="hint" style="margin-top:6px">Voeg je eigen klassen toe (klasnaam + leerlingen, één per lijn). Werkt enkel op dit toestel. Zo gebruikt elke collega hetzelfde bestand met de eigen klassen.</div>
-      <div id="klasbeheer" style="margin-top:8px"></div>
-    </details>
-  </div>
-
-  <div class="card">
-    <details>
-      <summary>Opgeslagen evaluaties op dit toestel</summary>
-      <div id="savedlist" style="margin-top:8px"></div>
-    </details>
+  <div id="tab-meer" class="tabview">
+    <div class="card">
+      <details>
+        <summary>Klassen beheren</summary>
+        <div class="hint" style="margin-top:6px">Voeg je eigen klassen toe (klasnaam + leerlingen, één per lijn). Werkt enkel op dit toestel. Zo gebruikt elke collega hetzelfde bestand met de eigen klassen.</div>
+        <div id="klasbeheer" style="margin-top:8px"></div>
+      </details>
+    </div>
+    <div class="card">
+      <div class="actions">
+        <button class="btn ghost" id="dlall">Download alles (back-up)</button>
+        <button class="btn warn" id="reset">Wis deze evaluatie</button>
+      </div>
+    </div>
+    <div class="card">
+      <details>
+        <summary>Opgeslagen evaluaties op dit toestel</summary>
+        <div id="savedlist" style="margin-top:8px"></div>
+      </details>
+    </div>
+    <div class="card">
+      <details>
+        <summary>Hoe werkt de app?</summary>
+        <div class="hint" style="margin-top:6px">De app onthoudt alles automatisch op dit toestel. Download geregeld de CSV-bestanden voor de doorlichting of om door te geven. Klassen beheer je hierboven; elke collega gebruikt hetzelfde bestand met de eigen klassen.</div>
+      </details>
+    </div>
   </div>
 </div>
 
+<div class="tabbar">
+  <div class="tabitem" id="tabbtn-evaluaties" onclick="switchTab('evaluaties')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v2.5h-5z"/><path d="M9 13l2 2 4-4.5"/></svg></span>Evaluaties</div>
+  <div class="tabitem" id="tabbtn-afwezigheden" onclick="switchTab('afwezigheden')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.4l2.4 2.4 4.7-5.2"/></svg></span>Afwezigheden</div>
+  <div class="tabitem" id="tabbtn-meer" onclick="switchTab('meer')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></span>Meer</div>
+</div>
 <div id="backdrop" class="backdrop"></div>
 <div id="sheet" class="sheet"><div class="sheet-inner" id="sheetbody"></div></div>
 <div class="toast" id="toast"></div>
@@ -381,8 +446,8 @@ function saveState(){
   localStorage.setItem(LS_ENABLED+"_"+state.categorie,JSON.stringify(state.enabled));
 }
 function loadOrInit(){
-  const klas=$("klas").value,graad=$("graad").value,categorie=$("categorie").value,
-        sport=$("sport").value,spec=$("spec").value,datum=$("datum").value;
+  const klas=$("klas").value,graad=graadVoorKlas($("klas").value),categorie=$("categorie").value,
+        sport=$("sport").value,spec=$("spec").value,datum=selDate;
   const label=sport+(spec?(" – "+spec):"");
   const k=keyFor(klas,datum,label);
   let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
@@ -711,32 +776,157 @@ function renderKlasBeheer(){
     KLASSEN[naam]=namen;saveKlassen();fillKlas(naam);renderKlasBeheer();reloadEvaluation();toast("Klas '"+naam+"' opgeslagen");
   };
 }
-function refreshAll(){renderToggles();renderStudents();renderOverview();renderSaved();
-  $("hsub").textContent=curRubriek().label+" · "+sportLabel()+" · "+state.klas+" · "+state.graad+" graad";}
+let selDate=todayISO();
+let currentTab="afwezigheden";
+function graadVoorKlas(k){const m=(""+k).match(/\d/);const y=m?parseInt(m[0],10):3;return y<=2?"1ste":(y<=4?"2de":"3de");}
+function parseISO(s){if(!s)return null;const d=new Date(s+"T12:00:00");return isNaN(d.getTime())?null:d;}
+function localISO(d){const o=d.getTimezoneOffset();return new Date(d.getTime()-o*60000).toISOString().slice(0,10);}
+
+function renderDateStrip(){
+  const strip=$("strip");if(!strip)return;strip.innerHTML="";
+  const anchor=parseISO(selDate)||new Date();
+  const start=new Date(anchor);start.setDate(start.getDate()-14);
+  const today=localISO(new Date());const wk=["zo","ma","di","wo","do","vr","za"];
+  for(let i=0;i<43;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);const iso=localISO(d);
+    const el=document.createElement("div");
+    el.className="day"+(iso===selDate?" sel":"")+(iso===today?" today":"");
+    el.innerHTML='<div class="dw">'+wk[d.getDay()]+'</div><div class="dn">'+d.getDate()+'</div>';
+    el.onclick=()=>{selDate=iso;reloadEvaluation();};
+    strip.appendChild(el);
+  }
+  const cal=document.createElement("label");cal.className="daycal";
+  cal.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>';
+  const inp=document.createElement("input");inp.type="date";inp.value=selDate;
+  inp.onchange=()=>{if(inp.value){selDate=inp.value;reloadEvaluation();}};
+  cal.appendChild(inp);strip.appendChild(cal);
+  const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
+}
+
+function switchTab(t){
+  currentTab=t;
+  ["evaluaties","afwezigheden","meer"].forEach(x=>{
+    const v=document.getElementById("tab-"+x);if(v)v.classList.toggle("on",x===t);
+    const b=document.getElementById("tabbtn-"+x);if(b)b.classList.toggle("on",x===t);
+  });
+  $("apptitle").textContent=(t==="evaluaties"?"Evaluaties":(t==="afwezigheden"?"Afwezigheden":"Meer"));
+  $("strip").style.display=(t==="meer")?"none":"flex";
+  $("klaschip").style.display=(t==="meer")?"none":"block";
+  if(t==="afwezigheden")renderReg();
+}
+
+function openKlasPicker(){
+  const box=$("sheetbody");box.innerHTML="";
+  const grab=document.createElement("div");grab.className="grab";box.appendChild(grab);
+  const h=document.createElement("div");h.className="sheethead";h.innerHTML='<span class="sheetnm">Kies een klas</span>';
+  const done=document.createElement("button");done.className="doneBtn";done.textContent="Sluit";done.onclick=closeSheet;h.appendChild(done);
+  box.appendChild(h);
+  Object.keys(KLASSEN).forEach(k=>{
+    const r=document.createElement("div");r.className="pickrow"+(k===state.klas?" on":"");
+    r.textContent=k+"  ·  "+KLASSEN[k].length+" lln";
+    r.onclick=()=>{$("klas").value=k;closeSheet();reloadEvaluation();};
+    box.appendChild(r);
+  });
+  $("backdrop").classList.add("open");$("sheet").classList.add("open");
+}
+
+/* ---------- AFWEZIGHEDEN-REGISTER ---------- */
+const LS_REG="lo_reg_";
+function getReg(klas){try{return JSON.parse(localStorage.getItem(LS_REG+klas))||{};}catch(e){return {};}}
+function saveReg(klas,obj){localStorage.setItem(LS_REG+klas,JSON.stringify(obj));}
+function regSet(klas,iso,naam,val){const r=getReg(klas);if(!r[iso])r[iso]={};if(val==null)delete r[iso][naam];else r[iso][naam]=val;if(!Object.keys(r[iso]).length)delete r[iso];saveReg(klas,r);}
+function regGet(klas,iso,naam){const r=getReg(klas);return (r[iso]&&r[iso][naam])||"";}
+function regDates(klas){const r=getReg(klas);return Object.keys(r).filter(iso=>Object.keys(r[iso]).length>0).sort();}
+function regScore(klas,naam){
+  const r=getReg(klas);const dates=regDates(klas);const tot=dates.length;let deel=0,pos=0;
+  dates.forEach(iso=>{const v=r[iso][naam];if(v==="G"||v==="R"||v==="D"){deel++;if(v==="G"||v==="D")pos++;}});
+  const deelname=tot>0?deel/tot:0;
+  const score=(deelname>=0.5&&deel>0)?Math.round(pos/deel*100)/10:null;
+  return {tot,deel,pos,deelname,score};
+}
+function regCell(v){
+  if(v==="G")return '<span class="ovd" style="background:#2faa57"></span>';
+  if(v==="R")return '<span class="ovd" style="background:#d6483c"></span>';
+  if(v==="A")return '<b style="color:#7a818a">A</b>';
+  if(v==="D")return '<b style="color:#0e8a78">D</b>';
+  return '<span style="color:#c4ccc2">·</span>';
+}
+function renderReg(){
+  const wrap=$("reglist");if(!wrap)return;wrap.innerHTML="";
+  KLASSEN[state.klas].forEach(naam=>{
+    const cur=regGet(state.klas,selDate,naam);
+    const row=document.createElement("div");row.className="regrow";
+    const nm=document.createElement("div");nm.className="rn";nm.textContent=naam;
+    const dots=document.createElement("div");dots.className="regdots";
+    [["G","g",""],["R","r",""],["A","","A"],["D","","D"]].forEach(o=>{
+      const b=document.createElement("div");
+      if(o[0]==="G"||o[0]==="R"){b.className="rdot "+o[1]+(cur===o[0]?" on":"");}
+      else{b.className="rbtn "+(cur===o[0]?(o[0]==="A"?"aon":"don"):"");b.textContent=o[2];}
+      b.onclick=()=>{regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();};
+      dots.appendChild(b);
+    });
+    row.appendChild(nm);row.appendChild(dots);wrap.appendChild(row);
+  });
+}
+function renderRegOverview(){
+  const tbl=$("regov");if(!tbl)return;
+  const r=getReg(state.klas);const dates=regDates(state.klas);
+  let html='<tr><th class="nm">Leerling</th>';
+  dates.forEach(iso=>{const d=parseISO(iso);html+='<th>'+(d?(d.getDate()+"/"+(d.getMonth()+1)):iso)+'</th>';});
+  html+='<th>Score</th></tr>';
+  KLASSEN[state.klas].forEach(naam=>{
+    const sc=regScore(state.klas,naam);
+    html+='<tr><td class="nm">'+naam+'</td>';
+    dates.forEach(iso=>{html+='<td>'+regCell((r[iso]&&r[iso][naam])||"")+'</td>';});
+    html+='<td>'+(sc.score==null?'<span style="color:#b5772a;font-size:11px">te weinig</span>':'<b style="color:'+(sc.score<5?"#bb3326":"#1c7a45")+'">'+sc.score.toFixed(1)+'</b>')+'</td></tr>';
+  });
+  if(!dates.length)html+='<tr><td class="nm" style="color:var(--muted)">Nog niets opgenomen voor deze klas.</td></tr>';
+  tbl.innerHTML=html;
+}
+function buildRegCSV(){
+  const r=getReg(state.klas);const dates=regDates(state.klas);
+  const L=[];const push=a=>L.push(a.map(csvEscape).join(";"));
+  push(["Register kledij & aanwezigheid","Klas",state.klas]);
+  push(["Legende: G = in orde, R = niet in orde, A = afwezig, D = doktersattest"]);
+  push(["Score /10 = (in orde + D) / deelname x 10, vanaf 50% deelname"]);
+  push([]);
+  push(["Leerling"].concat(dates).concat(["Deelname%","Score/10"]));
+  KLASSEN[state.klas].forEach(naam=>{
+    const sc=regScore(state.klas,naam);const row=[naam];
+    dates.forEach(iso=>{row.push((r[iso]&&r[iso][naam])||"");});
+    row.push(Math.round(sc.deelname*100));
+    row.push(sc.score==null?"te weinig deelname":sc.score.toFixed(1));
+    push(row);
+  });
+  return "﻿"+L.join("\r\n");
+}
+
+function refreshAll(){
+  renderDateStrip();
+  if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">▾</span>';
+  renderToggles();renderStudents();renderOverview();renderReg();renderSaved();
+  if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
+}
 function reloadEvaluation(){closeSheet();saveState();loadOrInit();refreshAll();}
 
 function init(){
-  loadKlassen();
-  loadGes();
-  fillKlas();
+  loadKlassen();loadGes();fillKlas();
   const cs=$("categorie");Object.keys(RUBRIEKEN).forEach(id=>{const o=document.createElement("option");o.value=id;o.textContent=RUBRIEKEN[id].label;cs.appendChild(o);});
-  cs.value="trefspelen";
-  fillSport("trefspelen");
-  $("datum").value=todayISO();
+  cs.value="trefspelen";fillSport("trefspelen");
   loadOrInit();refreshAll();renderKlasBeheer();
+  switchTab("afwezigheden");
 
-  $("klas").onchange=reloadEvaluation;
+  $("klaschip").onclick=openKlasPicker;
   $("categorie").onchange=()=>{fillSport($("categorie").value);reloadEvaluation();};
   $("sport").onchange=reloadEvaluation;
   $("spec").onchange=reloadEvaluation;
-  $("datum").onchange=reloadEvaluation;
-  $("graad").onchange=()=>{state.graad=$("graad").value;saveState();refreshAll();};
   $("backdrop").onclick=closeSheet;
+  $("critUitlegBtn").onclick=()=>{$("critUitleg").classList.toggle("collapsed");};
 
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
   $("dlall").onclick=()=>{
-    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0)all[k]=localStorage.getItem(k);}
-    download("LO_evaluaties_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
+    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0)all[k]=localStorage.getItem(k);}
+    download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
   };
   $("copyss").onclick=()=>{
     let txt=state.klas+" · "+sportLabel()+" · "+state.datum+":\n";
@@ -752,6 +942,8 @@ function init(){
       saveState();refreshAll();toast("Gewist");
     }
   };
+  $("regovbtn").onclick=()=>{const c=$("regovcard");const show=c.style.display==="none";c.style.display=show?"block":"none";if(show)renderRegOverview();};
+  $("regcsv").onclick=()=>{download("Register_"+state.klas+"_"+todayISO()+".csv",buildRegCSV());toast("Register-CSV gedownload");};
 }
 init();
 </script>
