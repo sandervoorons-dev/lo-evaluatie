@@ -225,6 +225,7 @@
     <div class="actions" style="margin-bottom:13px">
       <button class="btn ghost" id="regovbtn">Overzicht &amp; scores</button>
       <button class="btn primary" id="regcsv">Download (CSV)</button>
+      <button class="btn warn" id="regwis">Dag wissen</button>
     </div>
     <div class="card" id="regovcard" style="display:none">
       <div class="critttl" style="margin-bottom:8px">Overzicht periode</div>
@@ -972,6 +973,7 @@ function init(){
   };
   $("regovbtn").onclick=()=>{const c=$("regovcard");const show=c.style.display==="none";c.style.display=show?"block":"none";if(show)renderRegOverview();};
   $("regcsv").onclick=()=>{download("Register_"+state.klas+"_"+todayISO()+".csv",buildRegCSV());toast("Register-CSV gedownload");};
+  $("regwis").onclick=()=>{if(!confirm("Alle aanwezigheden van deze dag wissen voor "+state.klas+"?"))return;const r=getReg(state.klas);delete r[selDate];saveReg(state.klas,r);renderReg();if($("regovcard").style.display!=="none")renderRegOverview();toast("Dag gewist");};
 }
 init();
 </script>
