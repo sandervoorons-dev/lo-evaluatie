@@ -223,8 +223,10 @@
       </details>
     </div>
     <div class="card">
-      <div class="actions">
-        <button class="btn primary" id="dlcsv">Download (CSV)</button>
+      <button class="btn primary" id="saveeval" style="width:100%">Evaluatie opslaan</button>
+      <div class="muted" id="savestatus" style="margin-top:8px"></div>
+      <div class="actions" style="margin-top:10px">
+        <button class="btn ghost" id="dlcsv">Download (CSV)</button>
         <button class="btn ghost" id="copyss">Kopieer voor Smartschool</button>
       </div>
     </div>
@@ -467,6 +469,12 @@ function ensureStudent(st,naam){
   }
   if(!st.status[naam])st.status[naam]="aanwezig";
 }
+function hasContent(st){
+  if(!st||!st.data)return false;
+  for(const naam in st.status){if(st.status[naam]&&st.status[naam]!=="aanwezig")return true;}
+  for(const naam in st.data){const d=st.data[naam];for(const key in d){if(key==="__meting"){if(d[key])return true;}else if(d[key]!=null)return true;}}
+  return false;
+}
 function defaultEnabled(cat){
   try{const s=JSON.parse(localStorage.getItem(LS_ENABLED+"_"+cat));if(s)return Object.assign({},s);}catch(e){}
   const en={};const r=RUBRIEKEN[cat];
@@ -476,7 +484,9 @@ function defaultEnabled(cat){
 }
 function saveState(){
   if(!state)return;
-  localStorage.setItem(keyFor(state.klas,state.datum,sportLabel()),JSON.stringify(state));
+  const k=keyFor(state.klas,state.datum,sportLabel());
+  if(state.saved===true||hasContent(state))localStorage.setItem(k,JSON.stringify(state));
+  else localStorage.removeItem(k);
   localStorage.setItem(LS_ENABLED+"_"+state.categorie,JSON.stringify(state.enabled));
 }
 function loadOrInit(){
@@ -486,7 +496,7 @@ function loadOrInit(){
   const k=keyFor(klas,datum,label);
   let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
   if(!st){
-    st={klas,graad,categorie,sport,spec,datum,enabled:defaultEnabled(categorie),status:{},data:{}};
+    st={klas,graad,categorie,sport,spec,datum,enabled:defaultEnabled(categorie),status:{},data:{},saved:false};
   }else{
     if(!st.categorie)st.categorie=categorie;
     if(!st.enabled)st.enabled=defaultEnabled(st.categorie);
@@ -753,7 +763,7 @@ function renderSaved(){
   for(let i=0;i<localStorage.length;i++){
     const k=localStorage.key(i);
     if(k.indexOf(LS_PREFIX)!==0)continue;
-    try{const st=JSON.parse(localStorage.getItem(k));items.push({k,st});}catch(e){}
+    try{const st=JSON.parse(localStorage.getItem(k));if(st&&st.saved===false)continue;items.push({k,st});}catch(e){}
   }
   items.sort((a,b)=>(b.st.datum||"").localeCompare(a.st.datum||""));
   if(!items.length){box.innerHTML='<div class="muted">Nog geen opgeslagen evaluaties.</div>';return;}
@@ -953,9 +963,13 @@ function buildRegCSV(){
 function refreshAll(){
   renderDateStrip();
   if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">▾</span>';
-  renderToggles();renderStudents();renderOverview();renderReg();renderSaved();
+  renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();
   if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
 }
+function updateSaveStatus(){const el=$("savestatus");if(!el||!state)return;
+  if(state.saved===true)el.textContent="Opgeslagen in de app.";
+  else if(hasContent(state))el.textContent="Nog niet opgeslagen — tik op ‘Evaluatie opslaan’.";
+  else el.textContent="Nog niets ingevuld.";}
 function reloadEvaluation(){closeSheet();saveState();loadOrInit();refreshAll();}
 
 function init(){
@@ -974,6 +988,7 @@ function init(){
   if(localStorage.getItem("lo_crit_collapsed")==="1"){$("critBody").classList.add("collapsed");$("critChev").textContent="▸";}
   $("critCollapseBtn").onclick=()=>{const c=$("critBody").classList.toggle("collapsed");$("critChev").textContent=c?"▸":"▾";localStorage.setItem("lo_crit_collapsed",c?"1":"0");};
 
+  $("saveeval").onclick=()=>{if(!state)return;state.saved=true;saveState();renderSaved();updateSaveStatus();toast("Evaluatie opgeslagen");};
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
   $("dlall").onclick=()=>{
     const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0)all[k]=localStorage.getItem(k);}
