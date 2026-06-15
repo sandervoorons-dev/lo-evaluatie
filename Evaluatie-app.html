@@ -458,6 +458,49 @@ const RUBRIEKEN = {
         kledij:KLEDIJ_BANDS
       }
     }
+  },
+  gymnastiek:{
+    label:"Gymnastiek (turnen)",
+    rubriek:"Gymnastiek (turnen)",
+    sporten:["Grondturnen","Sprong (minitrampoline & kast)","Rekstok","Balk & evenwicht","Piramidebouw"],
+    criteria:[
+      {key:"techniek",   naam:"Techniek & uitvoering",            lpd:"LPD 1",    max:3},
+      {key:"houding",    naam:"Lichaamshouding & vormspanning",   lpd:"LPD 1, 4", max:3},
+      {key:"combinatie", naam:"Vloeiende combinatie & verbinding",lpd:"LPD 1",    max:3},
+      {key:"controle",   naam:"Controle, stabiliteit & landing",  lpd:"LPD 1",    max:3},
+      {key:"helpen",     naam:"Helpen & veilig begeleiden",       lpd:"LPD 6, 9", max:3},
+      {key:"zelfstandig",naam:"Zelfstandig & verantwoord werken", lpd:"LPD 3, 8", max:3},
+      {key:"kledij",     naam:"Kledij & veiligheid",              lpd:"LPD 8",    max:2}
+    ],
+    bands:{
+      "1ste":{
+        techniek:["Voert de basiselementen (rol, sprong, evenwicht) niet uit.","Voert een basiselement enkel met hulp of zeer onzuiver uit.","Voert de basiselementen correct uit in een eenvoudige vorm.","Voert de basiselementen vlot en zuiver uit."],
+        houding:["Heeft geen vormspanning; slap of ongecontroleerd lichaam.","Toont vormspanning enkel kortstondig.","Houdt een gestrekte, gecontroleerde houding aan tijdens de oefening.","Behoudt voortdurend goede vormspanning (gestrekt lichaam, gespannen romp)."],
+        combinatie:["Verbindt geen elementen; voert ze los uit.","Plakt twee elementen aan elkaar met onderbreking.","Verbindt enkele elementen tot een eenvoudige combinatie.","Voert een vloeiende combinatie uit zonder onderbrekingen."],
+        controle:["Verliest steeds het evenwicht of landt ongecontroleerd.","Landt of houdt wankel en moet bijsturen.","Landt of houdt de positie gecontroleerd.","Sluit elk element gecontroleerd en stabiel af (vaste landing of houding)."],
+        helpen:["Helpt niet en let niet op de veiligheid van anderen.","Helpt enkel na aansporing.","Helpt medeleerlingen gestuurd en veilig.","Helpt zelfstandig en correct en let op de veiligheid van de groep."],
+        zelfstandig:["Houdt zich niet aan de afspraken en gaat onzorgvuldig om met het materiaal.","Werkt en ruimt enkel op na aansporing.","Werkt zelfstandig in kleine groep en respecteert materiaal en afspraken.","Werkt zelfstandig, schat met een aangereikt criterium de eigen uitvoering in en gaat zorgzaam om met het materiaal."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        techniek:["Beheerst de gevraagde elementen niet.","Voert de elementen enkel los of met hulp uit.","Voert de gevraagde elementen (bv. handenstand doorrollen, rad, sprong, rekstokvorm) correct uit.","Beheerst de elementen zuiver, ook moeilijker varianten."],
+        houding:["Mist vormspanning en lichaamscontrole.","Toont onvoldoende of wisselende vormspanning.","Werkt met duidelijke vormspanning (schouders uitduwen, bekken kantelen).","Toont sterke, constante vormspanning en lichaamscontrole."],
+        combinatie:["Verbindt de elementen niet.","Verbindt elementen met duidelijke onderbrekingen.","Verbindt de elementen tot een vloeiende combinatie.","Voert een vloeiende, verzorgde combinatie uit met goede overgangen."],
+        controle:["Landt of houdt onveilig en ongecontroleerd.","Landt of houdt wankel.","Landt en sluit gecontroleerd af.","Landt steeds stabiel en beheerst, ook bij sprongen of op de balk."],
+        helpen:["Helpt niet mee en bewaakt de veiligheid niet.","Helpt enkel na aansturing.","Past de juiste helperstechniek toe en helpt veilig.","Helpt correct, rugvriendelijk en zelfstandig en aanvaardt zelf hulp."],
+        zelfstandig:["Werkt niet zelfstandig en negeert afspraken.","Werkt onregelmatig zelfstandig.","Werkt zelfstandig een opdrachtenfiche af en gaat ergonomisch om met materiaal.","Werkt zelfstandig, gebruikt criteria om de eigen uitvoering bij te sturen en plaatst materiaal rugvriendelijk."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        techniek:["Beheerst de elementen van het volledige niveau niet.","Voert enkel eenvoudige elementen zonder druk uit.","Voert de elementen (rad, handstand doorrollen, sprongen, draaien) gecontroleerd uit volgens de eigen mogelijkheden.","Beheerst een breed gamma elementen zuiver (incl. moeilijke zoals salto of molendraai)."],
+        houding:["Mist vormspanning in het volledige nummer.","Houdt de vormspanning enkel bij eenvoudige elementen.","Behoudt goede vormspanning en lichaamshouding doorheen de oefening.","Toont esthetische, constante vormspanning en controle in elk element."],
+        combinatie:["Maakt geen samenhangende combinatie of oefening.","Voert elementen na elkaar uit zonder verbinding.","Stelt een eigen oefening samen met verschillende elementen en niveaus en verbindt ze.","Voert een vloeiende, gevarieerde eigen oefening uit met verzorgde overgangen en niveaus."],
+        controle:["Heeft geen controle bij landingen of evenwicht.","Landt of houdt vaak onstabiel.","Landt en houdt elementen stabiel en beheerst.","Toont volledige controle en stabiliteit, ook bij moeilijke landingen of partnervormen."],
+        helpen:["Neemt geen helpersrol op.","Helpt enkel na aansturing.","Past helperstechnieken correct en veilig toe en aanvaardt hulp.","Begeleidt medeleerlingen zelfstandig en veilig naar een hoger niveau en geeft gerichte feedback."],
+        zelfstandig:["Toont weinig zelfstandigheid en verantwoordelijkheid.","Werkt enkel zelfstandig na aansturing.","Werkt zelfstandig, evalueert de eigen uitvoering kritisch (video of criteria) en werkt verantwoord.","Neemt verantwoordelijkheid, stuurt zichzelf en anderen bij via zelf- en peerevaluatie en werkt veilig en ergonomisch."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
   }
 };
 
