@@ -105,6 +105,11 @@
   .muted{color:var(--muted);font-size:12px}
   details summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--ink)}
   .savedrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .fbrow{padding:8px 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink);display:flex;gap:8px;align-items:flex-start}
+  .fbrow:first-child{border-top:none}
+  .fbrow .fbdate{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0}
+  .fbrow .fbtxt{flex:1;line-height:1.35;word-break:break-word}
+  .fbrow .fbdel{color:#c33;cursor:pointer;font-size:11px;flex-shrink:0}
   .savedrow a{color:var(--accent-deep);cursor:pointer;text-decoration:underline}
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(58,56,47,.95);color:#fff;
     padding:10px 16px;border-radius:11px;font-size:14px;opacity:0;transition:opacity .25s;z-index:60}
@@ -284,11 +289,20 @@
       </details>
     </div>
     <div class="card">
+      <div class="critttl" style="margin-bottom:6px">Opmerkingen over de app</div>
+      <div class="hint" style="margin-bottom:8px">Noteer hier bugs, tekortkomingen of ideeën tijdens het proefjaar. Ze worden mee bewaard in de back-up en je kan ze apart downloaden voor de vakvergadering.</div>
+      <textarea id="fbinput" rows="3" placeholder="Typ een opmerking…" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;box-sizing:border-box"></textarea>
+      <button class="btn primary" id="fbadd" style="width:100%;margin-top:8px">Opmerking toevoegen</button>
+      <div id="fblist" style="margin-top:10px"></div>
+      <button class="btn ghost" id="fbcsv" style="width:100%;margin-top:8px">Download opmerkingen</button>
+    </div>
+    <div class="card">
       <details>
         <summary>Hoe werkt de app?</summary>
         <div class="hint" style="margin-top:6px">De app onthoudt alles automatisch op dit toestel. Download geregeld de CSV-bestanden voor de doorlichting of om door te geven. Klassen beheer je hierboven; elke collega gebruikt hetzelfde bestand met de eigen klassen.</div>
       </details>
     </div>
+    <div class="muted" id="appversion" style="text-align:center;margin:2px 0 4px;font-size:11px"></div>
   </div>
 </div>
 
@@ -1291,6 +1305,26 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
+const APP_VERSION="v33";
+const LS_FB="lo_feedback";
+function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
+function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
+function renderFeedback(){
+  const box=$("fblist");if(!box)return;box.innerHTML="";
+  const a=getFb();
+  if(!a.length){box.innerHTML='<div class="muted" style="font-size:12px">Nog geen opmerkingen genoteerd.</div>';return;}
+  a.slice().reverse().forEach((it,ri)=>{
+    const idx=a.length-1-ri;
+    const row=document.createElement("div");row.className="fbrow";
+    const d=document.createElement("span");d.className="fbdate";d.textContent=it.t||"";
+    const t=document.createElement("span");t.className="fbtxt";t.textContent=it.txt||"";
+    const del=document.createElement("span");del.className="fbdel";del.textContent="wis";
+    del.onclick=()=>{if(confirm("Deze opmerking wissen?")){const arr=getFb();arr.splice(idx,1);saveFb(arr);renderFeedback();}};
+    row.appendChild(d);row.appendChild(t);row.appendChild(del);box.appendChild(row);
+  });
+}
+function nowStamp(){const d=new Date();const o=d.getTimezoneOffset();return new Date(d-o*60000).toISOString().slice(0,16).replace("T"," ");}
+function buildFbCSV(){const a=getFb();const L=["Datum;Opmerking"];a.forEach(it=>L.push(csvEscape(it.t||"")+";"+csvEscape(it.txt||"")));return "﻿"+L.join("\r\n");}
 function getReg(klas){try{return JSON.parse(localStorage.getItem(LS_REG+klas))||{};}catch(e){return {};}}
 function saveReg(klas,obj){localStorage.setItem(LS_REG+klas,JSON.stringify(obj));}
 function regSet(klas,iso,naam,val){const r=getReg(klas);if(!r[iso])r[iso]={};if(val==null)delete r[iso][naam];else r[iso][naam]=val;if(!Object.keys(r[iso]).length)delete r[iso];saveReg(klas,r);}
@@ -1399,11 +1433,15 @@ function init(){
     if(typeof ExcelJS!=="undefined"){try{const blob=await buildWeekXLSX();if(!blob){toast("Geen evaluaties deze week");return;}downloadBlob("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".xlsx",blob);toast("Week-evaluaties (Excel) gedownload");return;}catch(e){console.error(e);}}
     const t=buildWeekCSV();if(!t){toast("Geen evaluaties deze week");return;}download("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".csv",t);toast("Gedownload als CSV");};
   $("dlall").onclick=()=>{
-    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0)all[k]=localStorage.getItem(k);}
+    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0||k===LS_FB)all[k]=localStorage.getItem(k);}
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
     localStorage.setItem("lo_last_backup",todayISO());updateBackupStatus();$("bubanner").style.display="none";
   };
   $("bunow").onclick=()=>{switchTab("meer");$("dlall").click();};
+  $("fbadd").onclick=()=>{const v=$("fbinput").value.trim();if(!v)return;const a=getFb();a.push({t:nowStamp(),txt:v});saveFb(a);$("fbinput").value="";renderFeedback();toast("Opmerking toegevoegd");};
+  $("fbcsv").onclick=()=>{if(!getFb().length){toast("Geen opmerkingen");return;}download("Opmerkingen_app_"+todayISO()+".csv",buildFbCSV());toast("Opmerkingen gedownload");};
+  if($("appversion"))$("appversion").textContent="LO Evaluatie · versie "+APP_VERSION;
+  renderFeedback();
   $("restorebtn").onclick=()=>$("restorefile").click();
   $("restorefile").onchange=(e)=>{const f=e.target.files[0];if(!f){return;}const r=new FileReader();
     r.onload=()=>{let obj;try{obj=JSON.parse(r.result);}catch(err){obj=null;}
