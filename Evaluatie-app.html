@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" defer></script>
 <title>LO Evaluatie</title>
 <style>
   :root{
@@ -256,6 +257,10 @@
   </div>
 
   <div id="tab-meer" class="tabview">
+    <div class="card">
+      <button class="btn primary" id="dlweek" style="width:100%">Download evaluaties van deze week</button>
+      <div class="muted" id="weekinfo" style="margin-top:8px"></div>
+    </div>
     <div class="card">
       <details>
         <summary>Klassen beheren</summary>
@@ -886,6 +891,104 @@ function download(name,text,type){
   setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},400);
 }
 function fname(){return ("Evaluatie_"+sportLabel().replace(/[^\w]+/g,"-")+"_"+state.klas+"_"+state.datum+".csv");}
+function weekRange(iso){const d=parseISO(iso)||parseISO(todayISO());const dow=(d.getDay()+6)%7;const mon=new Date(d);mon.setDate(d.getDate()-dow);const sun=new Date(mon);sun.setDate(mon.getDate()+6);return [localISO(mon),localISO(sun)];}
+function buildWeekCSV(){
+  const [mon,sun]=weekRange(todayISO());
+  const items=[];
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
+    let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
+    if(!st||!st.datum||st.datum<mon||st.datum>sun)continue;
+    if(!KLASSEN[st.klas]||!RUBRIEKEN[st.categorie])continue;
+    items.push(st);}
+  if(!items.length)return null;
+  items.sort((a,b)=>(a.datum||"").localeCompare(b.datum||"")||(a.klas||"").localeCompare(b.klas||""));
+  const cur=state;const SEP="\r\n\r\n==================================================\r\n\r\n";
+  let out="﻿";
+  items.forEach((st,i)=>{state=st;if(!state.categorie)state.categorie="trefspelen";const body=buildCSV().replace(/^﻿/,"");out+=(i?SEP:"")+body;});
+  state=cur;
+  return out;
+}
+function updateWeekInfo(){const el=$("weekinfo");if(!el)return;const r=weekRange(todayISO());let n=0;
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
+    if(st&&st.datum&&st.datum>=r[0]&&st.datum<=r[1]&&KLASSEN[st.klas]&&RUBRIEKEN[st.categorie])n++;}
+  el.textContent="Week "+r[0]+" t/m "+r[1]+": "+n+" evaluatie"+(n===1?"":"s")+" worden gebundeld in één Excel-bestand (tabblad per klas).";}
+function downloadBlob(name,blob){const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);}
+async function buildWeekXLSX(){
+  if(typeof ExcelJS==="undefined")return null;
+  const [mon,sun]=weekRange(todayISO());
+  const items=[];
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
+    let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
+    if(!st||!st.datum||st.datum<mon||st.datum>sun)continue;
+    if(!KLASSEN[st.klas]||!RUBRIEKEN[st.categorie])continue;
+    items.push(st);}
+  if(!items.length)return null;
+  const byKlas={};items.forEach(st=>{(byKlas[st.klas]=byKlas[st.klas]||[]).push(st);});
+  const TAUPE="FF5D594C",LINE="FFCBBF9E",GOLD="FFF7E6BC";
+  const THIN={style:"thin",color:{argb:LINE}};
+  const bord=c=>{c.border={top:THIN,left:THIN,bottom:THIN,right:THIN};};
+  const styleHead=row=>{row.eachCell(c=>{c.font={bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:TAUPE}};c.alignment={vertical:"middle",wrapText:true};bord(c);});};
+  const wrapRow=row=>{row.eachCell(c=>{c.alignment={wrapText:true,vertical:"top"};bord(c);});};
+  const cur=state;
+  const wb=new ExcelJS.Workbook();
+  Object.keys(byKlas).sort().forEach(klas=>{
+    const ws=wb.addWorksheet(klas.substring(0,28).replace(/[\[\]\*\?\/\\:]/g,"-"));
+    ws.getColumn(1).width=28;ws.getColumn(2).width=18;ws.getColumn(3).width=12;
+    for(let c=4;c<=7;c++)ws.getColumn(c).width=46;
+    ws.pageSetup={margins:{left:0.5,right:0.5,top:0.6,bottom:0.6,header:0.3,footer:0.3}};
+    const tr=ws.addRow([klas+" — week "+mon+" t/m "+sun]);tr.font={bold:true,size:14,color:{argb:TAUPE}};
+    ws.addRow([]);
+    byKlas[klas].sort((a,b)=>(a.datum||"").localeCompare(b.datum||"")||(a.sport||"").localeCompare(b.sport||"")).forEach(st=>{
+      state=st;if(!state.categorie)state.categorie="trefspelen";
+      const R=curRubriek();
+      const hd=ws.addRow([(R.type==="meting"?("Atletiek – "+st.sport):R.rubriek)+"   ·   "+st.datum+(st.spec?("   ·   "+st.spec):"")+(R.type==="meting"?"":("   ·   "+st.graad+" graad"))]);
+      hd.font={bold:true,size:12,color:{argb:TAUPE}};hd.eachCell(c=>{c.fill={type:"pattern",pattern:"solid",fgColor:{argb:GOLD}};});
+      ws.addRow([]);
+      if(R.type==="meting"){
+        const od=R.onderdelen[st.sport];
+        ws.addRow(["Techniek-criteria (elk 0-3 → samen /10) — Leerplandoel: LPD 1"]).font={bold:true};
+        styleHead(ws.addRow(["Criterium","0","1","2","3"]));
+        od.techniek.forEach(t=>wrapRow(ws.addRow([t.naam,"0 — "+t.bands[0],"1 — "+t.bands[1],"2 — "+t.bands[2],"3 — "+t.bands[3]])));
+        ws.addRow([]);
+        ws.addRow(["Prestatietabel "+st.sport+" (meting "+od.eenheid+" → /10) — Leerplandoel: LPD 3, 4"]).font={bold:true};
+        styleHead(ws.addRow(["Punt /10","Meisje","Jongen"]));
+        for(let i=0;i<od.M.length;i++){const rr=ws.addRow([od.M[i][0],od.M[i][1],od.J[i][1]]);rr.eachCell(c=>bord(c));}
+        ws.addRow([]);
+        const cols=["Leerling","Status","Geslacht"].concat(crits().map(c=>c.naam+(state.enabled[c.key]?"":" (uit)"))).concat(["Techniek/10","Meting ("+od.eenheid+")","Prestatie/10","Totaal/20"]);
+        styleHead(ws.addRow(cols));
+        KLASSEN[st.klas].forEach(naam=>{
+          const stt=state.status[naam]||"aanwezig";const absent=stt!=="aanwezig";const sc=scoreFor(naam);
+          const g=getGes(naam);const gl=g==="M"?"Meisje":(g==="J"?"Jongen":"");
+          const row=[naam,statusLabel(stt),gl];
+          crits().forEach(c=>{const v=absent?null:state.data[naam][c.key];row.push(v==null?"":v);});
+          if(absent)row.push("","","","");
+          else row.push(sc.techn10==null?"":sc.techn10,state.data[naam].__meting||"",sc.prest10==null?"":sc.prest10,(sc.techn10!=null||sc.prest10!=null)?sc.totaal:"");
+          ws.addRow(row).eachCell(c=>bord(c));
+        });
+      }else{
+        ws.addRow(["Beoordelingscriteria — scorebanden + leerplandoel (referentie voor doorlichting)"]).font={bold:true};
+        styleHead(ws.addRow(["Criterium","Leerplandoel (KOV LO)","Meegerekend","0","1","2","3"]));
+        crits().forEach(c=>{const labels=c.max===3?LABELS3:LABELS2;const bands=R.bands[state.graad][c.key];const cells=[];for(let i=0;i<4;i++)cells.push(bands[i]?(i+" "+labels[i]+": "+bands[i]):"");
+          wrapRow(ws.addRow([c.naam,c.lpd||"",state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]));});
+        ws.addRow([]);
+        const cols=["Leerling","Status"].concat(crits().map(c=>c.naam+(state.enabled[c.key]?"":" (uit)"))).concat(["Behaald","Max","%","Score/10"]);
+        styleHead(ws.addRow(cols));
+        KLASSEN[st.klas].forEach(naam=>{
+          const stt=state.status[naam]||"aanwezig";const absent=stt!=="aanwezig";const sc=scoreFor(naam);
+          const row=[naam,statusLabel(stt)];
+          crits().forEach(c=>{const v=absent?null:state.data[naam][c.key];row.push(v==null?"":v);});
+          if(absent)row.push("","","","");
+          else row.push(sc.count>0?sc.beh:"",sc.count>0?sc.max:"",sc.count>0?(Math.round(sc.pct*1000)/10):"",sc.count>0?Number(sc.score10.toFixed(1)):"");
+          ws.addRow(row).eachCell(c=>bord(c));
+        });
+      }
+      ws.addRow([]);ws.addRow([]);
+    });
+  });
+  state=cur;
+  const buf=await wb.xlsx.writeBuffer();
+  return new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+}
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
 
 /* ---------- SAVED LIST ---------- */
@@ -1098,7 +1201,7 @@ function buildRegCSV(){
 function refreshAll(){
   renderDateStrip();
   if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">▾</span>';
-  renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();
+  renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();
   if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
 }
 function updateSaveStatus(){const el=$("savestatus");if(!el||!state)return;
@@ -1128,6 +1231,9 @@ function init(){
     KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);if(curRubriek().type==="meting")state.data[n].__meting="";state.status[n]="aanwezig";});
     state.saved=false;localStorage.removeItem(keyFor(state.klas,state.datum,sportLabel()));refreshAll();toast("Evaluatie gewist");};
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
+  $("dlweek").onclick=async ()=>{const r=weekRange(todayISO());
+    if(typeof ExcelJS!=="undefined"){try{const blob=await buildWeekXLSX();if(!blob){toast("Geen evaluaties deze week");return;}downloadBlob("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".xlsx",blob);toast("Week-evaluaties (Excel) gedownload");return;}catch(e){console.error(e);}}
+    const t=buildWeekCSV();if(!t){toast("Geen evaluaties deze week");return;}download("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".csv",t);toast("Gedownload als CSV");};
   $("dlall").onclick=()=>{
     const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0)all[k]=localStorage.getItem(k);}
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
