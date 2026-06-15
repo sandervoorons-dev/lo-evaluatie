@@ -638,6 +638,49 @@ const RUBRIEKEN = {
         kledij:KLEDIJ_BANDS
       }
     }
+  },
+  conditie:{
+    label:"Conditie & kracht",
+    rubriek:"Conditie, kracht en gezonde levensstijl",
+    sporten:["Conditiecircuit (lichaamsgewicht)","Krachttraining","Duur- & hartslagtraining"],
+    criteria:[
+      {key:"uitvoering", naam:"Krachtoefeningen — uitvoering & techniek",lpd:"LPD 1, 4", max:3},
+      {key:"houding",    naam:"Lichaamshouding & ergonomie",            lpd:"LPD 6",    max:3},
+      {key:"uithouding", naam:"Uithouding & volgehouden inzet",         lpd:"LPD 4",    max:3},
+      {key:"schema",     naam:"Trainingsschema opstellen & opvolgen",   lpd:"LPD 3, 5", max:3},
+      {key:"levensstijl",naam:"Gezonde & actieve levensstijl",          lpd:"LPD 5",    max:3},
+      {key:"zelfstandig",naam:"Veilig & zelfstandig werken",            lpd:"LPD 8",    max:3},
+      {key:"kledij",     naam:"Kledij & veiligheid",                    lpd:"LPD 8",    max:2}
+    ],
+    bands:{
+      "1ste":{
+        uitvoering:["Voert de oefeningen niet of fout uit.","Voert eenvoudige oefeningen enkel voorgedaan uit.","Voert de basisoefeningen met lichaamsgewicht correct uit.","Voert de oefeningen vlot en met goede controle uit."],
+        houding:["Werkt met een verkeerde, onveilige houding.","Let enkel na aanwijzing op de houding.","Werkt met een correcte houding en aandacht voor core-stability.","Houdt voortdurend een correcte, stabiele houding (rechte rug, gespannen romp)."],
+        uithouding:["Haakt snel af en zet zich niet in.","Wisselende inzet; pauzeert veel.","Houdt het circuit met inzet vol.","Werkt volgehouden en met volle inzet doorheen het circuit."],
+        schema:["Volgt geen enkele opbouw of afspraak.","Volgt het opgelegde circuit enkel met begeleiding.","Volgt het opgelegde circuit (oefeningen, beurten, rust) correct.","Volgt het circuit zelfstandig en let op een correcte opbouw."],
+        levensstijl:["Toont geen besef van het nut van bewegen.","Benoemt nauwelijks waarom bewegen gezond is.","Begrijpt waarom opwarming en bewegen belangrijk zijn.","Legt het verband tussen bewegen en gezondheid en past het toe in de les."],
+        zelfstandig:["Negeert de veiligheids- en materiaalafspraken.","Volgt de afspraken enkel na aansporing.","Werkt veilig en zorgzaam met het materiaal.","Werkt veilig, zelfstandig en helpt mee bij de organisatie."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        uitvoering:["Beheerst de krachtoefeningen niet.","Voert de oefeningen onzuiver uit.","Voert de krachtoefeningen met lichaamsgewicht correct en gecontroleerd uit.","Voert ze verzorgd uit en doseert de intensiteit bewust."],
+        houding:["Werkt met een onveilige houding.","Let onvoldoende op houding en ergonomie.","Past een correcte lichaamshouding en ergonomische principes toe (heffen, tillen, rechte rug).","Werkt steeds ergonomisch en corrigeert zichzelf en anderen."],
+        uithouding:["Levert weinig of geen inspanning.","Inspanning is onregelmatig.","Houdt een gepaste inspanning vol gedurende het circuit.","Houdt de inspanning vol en stuurt op basis van hartslag bij."],
+        schema:["Kan geen eigen schema volgen of opstellen.","Volgt een aangereikt schema met moeite.","Volgt een trainingsschema en houdt de hartslag in de gaten.","Stelt met hulp een eenvoudig schema op en stuurt op basis van hartslag of belasting bij."],
+        levensstijl:["Toont geen inzicht in een gezonde levensstijl.","Benoemt enkele beweegrichtlijnen.","Past beweegrichtlijnen toe en kent het belang van belasting en belastbaarheid.","Legt het verband tussen conditie, hartslag en gezondheid en past het bewust toe."],
+        zelfstandig:["Werkt onveilig en houdt zich niet aan de afspraken.","Werkt enkel veilig na aansturing.","Werkt veilig en zelfstandig met aandacht voor het materiaal.","Werkt zelfstandig, veilig en ondersteunt medeleerlingen."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        uitvoering:["Beheerst de oefeningen niet in een volledige training.","Voert enkel eenvoudige oefeningen correct uit.","Voert de oefeningen gecontroleerd uit volgens de eigen mogelijkheden.","Beheerst een gevarieerd oefenrepertoire en doseert intensiteit en herhalingen doelgericht."],
+        houding:["Werkt onveilig en zonder aandacht voor ergonomie.","Let enkel bij eenvoudige oefeningen op de houding.","Past ergonomische principes en een correcte houding consequent toe.","Traint ergonomisch verantwoord, voorkomt overbelasting en bewaakt de houding van anderen."],
+        uithouding:["Levert geen volgehouden inspanning.","Houdt de inspanning enkel kort vol.","Houdt een doelgerichte inspanning vol en traint op hartslag.","Traint volgehouden en doelgericht (hartslagzones) en verlegt veilig de eigen grenzen."],
+        schema:["Stelt geen trainingsschema op.","Stelt met veel hulp een schema op.","Stelt een eigen trainingsschema op en voert het uit met hartslagopvolging.","Stelt zelfstandig een onderbouwd schema op (opbouw, belasting/belastbaarheid) en stuurt het bij op basis van vorderingen."],
+        levensstijl:["Toont weinig besef van levenslang bewegen.","Benoemt beweegrichtlijnen zonder ze toe te passen.","Past beweegrichtlijnen toe en kan een gezonde, actieve levensstijl toelichten.","Integreert beweegrichtlijnen doordacht in functie van levenslang bewegen en blessurepreventie."],
+        zelfstandig:["Werkt onveilig en onzelfstandig.","Werkt enkel veilig na aansturing.","Traint zelfstandig en veilig met correct materiaalgebruik.","Traint volledig zelfstandig en veilig en neemt verantwoordelijkheid voor de groep."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
   }
 };
 
