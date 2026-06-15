@@ -552,6 +552,92 @@ const RUBRIEKEN = {
         kledij:KLEDIJ_BANDS
       }
     }
+  },
+  ritmiek:{
+    label:"Ritmische vorming / dans",
+    rubriek:"Ritmische vorming, dans en expressie",
+    sporten:["Dans / choreografie","Aerobic / stepaerobic","Touwspringen (rope skipping)"],
+    criteria:[
+      {key:"ritme",      naam:"Ritme & maatgevoel",            lpd:"LPD 1",         max:3},
+      {key:"techniek",   naam:"Pas- & bewegingstechniek",      lpd:"LPD 1",         max:3},
+      {key:"coordinatie",naam:"Coördinatie & moeilijkheidsgraad",lpd:"LPD 1, 4",    max:3},
+      {key:"compositie", naam:"Reeks samenstellen & afwerken",  lpd:"LPD 1, 3",      max:3},
+      {key:"expressie",  naam:"Expressie, durf & uitstraling",  lpd:"LPD 1",         max:3},
+      {key:"samenwerken",naam:"Samenwerken, leiden & volgen",   lpd:"LPD 10, 11, 12",max:3},
+      {key:"kledij",     naam:"Kledij & veiligheid",            lpd:"LPD 8",         max:2}
+    ],
+    bands:{
+      "1ste":{
+        ritme:["Beweegt niet op de maat van de muziek.","Volgt de maat enkel af en toe.","Beweegt grotendeels op de maat (8-tijden).","Beweegt vlot en zeker op de maat van de muziek."],
+        techniek:["Voert de basispassen of sprongen niet uit.","Voert de basispassen onzuiver of enkel voorgedaan uit.","Voert de basispassen correct uit.","Voert de basispassen vlot en verzorgd uit."],
+        coordinatie:["Mist coördinatie tussen arm- en beenbeweging.","Coördineert eenvoudige bewegingen met moeite.","Coördineert de bewegingen vlot in een eenvoudige reeks.","Coördineert vloeiend, ook bij iets moeilijkere combinaties."],
+        compositie:["Kan geen reeks onthouden of aaneenschakelen.","Schakelt twee bewegingen aan elkaar.","Voert een korte aangeleerde reeks (8-tijden) zelfstandig uit.","Voert een langere reeks zelfstandig en correct uit."],
+        expressie:["Toont geen inzet of durf.","Beweegt gesloten en aarzelend.","Beweegt met een open houding en durft te tonen.","Straalt uit, beweegt expressief en met inzet."],
+        samenwerken:["Werkt niet samen met de groep.","Volgt de groep met moeite.","Werkt samen en stemt af op de groep.","Werkt vlot samen en helpt de groep gelijk te lopen."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        ritme:["Houdt de maat niet aan.","Verliest regelmatig de maat.","Houdt de maat aan in een langere reeks.","Speelt met het ritme en blijft strak op de maat."],
+        techniek:["Beheerst de passen of figuren niet.","Voert de passen onzuiver uit.","Voert de passen en figuren correct uit.","Voert ze verzorgd uit en voegt variatie toe."],
+        coordinatie:["Mist coördinatie in de combinaties.","Coördineert enkel eenvoudige combinaties.","Coördineert vlot, ook met richting- of niveauwissels.","Coördineert vloeiend met een hogere moeilijkheidsgraad."],
+        compositie:["Bedenkt of onthoudt geen reeks.","Bedenkt een zeer korte reeks met hulp.","Bedenkt en schakelt bewegingen samen tot één geheel (intro–eindhouding).","Stelt een verzorgde reeks samen en bouwt ze logisch op."],
+        expressie:["Toont weinig inzet of durf.","Beweegt nog gesloten.","Beweegt expressief met een open houding.","Brengt de reeks overtuigend en met uitstraling."],
+        samenwerken:["Werkt niet samen in het groepje.","Werkt samen maar overlegt of stuurt niet.","Werkt per groepje samen tot één geheel.","Neemt en aanvaardt leiding en stemt het groepje op elkaar af."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        ritme:["Beweegt niet op de maat in het volledige nummer.","Houdt de maat enkel bij eenvoudige delen.","Houdt de maat aan doorheen de hele reeks.","Beheerst ritme en flow volledig, ook bij moeilijke passages."],
+        techniek:["Beheerst de technieken niet in de combinatie.","Voert enkel eenvoudige figuren correct uit.","Voert de figuren gecontroleerd uit volgens de eigen mogelijkheden.","Beheerst een breed gamma figuren zuiver en gevarieerd."],
+        coordinatie:["Mist coördinatie en flow.","Coördineert enkel trage of eenvoudige delen.","Coördineert de combinatie vlot met goede flow.","Toont vloeiende, complexe coördinatie met hoge moeilijkheidsgraad."],
+        compositie:["Stelt geen eigen reeks samen.","Voegt elementen samen zonder opbouw.","Stelt een eigen reeks (4x8) samen volgens de eigen mogelijkheden.","Stelt een verzorgde, gevarieerde reeks samen met duidelijke opbouw en moeilijkheidsgraad."],
+        expressie:["Toont geen uitstraling of durf.","Brengt de reeks vlak.","Brengt de reeks expressief en verzorgd.","Brengt de reeks overtuigend, met sterke uitstraling en eigen accenten."],
+        samenwerken:["Neemt geen rol op in de groep.","Volgt enkel, neemt geen initiatief.","Kan in het groepje leiden én volgen en toont respect voor de partner.","Stuurt het groepje, geeft gerichte feedback en houdt iedereen mee."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
+  },
+  contact:{
+    label:"Contact & verdediging",
+    rubriek:"Contact en verdediging",
+    sporten:["Judo / grondvechten","Stoei- & trekspelen","Zelfverdediging"],
+    criteria:[
+      {key:"valtechniek",naam:"Val- & roltechniek",               lpd:"LPD 1",      max:3},
+      {key:"techniek",   naam:"Grondvecht- & worptechniek",       lpd:"LPD 1",      max:3},
+      {key:"kamp",       naam:"Toepassing in kamp & verdediging", lpd:"LPD 2, 3",   max:3},
+      {key:"veiligheid", naam:"Veiligheid & afspraken (afkloppen)",lpd:"LPD 8",     max:3},
+      {key:"helpen",     naam:"Helpen, coachen & kamp leiden",    lpd:"LPD 10, 11", max:3},
+      {key:"respect",    naam:"Respect & verantwoord gedrag",     lpd:"LPD 12",     max:3},
+      {key:"kledij",     naam:"Kledij & veiligheid",              lpd:"LPD 8",      max:2}
+    ],
+    bands:{
+      "1ste":{
+        valtechniek:["Beheerst de valtechnieken niet en valt onveilig.","Voert rugwaarts of zijwaarts rollen enkel met hulp uit.","Voert de basisvaltechnieken (rollen) veilig uit.","Valt en rolt gecontroleerd en veilig in verschillende richtingen."],
+        techniek:["Voert de basisgrepen of -oefeningen niet uit.","Voert duw- en trekoefeningen onzuiver uit.","Voert duw-, trek- en basisgrepen correct uit.","Voert de basistechnieken vlot en met controle uit."],
+        kamp:["Neemt niet deel aan het stoeien of kamp.","Stoeit zonder inzicht of controle.","Past de basisafspraken toe tijdens het stoeien.","Gebruikt eenvoudige principes (evenwicht, kracht) in het stoeien."],
+        veiligheid:["Negeert de veiligheidsafspraken (afkloppen).","Volgt de afspraken enkel na aansporing.","Klopt af en respecteert de veiligheidsafspraken.","Werkt steeds veilig, klopt af en reageert gepast op onveilige situaties."],
+        helpen:["Helpt de partner niet.","Helpt enkel na aansporing.","Helpt de partner gestuurd bij een opdracht.","Helpt de partner correct en let op diens veiligheid."],
+        respect:["Toont geen respect voor de partner.","Gaat ruw of onvoorzichtig om met de partner.","Gaat respectvol en voorzichtig om met de partner.","Toont voortdurend respect en zorgt voor een veilige sfeer."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        valtechniek:["Valt onveilig in dynamische situaties.","Valt veilig enkel bij trage oefeningen.","Valt veilig in de meeste kampsituaties.","Valt steeds gecontroleerd en veilig, ook onder lichte druk."],
+        techniek:["Beheerst de grondvechttechnieken niet.","Voert houdgreep of omkering enkel met hulp uit.","Voert houdgreep en omkeringstechniek correct uit (links en rechts).","Voert de technieken vlot en gecontroleerd uit aan beide zijden."],
+        kamp:["Past de technieken niet toe in kamp.","Kampt zonder de technieken te gebruiken.","Past de technieken toe in een kamp (grondvechten).","Gebruikt de beweging van de tegenstander en kampt tactisch."],
+        veiligheid:["Respecteert de veiligheidsregels niet.","Volgt de regels inconsistent.","Past de afspraken en het reglement toe en klopt af.","Werkt veilig, past het reglement toe en kan een kamp mee leiden."],
+        helpen:["Helpt of begeleidt de partner niet.","Helpt enkel na aansturing.","Helpt de partner en geeft eenvoudige feedback.","Begeleidt de partner correct en kan een kamp leiden als scheidsrechter."],
+        respect:["Gaat onrespectvol of ruw om met de partner.","Heeft het moeilijk met winst en verlies.","Gaat respectvol om met de partner en aanvaardt de uitslag.","Toont voortdurend respect, fair play en verantwoord gedrag."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        valtechniek:["Valt onveilig bij worpen.","Valt veilig enkel bij begeleide worpen.","Valt veilig bij worpen (begeleid vallen).","Valt steeds gecontroleerd en veilig, ook bij een heupworp."],
+        techniek:["Beheerst de worp- of verdedigingstechnieken niet.","Voert enkel eenvoudige technieken zonder druk uit.","Voert een heupworp en grondvechttechnieken gecontroleerd uit.","Beheerst worp, verbreken en zelfverdedigingstechnieken zuiver en zelfstandig."],
+        kamp:["Past de technieken niet toe in kamp of zelfverdediging.","Past ze enkel in eenvoudige situaties toe.","Past de technieken toe in kamp en demonstreert zelfgekozen zelfverdedigingstechnieken.","Combineert technieken tactisch in kamp en past zelfverdediging zelfstandig en doordacht toe."],
+        veiligheid:["Werkt onveilig en negeert het reglement.","Volgt het reglement enkel na aansturing.","Werkt veilig, past het reglement toe en leidt mee.","Werkt steeds veilig, leidt zelfstandig een kamp als scheidsrechter en bewaakt de veiligheid."],
+        helpen:["Neemt geen begeleidende rol op.","Helpt enkel na aansturing.","Begeleidt de partner en geeft gerichte feedback (ook via video).","Coacht zelfstandig, geeft kwaliteitsvolle feedback en leidt het werk in kleine groep."],
+        respect:["Toont weinig respect of verantwoordelijkheid.","Neemt deel maar zonder verantwoord gedrag.","Gaat respectvol en verantwoord om met partner en materiaal.","Neemt verantwoordelijkheid, toont voorbeeldgedrag en let op de kwetsbaarheid van anderen."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
   }
 };
 
