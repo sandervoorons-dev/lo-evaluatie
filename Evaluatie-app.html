@@ -681,6 +681,41 @@ const RUBRIEKEN = {
         kledij:KLEDIJ_BANDS
       }
     }
+  },
+  ehbo:{
+    label:"EHBO & reanimatie",
+    rubriek:"Eerste hulp en levensreddend handelen",
+    sporten:["Eerste hulp (EHBO)","Reanimatie (CPR) & AED"],
+    criteria:[
+      {key:"kennis",    naam:"Kennis: stappen & technieken",        lpd:"LPD 7",     max:3},
+      {key:"uitvoering",naam:"Uitvoering van de technieken",        lpd:"LPD 7",     max:3},
+      {key:"toepassing",naam:"Toepassing in een situatie/casus",    lpd:"LPD 7",     max:3},
+      {key:"evaluatie", naam:"Beoordelen & feedback (evaluatorrol)",lpd:"LPD 3, 10", max:3},
+      {key:"attitude",  naam:"Luisterbereidheid & verantwoord handelen",lpd:"LPD 8, 12",max:3}
+    ],
+    bands:{
+      "1ste":{
+        kennis:["Kent de basisstappen van eerste hulp niet.","Kent enkele begrippen maar niet de stappen.","Kent de basisstappen bij eenvoudige letsels (bloedneus, wonde, brandwonde).","Legt de basisstappen helder uit en weet wanneer ze nodig zijn."],
+        uitvoering:["Voert de technieken niet uit.","Voert een techniek enkel voorgedaan uit.","Voert de basistechnieken (wonde verzorgen, koelen…) correct uit.","Voert de basistechnieken vlot en correct uit."],
+        toepassing:["Herkent een eenvoudige situatie niet.","Herkent de situatie maar weet niet te handelen.","Reageert gepast op een eenvoudige, voorgestelde situatie.","Schat een eenvoudige situatie correct in en handelt gepast."],
+        evaluatie:["Kan een handeling niet beoordelen.","Geeft nauwelijks feedback aan een medeleerling.","Beoordeelt met een hulpmiddel of een handeling juist is.","Geeft gerichte feedback aan een medeleerling over de uitvoering."],
+        attitude:["Toont geen luisterbereidheid of inzet.","Luistert enkel na aansporing.","Luistert, werkt mee en gaat ernstig met het onderwerp om.","Toont luisterbereidheid, inzet en verantwoord gedrag."]
+      },
+      "2de":{
+        kennis:["Kent de stappen en technieken niet.","Kent ze onvolledig.","Kent de stappen en technieken bij verschillende letsels (flauwte, verstuiking, verstikking…).","Legt de stappen en het benaderen van een slachtoffer helder uit."],
+        uitvoering:["Voert de technieken niet correct uit.","Voert ze onzeker uit.","Voert de technieken (o.a. stabiele zijligging) correct uit.","Voert de technieken vlot, correct en gecontroleerd uit."],
+        toepassing:["Reageert niet op een gesimuleerde situatie.","Reageert maar handelt fout.","Past eerste hulp toe in een gesimuleerde situatie.","Schat de gesimuleerde situatie juist in en handelt zelfstandig en gepast."],
+        evaluatie:["Beoordeelt een handeling niet.","Geeft beperkte feedback.","Beoordeelt met een checklist of een handeling juist verloopt.","Beoordeelt met een checklist en geeft onderbouwde feedback."],
+        attitude:["Toont weinig luisterbereidheid of inzet.","Werkt enkel mee na aansporing.","Luistert, werkt ernstig mee en respecteert de afspraken.","Toont volgehouden inzet, luisterbereidheid en verantwoord gedrag."]
+      },
+      "3de":{
+        kennis:["Kent de reanimatiestappen niet.","Kent de stappen onvolledig.","Kent de stappen van reanimatie (4 stappen) en het gebruik van een AED.","Legt reanimatie, defibrillatie en wondzorg helder en correct uit."],
+        uitvoering:["Voert reanimatie of EHBO-technieken niet uit.","Voert ze enkel gedeeltelijk of fout uit.","Voert reanimatie en EHBO-technieken correct uit (eventueel met tijdslimiet).","Voert reanimatie, AED en wondzorg vlot en correct uit, ook in complexere toepassingen."],
+        toepassing:["Handelt niet in een complexe situatie.","Handelt enkel in een eenvoudige, gestuurde situatie.","Past EHBO en CPR zelfstandig toe in eenvoudige én complexe toepassingen.","Schat complexe situaties (casussen) correct in en handelt zelfstandig en doordacht."],
+        evaluatie:["Neemt geen evaluatorrol op.","Beoordeelt enkel oppervlakkig.","Beoordeelt de uitvoering van zichzelf en anderen met een checklist (partnerevaluatie).","Beoordeelt kritisch bij zichzelf en anderen en geeft kwaliteitsvolle feedback als evaluator."],
+        attitude:["Toont weinig betrokkenheid of verantwoordelijkheid.","Neemt deel zonder verantwoord handelen.","Handelt ernstig, verantwoord en respectvol.","Toont voorbeeldgedrag, neemt verantwoordelijkheid en let op de kwetsbaarheid van anderen."]
+      }
+    }
   }
 };
 
