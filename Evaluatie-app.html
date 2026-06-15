@@ -156,11 +156,12 @@
   .regrow{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid var(--line)}
   .regrow:first-child{border-top:none}
   .regrow .rn{flex:1;font-size:13.5px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .regdots{display:flex;align-items:center;gap:7px;flex-shrink:0}
-  .rdot{width:22px;height:22px;border-radius:50%;border:2px solid;cursor:pointer;background:transparent}
+  .regdots{display:flex;align-items:center;gap:9px;flex-shrink:0}
+  .rdot{width:30px;height:30px;border-radius:50%;border:2px solid;cursor:pointer;background:transparent}
   .rdot.g{border-color:#2faa57}.rdot.g.on{background:#2faa57}
   .rdot.r{border-color:#d6483c}.rdot.r.on{background:#d6483c}
-  .rbtn{min-width:24px;height:24px;border:1px solid rgba(120,140,120,.3);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;color:#7a818a;background:rgba(255,255,255,.5);padding:0 6px}
+  .rbtn{min-width:32px;height:32px;border:1px solid rgba(120,100,60,.35);border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;cursor:pointer;color:#7a6f53;background:rgba(255,255,255,.5);padding:0 8px}
+  .regsavednote{padding:11px 12px;font-size:13px;font-weight:600;color:#1d6b4f;background:rgba(46,170,110,.14);border-bottom:1px solid var(--line)}
   .rbtn.aon{background:#7a818a;color:#fff;border-color:#7a818a}
   .rbtn.don{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
   .ovwrap{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
@@ -234,9 +235,10 @@
 
   <div id="tab-afwezigheden" class="tabview">
     <div class="card" style="padding:0"><div id="reglist"></div></div>
+    <button class="btn primary" id="regsave" style="width:100%;margin-bottom:13px">Afwezigheden opslaan</button>
     <div class="actions" style="margin-bottom:13px">
       <button class="btn ghost" id="regovbtn">Overzicht &amp; scores</button>
-      <button class="btn primary" id="regcsv">Download (CSV)</button>
+      <button class="btn ghost" id="regcsv">Download (CSV)</button>
       <button class="btn warn" id="regwis">Dag wissen</button>
     </div>
     <div class="card" id="regovcard" style="display:none">
@@ -498,6 +500,49 @@ const RUBRIEKEN = {
         controle:["Heeft geen controle bij landingen of evenwicht.","Landt of houdt vaak onstabiel.","Landt en houdt elementen stabiel en beheerst.","Toont volledige controle en stabiliteit, ook bij moeilijke landingen of partnervormen."],
         helpen:["Neemt geen helpersrol op.","Helpt enkel na aansturing.","Past helperstechnieken correct en veilig toe en aanvaardt hulp.","Begeleidt medeleerlingen zelfstandig en veilig naar een hoger niveau en geeft gerichte feedback."],
         zelfstandig:["Toont weinig zelfstandigheid en verantwoordelijkheid.","Werkt enkel zelfstandig na aansturing.","Werkt zelfstandig, evalueert de eigen uitvoering kritisch (video of criteria) en werkt verantwoord.","Neemt verantwoordelijkheid, stuurt zichzelf en anderen bij via zelf- en peerevaluatie en werkt veilig en ergonomisch."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
+  },
+  slagspelen:{
+    label:"Slagspelen",
+    rubriek:"Slagspelen",
+    sporten:["Baseball / honkbal"],
+    criteria:[
+      {key:"slag",       naam:"Slagtechniek (batten)",             lpd:"LPD 1",         max:3},
+      {key:"werpenvangen",naam:"Werpen & vangen (veldspel)",       lpd:"LPD 1",         max:3},
+      {key:"honkenspel", naam:"Loop- & honkenspel (aanvallend)",   lpd:"LPD 2",         max:3},
+      {key:"veldtactiek",naam:"Veldspel & omschakelen (verdedigend)",lpd:"LPD 2",       max:3},
+      {key:"inzicht",    naam:"Spelinzicht, regels & spelleiding", lpd:"LPD 2, 8, 11",  max:3},
+      {key:"fairplay",   naam:"Samenwerken & fair play",           lpd:"LPD 10, 11, 12",max:3},
+      {key:"kledij",     naam:"Kledij & veiligheid",               lpd:"LPD 8",         max:2}
+    ],
+    bands:{
+      "1ste":{
+        slag:["Raakt de bal niet met de slaghout.","Raakt de bal af en toe, zonder controle.","Raakt de bal met de slaghout en speelt hem het veld in.","Slaat de bal gecontroleerd en met richting het veld in."],
+        werpenvangen:["Werpt en vangt de bal niet.","Werpt of vangt enkel van dichtbij en onzuiver.","Werpt gericht en vangt een aangespeelde bal.","Werpt vlot en gericht en vangt de meeste ballen."],
+        honkenspel:["Loopt niet of in de verkeerde richting na het slaan.","Loopt naar een honk maar zonder inzicht.","Loopt na het slaan naar het juiste honk.","Loopt vlot en kiest het juiste moment om door te lopen."],
+        veldtactiek:["Neemt geen plaats in het veld in.","Staat in het veld maar onderneemt niets.","Vangt of stopt ballen in het veld en speelt ze door.","Kiest een goede veldpositie en speelt de bal gericht door."],
+        inzicht:["Kent de basisregels niet.","Kent enkele regels maar past ze nauwelijks toe.","Kent en past de basisregels toe (slagbeurt, honken, uit).","Past de regels vlot toe en kan een beurt mee tellen of leiden."],
+        fairplay:["Werkt niet samen en houdt zich niet aan de afspraken.","Wisselende inzet; discussieert over beslissingen.","Zet zich in, speelt fair en moedigt het team aan.","Toont voortdurend inzet, geeft beslissingen eerlijk toe en helpt medespelers."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        slag:["Heeft weinig controle bij het batten.","Raakt de bal maar zonder richting of kracht.","Slaat de bal gericht naar een vrije zone in het veld.","Slaat gecontroleerd en varieert in richting en kracht."],
+        werpenvangen:["Werpt en vangt onvoldoende voor het spel.","Werpt of vangt onnauwkeurig onder lichte druk.","Werpt gericht naar een medespeler of honk en vangt onder druk.","Werpt snel en zuiver naar het juiste honk en vangt betrouwbaar."],
+        honkenspel:["Loopt zonder inzicht tussen de honken.","Loopt enkel veilig en neemt geen risico.","Kiest gericht wanneer hij doorloopt of blijft staan.","Speelt slim honkenspel en zet druk met goed getimede loopacties."],
+        veldtactiek:["Heeft geen verdedigende veldpositie.","Verdedigt passief en speelt de bal te laat door.","Stelt zich goed op en speelt de bal naar het juiste honk om uit te maken.","Anticipeert, dekt zones af en schakelt snel om om punten te voorkomen."],
+        inzicht:["Past de spelregels niet toe.","Kent de regels maar past ze inconsistent toe.","Past de regels toe en kan een wedstrijd mee leiden als scheidsrechter.","Past regels en tactiek vlot toe en leidt zelfstandig een beurt of wedstrijd."],
+        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en neemt en aanvaardt leiding.","Toont voortdurend inzet, blijft sportief en stuurt of motiveert medespelers."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        slag:["Beheerst de slagtechniek niet in het volledige spel.","Slaat enkel in eenvoudige situaties zonder druk.","Slaat gecontroleerd en plaatst de bal volgens de veldopstelling.","Slaat tactisch (plaatsing in functie van vrije zones en lopers), ook onder druk."],
+        werpenvangen:["Hanteert werpen en vangen niet betrouwbaar in het spel.","Werpt of vangt enkel in eenvoudige situaties.","Werpt en vangt gecontroleerd en kiest het juiste doelhonk.","Werpt snel en zuiver, vangt onder druk en zet de bal meteen om in een uitmaakactie."],
+        honkenspel:["Draagt niet bij aan het aanvallende honkenspel.","Loopt mee maar zonder tactiek.","Bouwt mee aanvallend honkenspel op en kiest gerichte loopmomenten.","Stuurt het aanvallende honkenspel en zet de verdediging onder druk."],
+        veldtactiek:["Onderneemt geen georganiseerde veldacties.","Verdedigt enkel in de eigen zone.","Verdedigt georganiseerd en organiseert uitmaakacties.","Leidt het veldspel, dekt zones af en schakelt meteen om naar de aanval."],
+        inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over tactiek en organisatie (opstelling, beurten).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi."],
+        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in, speelt sportief en gaat gepast om met het materiaal.","Neemt verantwoordelijkheid, coacht anderen en draagt bij tot een positieve sfeer gericht op levenslang bewegen."],
         kledij:KLEDIJ_BANDS
       }
     }
@@ -914,6 +959,7 @@ function renderKlasBeheer(){
 }
 let selDate=todayISO();
 let currentTab="afwezigheden";
+let regJustSaved=null;
 function graadVoorKlas(k){const m=(""+k).match(/\d/);const y=m?parseInt(m[0],10):3;return y<=2?"1ste":(y<=4?"2de":"3de");}
 function parseISO(s){if(!s)return null;const d=new Date(s+"T12:00:00");return isNaN(d.getTime())?null:d;}
 function localISO(d){const o=d.getTimezoneOffset();return new Date(d.getTime()-o*60000).toISOString().slice(0,10);}
@@ -937,13 +983,13 @@ function renderDateStrip(){
     const el=document.createElement("div");
     el.className="day"+(iso===selDate?" sel":"")+(iso===today?" today":"");
     el.innerHTML='<div class="dw">'+wk[d.getDay()]+'</div><div class="dn">'+d.getDate()+'</div>';
-    el.onclick=()=>{selDate=iso;reloadEvaluation();};
+    el.onclick=()=>{regJustSaved=null;selDate=iso;reloadEvaluation();};
     strip.appendChild(el);
   }
   const cal=document.createElement("label");cal.className="daycal";
   cal.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>';
   const inp=document.createElement("input");inp.type="date";inp.value=selDate;
-  inp.onchange=()=>{if(inp.value){selDate=inp.value;reloadEvaluation();}};
+  inp.onchange=()=>{if(inp.value){regJustSaved=null;selDate=inp.value;reloadEvaluation();}};
   cal.appendChild(inp);strip.appendChild(cal);
   const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
 }
@@ -998,8 +1044,10 @@ function regCell(v){
 }
 function renderReg(){
   const wrap=$("reglist");if(!wrap)return;wrap.innerHTML="";
+  const blank=(regJustSaved===selDate);
+  if(blank){const note=document.createElement("div");note.className="regsavednote";note.textContent="✓ Afwezigheden opgeslagen — leeg blad klaar";wrap.appendChild(note);}
   KLASSEN[state.klas].forEach(naam=>{
-    const cur=regGet(state.klas,selDate,naam);
+    const cur=blank?"":regGet(state.klas,selDate,naam);
     const row=document.createElement("div");row.className="regrow";
     const nm=document.createElement("div");nm.className="rn";nm.textContent=naam;
     const dots=document.createElement("div");dots.className="regdots";
@@ -1007,7 +1055,7 @@ function renderReg(){
       const b=document.createElement("div");
       if(o[0]==="G"||o[0]==="R"){b.className="rdot "+o[1]+(cur===o[0]?" on":"");}
       else{b.className="rbtn "+(cur===o[0]?(o[0]==="A"?"aon":"don"):"");b.textContent=o[2];}
-      b.onclick=()=>{regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();};
+      b.onclick=()=>{regJustSaved=null;regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();};
       dots.appendChild(b);
     });
     row.appendChild(nm);row.appendChild(dots);wrap.appendChild(row);
@@ -1108,7 +1156,8 @@ function init(){
   };
   $("regovbtn").onclick=()=>{const c=$("regovcard");const show=c.style.display==="none";c.style.display=show?"block":"none";if(show)renderRegOverview();};
   $("regcsv").onclick=()=>{download("Register_"+state.klas+"_"+todayISO()+".csv",buildRegCSV());toast("Register-CSV gedownload");};
-  $("regwis").onclick=()=>{if(!confirm("Alle aanwezigheden van deze dag wissen voor "+state.klas+"?"))return;const r=getReg(state.klas);delete r[selDate];saveReg(state.klas,r);renderReg();if($("regovcard").style.display!=="none")renderRegOverview();toast("Dag gewist");};
+  $("regwis").onclick=()=>{if(!confirm("Alle aanwezigheden van deze dag wissen voor "+state.klas+"?"))return;const r=getReg(state.klas);delete r[selDate];saveReg(state.klas,r);regJustSaved=null;renderReg();if($("regovcard").style.display!=="none")renderRegOverview();toast("Dag gewist");};
+  $("regsave").onclick=()=>{regJustSaved=selDate;renderReg();if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();toast("Afwezigheden opgeslagen");};
 }
 init();
 </script>
