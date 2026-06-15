@@ -230,6 +230,7 @@
         <button class="btn ghost" id="dlcsv">Download (CSV)</button>
         <button class="btn ghost" id="copyss">Kopieer voor Smartschool</button>
       </div>
+      <button class="btn warn" id="delEval" style="width:100%;margin-top:10px">Evaluatie wissen</button>
     </div>
   </div>
 
@@ -818,11 +819,11 @@ function buildCSV(){
     push(["Klas",state.klas,"Datum",state.datum]);
     push(["Details/periode",state.spec||""]);
     push([]);
-    push(["Techniek-criteria (elk 0-3; samen herschaald naar /10)"]);
+    push(["Techniek-criteria (elk 0-3; samen herschaald naar /10) — Leerplandoel: LPD 1 (technieken uitvoeren)"]);
     push(["Criterium","0","1","2","3"]);
     od.techniek.forEach(t=>push([t.naam,"0 "+t.bands[0],"1 "+t.bands[1],"2 "+t.bands[2],"3 "+t.bands[3]]));
     push([]);
-    push(["Prestatietabel "+state.sport+" (meting "+od.eenheid+" -> punt /10; tussenwaarden lineair)"]);
+    push(["Prestatietabel "+state.sport+" (meting "+od.eenheid+" -> punt /10; tussenwaarden lineair) — Leerplandoel: LPD 3 (vorderingen) en LPD 4 (fysieke capaciteiten)"]);
     push(["Punt /10","Meisje","Jongen"]);
     for(let i=0;i<od.M.length;i++)push([od.M[i][0],od.M[i][1],od.J[i][1]]);
     push([]);
@@ -846,14 +847,14 @@ function buildCSV(){
   push(["Details/periode",state.spec||"","Klas",state.klas]);
   push(["Datum",state.datum]);
   push([]);
-  push(["Beoordelingscriteria — scorebanden (referentie)"]);
-  push(["Criterium","Meegerekend","0","1","2","3"]);
+  push(["Beoordelingscriteria — scorebanden + leerplandoel (referentie voor doorlichting)"]);
+  push(["Criterium","Leerplandoel (KOV LO)","Meegerekend","0","1","2","3"]);
   crits().forEach(c=>{
     const labels=c.max===3?LABELS3:LABELS2;
     const bands=curRubriek().bands[state.graad][c.key];
     const cells=["","","",""];
     for(let i=0;i<4;i++){cells[i]=bands[i]?(i+" "+labels[i]+": "+bands[i]):"";}
-    push([c.naam,state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]);
+    push([c.naam,c.lpd||"",state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]);
   });
   push([]);
   push(["Legende: cijfer per criterium = behaalde score. Leeg = niet beoordeeld. Afwezig/Doktersattest = geen score."]);
@@ -1123,6 +1124,9 @@ function init(){
   $("critCollapseBtn").onclick=()=>{const c=$("critBody").classList.toggle("collapsed");$("critChev").textContent=c?"▸":"▾";localStorage.setItem("lo_crit_collapsed",c?"1":"0");};
 
   $("saveeval").onclick=()=>{if(!state)return;state.saved=true;saveState();renderSaved();updateSaveStatus();toast("Evaluatie opgeslagen");};
+  $("delEval").onclick=()=>{if(!state)return;if(!confirm("Deze evaluatie volledig wissen (scores én status)? Dit kan niet ongedaan worden gemaakt."))return;
+    KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);if(curRubriek().type==="meting")state.data[n].__meting="";state.status[n]="aanwezig";});
+    state.saved=false;localStorage.removeItem(keyFor(state.klas,state.datum,sportLabel()));refreshAll();toast("Evaluatie gewist");};
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
   $("dlall").onclick=()=>{
     const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0)all[k]=localStorage.getItem(k);}
