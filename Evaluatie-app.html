@@ -339,9 +339,9 @@ const RUBRIEKEN = {
       {key:"vangen",      naam:"Vangen & ontwijken",                lpd:"LPD 1",        max:3},
       {key:"samenspel",   naam:"Samenspel & aanvallend spel",       lpd:"LPD 2",        max:3},
       {key:"inzicht",     naam:"Spelinzicht, regels & tactiek",     lpd:"LPD 2, 8",     max:3},
-      {key:"samenwerken", naam:"Samenwerken, fair play & coaching", lpd:"LPD 8, 11, 12",max:3},
-      {key:"inzet",       naam:"Inzet & attitude",                  lpd:"LPD 8, 13",    max:3},
-      {key:"kledij",      naam:"Kledij & veiligheid",               lpd:"",             max:2}
+      {key:"samenwerken", naam:"Samenwerken, fair play & coaching", lpd:"LPD 10, 11",   max:3},
+      {key:"inzet",       naam:"Inzet & attitude",                  lpd:"LPD 12",       max:3},
+      {key:"kledij",      naam:"Kledij & veiligheid",               lpd:"LPD 8",        max:2}
     ],
     bands:{
       "1ste":{
@@ -382,9 +382,9 @@ const RUBRIEKEN = {
       {key:"aanvallend",    naam:"Aanvallend spel & scoren",         lpd:"LPD 2",         max:3},
       {key:"verdedigend",   naam:"Verdedigend spel & omschakelen",   lpd:"LPD 2",         max:3},
       {key:"inzicht",       naam:"Spelinzicht, regels & rollen",     lpd:"LPD 2, 8",      max:3},
-      {key:"samenwerken",   naam:"Samenwerken, coachen & spelleiding",lpd:"LPD 8, 10-12", max:3},
-      {key:"fairplay",      naam:"Fair play, inzet & attitude",      lpd:"LPD 8, 11, 13", max:3},
-      {key:"kledij",        naam:"Kledij & veiligheid",              lpd:"",              max:2}
+      {key:"samenwerken",   naam:"Samenwerken, coachen & spelleiding",lpd:"LPD 10, 11",   max:3},
+      {key:"fairplay",      naam:"Fair play, inzet & attitude",      lpd:"LPD 8, 12",     max:3},
+      {key:"kledij",        naam:"Kledij & veiligheid",              lpd:"LPD 8",         max:2}
     ],
     bands:{
       "1ste":{
@@ -412,6 +412,49 @@ const RUBRIEKEN = {
         inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over organisatie (teams, timing, materiaal).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi."],
         samenwerken:["Neemt geen ondersteunende rol op.","Helpt enkel na aansturing.","Coacht medeleerlingen en geeft eigen inzichten door.","Coacht, leidt het spel zelfstandig en geeft inzichten door aan minder ervaren spelers."],
         fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en toont een houding gericht op levenslang bewegen."],
+        kledij:KLEDIJ_BANDS
+      }
+    }
+  },
+  terugslagspelen:{
+    label:"Terugslagspelen",
+    rubriek:"Terugslagspelen (net- en racketsporten)",
+    sporten:["Volleybal","Badminton","Tafeltennis"],
+    criteria:[
+      {key:"techniek",   naam:"Slagtechniek & balcontrole",         lpd:"LPD 1",        max:3},
+      {key:"plaatsing",  naam:"Plaatsing & richting",               lpd:"LPD 1, 2",     max:3},
+      {key:"aanvallend", naam:"Aanvallend spel & afwerken",         lpd:"LPD 2",        max:3},
+      {key:"verdedigend",naam:"Terugslag & verdediging",            lpd:"LPD 2",        max:3},
+      {key:"inzicht",    naam:"Spelinzicht, regels & spelleiding",  lpd:"LPD 2, 8, 11", max:3},
+      {key:"fairplay",   naam:"Samenwerken, fair play & inzet",     lpd:"LPD 10, 11, 12",max:3},
+      {key:"kledij",     naam:"Kledij & veiligheid",                lpd:"LPD 8",        max:2}
+    ],
+    bands:{
+      "1ste":{
+        techniek:["Beheerst de basisslag (bovenhandse pas / slag) niet en mist de bal vaak.","Voert de basisslag enkel stilstaand of bij aangooi correct uit.","Speelt de bal met de juiste basistechniek (hand-/rackethouding) in een eenvoudige oefenvorm.","Beheerst de basisslag vlot en houdt de bal gecontroleerd in het spel."],
+        plaatsing:["Speelt de bal zonder richting weg.","Speelt de bal de juiste kant op maar onnauwkeurig.","Speelt de bal gericht naar een medespeler of in het veld.","Plaatst de bal bewust naar een gekozen zone of medespeler."],
+        aanvallend:["Onderneemt geen poging om te scoren.","Probeert af te werken maar zonder controle.","Werkt eenvoudige kansen af (gerichte pas/slag over het net).","Kiest een gericht moment om aanvallend af te werken en scoort."],
+        verdedigend:["Reageert niet op de bal die naar hem komt.","Reageert traag en verwerkt de bal zelden.","Verwerkt de aankomende bal en speelt hem terug.","Verwerkt de bal gecontroleerd en houdt de rally gaande."],
+        inzicht:["Kent de basisregels niet.","Kent enkele regels maar past ze nauwelijks toe.","Kent en past de basisregels toe (telling, lijnen, net, beurten).","Past de regels vlot toe en kan een eenvoudige beurt mee leiden of tellen."],
+        fairplay:["Werkt niet samen en houdt zich niet aan de afspraken.","Wisselende inzet; discussieert over punten.","Zet zich in, speelt fair en gaat respectvol om met het materiaal.","Toont voortdurend inzet, geeft punten eerlijk toe en moedigt anderen aan."],
+        kledij:KLEDIJ_BANDS
+      },
+      "2de":{
+        techniek:["Heeft weinig balcontrole in beweging.","Voert de slag uit maar verliest controle onder lichte druk.","Speelt gericht in beweging (gerichte bovenhandse pas / forehand, clear, drop).","Combineert verschillende slagen gecontroleerd, ook onder lichte druk."],
+        plaatsing:["Gebruikt de ruimte en diepte van het veld niet.","Speelt voorspelbaar naar dezelfde plek.","Gebruikt diepte en richting om de tegenstander te verplaatsen ('plagen').","Varieert bewust in diepte en richting om de tegenstander uit positie te spelen."],
+        aanvallend:["Bouwt geen aanval op.","Speelt individueel en creëert zelden een kans.","Bouwt een aanval op (via netspeler of gerichte opbouw) en werkt af.","Bouwt aanvallen op en werkt af met een gerichte smash of aanvalsslag."],
+        verdedigend:["Verwerkt aankomende ballen niet.","Verdedigt passief en verliest vaak de bal.","Verdedigt actief en zet de bal om in opbouw.","Verdedigt een harde bal of smash en schakelt om naar een tegenaanval."],
+        inzicht:["Past de spelregels niet toe.","Kent de regels maar past ze inconsistent toe.","Past de regels (enkel- en dubbelspel) toe en kan als scheidsrechter optreden.","Past regels en tactiek vlot toe en leidt zelfstandig een wedstrijd of beurt."],
+        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en neemt en aanvaardt leiding.","Toont voortdurend inzet, blijft sportief en stuurt of motiveert medespelers."],
+        kledij:KLEDIJ_BANDS
+      },
+      "3de":{
+        techniek:["Hanteert de slagen niet gecontroleerd in het volledige spel.","Beheerst de slagen enkel in eenvoudige situaties zonder druk.","Wendt verschillende slagen gecontroleerd aan volgens de eigen mogelijkheden.","Beheerst een breed slagenarsenaal (incl. gesprongen smash), ook onder actieve tegenstand."],
+        plaatsing:["Speelt zonder oog voor de positie van de tegenstander.","Plaatst de bal zonder rekening te houden met de tegenstander.","Kiest slag en plaatsing in functie van de positie en actie van de tegenstander.","Stuurt het spel via gevarieerde plaatsing en transfer van technieken tussen sporten."],
+        aanvallend:["Draagt niet bij aan de aanvalsopbouw.","Neemt deel maar speelt voorspelbaar.","Bouwt mee op en werkt aanvallen gericht af (smash/afwerking).","Stuurt de aanvalsopbouw (ook in dubbelspel) en zet medespelers vrij om te scoren."],
+        verdedigend:["Onderneemt geen verdedigende acties.","Verdedigt enkel eenvoudige ballen.","Verdedigt georganiseerd en bouwt van daaruit een tegenaanval op.","Verdedigt onder druk (smashverdediging) en organiseert meteen de tegenaanval."],
+        inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over tactiek en organisatie (dubbelspel, tornooischema).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi (opstelling, timing, schema)."],
+        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in, speelt sportief en gaat gepast om met het materiaal.","Neemt verantwoordelijkheid, coacht anderen en draagt bij tot een positieve sfeer gericht op levenslang bewegen."],
         kledij:KLEDIJ_BANDS
       }
     }
