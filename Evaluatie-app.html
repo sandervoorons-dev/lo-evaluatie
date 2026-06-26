@@ -122,6 +122,9 @@
   .planmonth{margin-top:4px;font-size:13.5px;font-weight:700;color:var(--ink);padding:10px 2px;border-top:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
   .planmonth .pchev{color:var(--accent-deep);font-weight:400}
   .planmonthbody.collapsed{display:none}
+  .fase{font-size:10.5px;font-weight:600;border-radius:6px;padding:1px 6px}
+  .fase.oef{background:rgba(244,194,74,.22);color:#5a4a12}
+  .fase.eval{background:rgba(46,170,110,.18);color:#1c7a45}
   .pwsug{font-size:11.5px;color:var(--muted);margin:4px 0 6px;line-height:1.35}
   .savedrow a{color:var(--accent-deep);cursor:pointer;text-decoration:underline}
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(58,56,47,.95);color:#fff;
@@ -1352,7 +1355,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v39";
+const APP_VERSION="v40";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1554,8 +1557,8 @@ function renderPlanner(){
     }
     const vak=vakantieVoor(iso);
     if(vak){html+='<div class="planweek"><div class="pwhead"><span class="pwk" style="color:var(--muted)">'+d.getDate()+'/'+(d.getMonth()+1)+'</span><span class="locbadge vakb">'+vak+'</span></div></div>';return;}
-    const loc=locForIndex(lw,cfg.beginloc);const rank=seasonRank(d.getMonth());
-    html+='<div class="planweek"><div class="pwhead"><span class="pwk">week '+(lw+1)+' · '+d.getDate()+'/'+(d.getMonth()+1)+'</span><span class="locbadge '+loc+'">'+LOC_LABEL[loc]+'</span></div>';
+    const loc=locForIndex(lw,cfg.beginloc);const rank=seasonRank(d.getMonth());const fase=(lw%2===0)?"Oefenen":"Evaluatie";
+    html+='<div class="planweek"><div class="pwhead"><span class="pwk">week '+(lw+1)+' · '+d.getDate()+'/'+(d.getMonth()+1)+' · <span class="fase '+(lw%2===0?"oef":"eval")+'">'+fase+'</span></span><span class="locbadge '+loc+'">'+LOC_LABEL[loc]+'</span></div>';
     html+='<div class="pwsug">'+planSuggestie(loc,rank)+'</div>';
     html+=sportSelectHTML(plan[iso]||"",iso)+'</div>';
     lw++;
@@ -1570,11 +1573,11 @@ function buildPlanCSV(){
   const weeks=planWeeks(cfg.start,cfg.eind);if(!weeks.length)return null;
   const plan=getPlan();const L=[];const push=a=>L.push(a.map(csvEscape).join(";"));
   push(["JAARPLANNING LO"]);push(["Beurtrol","2 weken sportzaal / 2 weken polyzaal / 2 weken buiten"]);push([]);
-  push(["Week","Week van","Locatie","Seizoensadvies","Mijn plan"]);
+  push(["Week","Week van","Locatie","Fase","Seizoensadvies","Mijn plan"]);
   let lw=0;
   weeks.forEach((iso)=>{const d=parseISO(iso);const vak=vakantieVoor(iso);
-    if(vak){push(["",iso,vak,"",""]);return;}
-    const loc=locForIndex(lw,cfg.beginloc);push([(lw+1),iso,LOC_LABEL[loc],planSuggestie(loc,seasonRank(d.getMonth())),planLabel(plan[iso]||"")]);lw++;});
+    if(vak){push(["",iso,vak,"","",""]);return;}
+    const loc=locForIndex(lw,cfg.beginloc);push([(lw+1),iso,LOC_LABEL[loc],(lw%2===0?"Oefenen":"Evaluatie"),planSuggestie(loc,seasonRank(d.getMonth())),planLabel(plan[iso]||"")]);lw++;});
   return "﻿"+L.join("\r\n");
 }
 function evalsForKlasCat(klas,cat){

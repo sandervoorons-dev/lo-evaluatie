@@ -1,4 +1,4 @@
-const CACHE = "lo-eval-v39";
+const CACHE = "lo-eval-v40";
 const ASSETS = [
   "Evaluatie-app.html",
   "manifest.webmanifest",
