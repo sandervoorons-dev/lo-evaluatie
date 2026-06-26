@@ -110,6 +110,16 @@
   .fbrow .fbdate{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0}
   .fbrow .fbtxt{flex:1;line-height:1.35;word-break:break-word}
   .fbrow .fbdel{color:#c33;cursor:pointer;font-size:11px;flex-shrink:0}
+  .planweek{padding:10px 0;border-top:1px solid var(--line)}
+  .planweek:first-child{border-top:none}
+  .pwhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .pwk{font-size:13px;font-weight:600;color:var(--ink)}
+  .locbadge{font-size:11px;font-weight:600;border-radius:8px;padding:3px 9px;white-space:nowrap}
+  .locbadge.sportzaal{background:rgba(46,170,110,.18);color:#1c7a45}
+  .locbadge.poly{background:rgba(244,194,74,.22);color:#5a4a12}
+  .locbadge.buiten{background:rgba(55,138,221,.16);color:#185fa5}
+  .locbadge.vakb{background:#eceae3;color:#8a8a80}
+  .pwsug{font-size:11.5px;color:var(--muted);margin:4px 0 6px;line-height:1.35}
   .savedrow a{color:var(--accent-deep);cursor:pointer;text-decoration:underline}
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(58,56,47,.95);color:#fff;
     padding:10px 16px;border-radius:11px;font-size:14px;opacity:0;transition:opacity .25s;z-index:60}
@@ -274,6 +284,19 @@
     <div class="card">
       <button class="btn primary" id="dlweek" style="width:100%">Download evaluaties van deze week</button>
       <div class="muted" id="weekinfo" style="margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <div class="critttl" style="margin-bottom:6px">Jaarplanning</div>
+      <div class="hint" style="margin-bottom:9px">Plan logisch over het jaar. De app toont per week of je <b>sportzaal</b>, <b>polyzaal</b> of <b>buiten</b> hebt (beurtrol 2/2/2) met een seizoensadvies (binnen-/buitensport). Vul per week je domein/sport in. Let op: schoolvakanties kunnen de beurtrol verschuiven — pas dan de startdatum aan.</div>
+      <label class="fld">Start schooljaar (een maandag)</label>
+      <input type="date" id="plstart">
+      <label class="fld">Einde</label>
+      <input type="date" id="pleind">
+      <label class="fld">Jouw locatie in de eerste 2 weken</label>
+      <select id="plbegin"><option value="sportzaal">Sportzaal</option><option value="poly">Polyzaal</option><option value="buiten">Buiten</option></select>
+      <button class="btn ghost" id="plgen" style="width:100%;margin-top:10px">Planning tonen / verversen</button>
+      <div id="planlist" style="margin-top:11px"></div>
+      <button class="btn primary" id="pldl" style="width:100%;margin-top:10px">Download jaarplanning (CSV)</button>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
@@ -1306,7 +1329,7 @@ function switchTab(t){
   $("strip").style.display=(t==="meer")?"none":"flex";
   $("klaschip").style.display=(t==="meer")?"none":"block";
   if(t==="afwezigheden")renderReg();
-  if(t==="meer"){populateEv();renderEvolutie();}
+  if(t==="meer"){populateEv();renderEvolutie();renderPlanner();}
 }
 
 function openKlasPicker(){
@@ -1326,7 +1349,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v36";
+const APP_VERSION="v38";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1477,6 +1500,60 @@ function buildAfwezigCSV(from,to){
   return "﻿"+L.join("\r\n");
 }
 
+const LS_PLANCFG="lo_plan_cfg";const LS_PLAN="lo_plan";
+const LOC_ORDER=["sportzaal","poly","buiten"];
+const LOC_LABEL={sportzaal:"Sportzaal",poly:"Polyzaal",buiten:"Buiten"};
+function getPlanCfg(){try{return JSON.parse(localStorage.getItem(LS_PLANCFG))||{};}catch(e){return {};}}
+function savePlanCfg(o){localStorage.setItem(LS_PLANCFG,JSON.stringify(o));}
+function getPlan(){try{return JSON.parse(localStorage.getItem(LS_PLAN))||{};}catch(e){return {};}}
+function savePlan(o){localStorage.setItem(LS_PLAN,JSON.stringify(o));}
+function mondayOf(d){const x=new Date(d.getTime());const dow=(x.getDay()+6)%7;x.setDate(x.getDate()-dow);x.setHours(12,0,0,0);return x;}
+function planWeeks(startISO,endISO){const out=[];const s=parseISO(startISO),e=parseISO(endISO);if(!s||!e)return out;let m=mondayOf(s);let g=0;while(m<=e&&g<60){out.push(localISO(m));m=new Date(m.getTime()+7*86400000);g++;}return out;}
+function locForIndex(i,beginloc){const off=Math.max(0,LOC_ORDER.indexOf(beginloc));const block=Math.floor(i/2);return LOC_ORDER[(off+block)%3];}
+const VAKANTIES=[
+  {naam:"Herfstvakantie",from:"2026-11-02",to:"2026-11-08"},
+  {naam:"Kerstvakantie",from:"2026-12-21",to:"2027-01-03"},
+  {naam:"Krokusvakantie",from:"2027-02-08",to:"2027-02-14"},
+  {naam:"Paasvakantie",from:"2027-03-29",to:"2027-04-11"}
+];
+function vakantieVoor(iso){for(let i=0;i<VAKANTIES.length;i++){if(iso>=VAKANTIES[i].from&&iso<=VAKANTIES[i].to)return VAKANTIES[i].naam;}return null;}
+function seasonRank(m){if([10,11,0,1].indexOf(m)>=0)return "slecht";if([3,4,5,8].indexOf(m)>=0)return "goed";if([2,9].indexOf(m)>=0)return "matig";return "goed";}
+function planSuggestie(loc,rank){
+  if(loc==="sportzaal")return "Zaalweek — ideaal voor gymnastiek, dans, contact of volleybal/badminton."+(rank==="slecht"?" Benut deze week zeker (buiten is het seizoen nat).":"");
+  if(loc==="buiten"){if(rank==="goed")return "Buitenweek, meestal goed weer — atletiek, voetbal, trefspelen of baseball.";if(rank==="matig")return "Buitenweek, wisselend weer — buiten als het kan, anders looptraining of theorie.";return "Buitenweek in een nat seizoen — kies looptraining/conditie of plan theorie (EHBO).";}
+  return "Polyzaal (beperkt) — EHBO/theorie, conditie met lichaamsgewicht of tafeltennis.";
+}
+function renderPlanner(){
+  const box=$("planlist");if(!box)return;
+  const cfg=getPlanCfg();
+  if(!cfg.start||!cfg.eind||!cfg.beginloc){box.innerHTML='<div class="muted" style="font-size:12px">Stel hierboven je schooljaar en je startlocatie in.</div>';return;}
+  const weeks=planWeeks(cfg.start,cfg.eind);
+  if(!weeks.length){box.innerHTML='<div class="muted" style="font-size:12px">Geen weken in dit bereik (controleer de data).</div>';return;}
+  const plan=getPlan();let html="";let lw=0;
+  weeks.forEach((iso)=>{
+    const d=parseISO(iso);const vak=vakantieVoor(iso);
+    if(vak){html+='<div class="planweek"><div class="pwhead"><span class="pwk" style="color:var(--muted)">'+d.getDate()+'/'+(d.getMonth()+1)+'</span><span class="locbadge vakb">'+vak+'</span></div></div>';return;}
+    const loc=locForIndex(lw,cfg.beginloc);const rank=seasonRank(d.getMonth());
+    html+='<div class="planweek"><div class="pwhead"><span class="pwk">week '+(lw+1)+' · '+d.getDate()+'/'+(d.getMonth()+1)+'</span><span class="locbadge '+loc+'">'+LOC_LABEL[loc]+'</span></div>';
+    html+='<div class="pwsug">'+planSuggestie(loc,rank)+'</div>';
+    html+='<input class="pwin" data-iso="'+iso+'" type="text" placeholder="Mijn plan (domein/sport)…" value="'+(plan[iso]?plan[iso].replace(/"/g,"&quot;"):"")+'"></div>';
+    lw++;
+  });
+  box.innerHTML=html;
+  box.querySelectorAll(".pwin").forEach(inp=>{inp.onchange=()=>{const p=getPlan();const v=inp.value.trim();const iso=inp.getAttribute("data-iso");if(v)p[iso]=v;else delete p[iso];savePlan(p);};});
+}
+function buildPlanCSV(){
+  const cfg=getPlanCfg();if(!cfg.start||!cfg.eind||!cfg.beginloc)return null;
+  const weeks=planWeeks(cfg.start,cfg.eind);if(!weeks.length)return null;
+  const plan=getPlan();const L=[];const push=a=>L.push(a.map(csvEscape).join(";"));
+  push(["JAARPLANNING LO"]);push(["Beurtrol","2 weken sportzaal / 2 weken polyzaal / 2 weken buiten"]);push([]);
+  push(["Week","Week van","Locatie","Seizoensadvies","Mijn plan"]);
+  let lw=0;
+  weeks.forEach((iso)=>{const d=parseISO(iso);const vak=vakantieVoor(iso);
+    if(vak){push(["",iso,vak,"",""]);return;}
+    const loc=locForIndex(lw,cfg.beginloc);push([(lw+1),iso,LOC_LABEL[loc],planSuggestie(loc,seasonRank(d.getMonth())),plan[iso]||""]);lw++;});
+  return "﻿"+L.join("\r\n");
+}
 function evalsForKlasCat(klas,cat){
   const out=[];
   for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);
@@ -1589,11 +1666,15 @@ function init(){
     if(typeof ExcelJS!=="undefined"){try{const blob=await buildWeekXLSX();if(!blob){toast("Geen evaluaties deze week");return;}downloadBlob("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".xlsx",blob);toast("Week-evaluaties (Excel) gedownload");return;}catch(e){console.error(e);}}
     const t=buildWeekCSV();if(!t){toast("Geen evaluaties deze week");return;}download("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".csv",t);toast("Gedownload als CSV");};
   $("dlall").onclick=()=>{
-    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0||k===LS_FB)all[k]=localStorage.getItem(k);}
+    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0||k===LS_FB||k===LS_PLAN||k===LS_PLANCFG)all[k]=localStorage.getItem(k);}
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
     localStorage.setItem("lo_last_backup",todayISO());updateBackupStatus();$("bubanner").style.display="none";
   };
   $("bunow").onclick=()=>{switchTab("meer");$("dlall").click();};
+  (function(){const cfg=getPlanCfg();if($("plstart")){if(cfg.start)$("plstart").value=cfg.start;if(cfg.eind)$("pleind").value=cfg.eind;if(cfg.beginloc)$("plbegin").value=cfg.beginloc;}})();
+  function savePlanUI(){savePlanCfg({start:$("plstart").value,eind:$("pleind").value,beginloc:$("plbegin").value});renderPlanner();}
+  $("plstart").onchange=savePlanUI;$("pleind").onchange=savePlanUI;$("plbegin").onchange=savePlanUI;$("plgen").onclick=savePlanUI;
+  $("pldl").onclick=()=>{const t=buildPlanCSV();if(!t){toast("Stel eerst je schooljaar in");return;}download("Jaarplanning_LO.csv",t);toast("Jaarplanning gedownload");};
   $("evleer").onchange=renderEvolutie;$("evdom").onchange=renderEvolutie;
   $("evdl").onclick=()=>{if(!state)return;const naam=$("evleer").value,cat=$("evdom").value;if(!naam||!cat){toast("Kies leerling en domein");return;}const t=buildEvolutieCSV(state.klas,naam,cat);if(!t){toast("Geen evaluaties voor dit domein");return;}download(state.klas.replace(/[^\w]+/g,"-")+"_"+naam.replace(/[^\w]+/g,"-")+"_Evolutie_"+(RUBRIEKEN[cat].label.replace(/[^\w]+/g,"-"))+".csv",t);toast("Evolutierapport gedownload");};
   $("fbadd").onclick=()=>{const v=$("fbinput").value.trim();if(!v)return;const a=getFb();a.push({t:nowStamp(),txt:v});saveFb(a);$("fbinput").value="";renderFeedback();toast("Opmerking toegevoegd");};
