@@ -426,11 +426,12 @@ function saveKlassen(){localStorage.setItem(LS_KLASSEN,JSON.stringify(KLASSEN));
 const LABELS3 = ["Onvoldoende","Zwak","Goed","Zeer goed"];
 const LABELS2 = ["Niet in orde","Deels in orde","In orde"];
 const STATUS  = [{v:"aanwezig",l:"Aanwezig"},{v:"afwezig",l:"Afwezig"},{v:"attest",l:"Doktersattest"}];
-const KLEDIJ_BANDS = ["Geen sportkledij / werkt onveilig.","Wel kledij maar niet van de school.","Sportkledij van de school en werkt veilig."];
+/* Kledij wordt niet meer bij de evaluaties gescoord (zit al in het afwezigheden-register); banden bewaard voor het geval ze terugkomen. */
+const KLEDIJ_BANDS = ["Geen sportkledij bij.","Sportkledij onvolledig (bv. geen sportschoenen) of werkt onveilig.","Sportkledij aan en werkt veilig."];
 
 /* ---------- SPORTKLASSEN + RUBRIEKEN ---------- */
 const RUBRIEKEN = {
-  atletiek: {"label":"Atletiek","type":"meting","sporten":["Kogelstoten","Verspringen","Hoogspringen","Schaarsprong","60m sprint","Afstandslopen 1000m","Afstandslopen 2000m","Afstandslopen 3000m"],"onderdelen":{"Kogelstoten":{"eenheid":"m","techniek":[{"naam":"Uitgangshouding & greep","bands":["Houdt de kogel verkeerd vast of neemt een onveilige houding aan.","Correcte greep maar verkeerde uitgangshouding.","Correcte greep én uitgangshouding (kogel in de hals, lichaam zijwaarts).","Vlotte, stabiele uitgangshouding, klaar voor een krachtige afstoot."]},{"naam":"Stootbeweging (benen-romp-arm)","bands":["Gooit i.p.v. te stoten; geen krachtoverdracht.","Stoot, maar zonder beengebruik of juiste volgorde.","Gebruikt benen-romp-arm in de juiste volgorde.","Vloeiende stootketting met volledige strekking en polsklap."]},{"naam":"Veiligheid & uitvoering","bands":["Werkt onveilig of stoort de afspraken.","Volgt de afspraken enkel na aansporing.","Stoot veilig en respecteert de zone-afspraken.","Werkt veilig en zelfstandig en helpt mee bij de organisatie."]}],"M":[[10,8],[9.5,7.5],[9,7],[8.5,6.5],[8,6],[7.5,5.5],[7,5],[6.5,4.5],[6,4],[5.5,3.5],[5,3],[4.5,2.5],[4,2]],"J":[[10,10.5],[9.5,10],[9,9.5],[8.5,9],[8,8.5],[7.5,8],[7,7.5],[6.5,7],[6,6.5],[5.5,6],[5,5.5],[4.5,5],[4,4.5]]},"Verspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen ritme; stopt of remt af voor de afzet.","Loopt aan maar zonder versnelling.","Regelmatige aanloop met versnelling naar de balk.","Gecontroleerde, versnellende aanloop met juiste afzetpas."]},{"naam":"Afzet","bands":["Geen duidelijke of dubbele afzet.","Zet af, maar ver achter of over de balk.","Eenvoetige afzet kort bij de balk.","Krachtige eenvoetige afzet met duidelijke opwaartse impuls."]},{"naam":"Zweef & landing","bands":["Valt ongecontroleerd; landt op rug of handen achter.","Landt op twee voeten maar zakt achterover.","Landt gecontroleerd op twee voeten.","Actieve zweef en landing met voeten vooruit; gewicht volgt."]}],"M":[[10,3.5],[9.5,3.25],[9,3],[8.5,2.75],[8,2.5],[7.5,2.25],[7,2],[6.5,1.9],[6,1.8],[5.5,1.7],[5,1.6],[4.5,1.3],[4,1]],"J":[[10,4.5],[9.5,4.25],[9,4],[8.5,3.75],[8,3.5],[7.5,3.25],[7,3],[6.5,2.75],[6,2.5],[5.5,2.3],[5,2],[4.5,1.8],[4,1.6]]},"Hoogspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen aangepaste aanloop.","Rechte aanloop zonder ritme.","Aanloop met ritme richting de lat.","Aangepaste (gebogen) aanloop met versnelling en juiste afzetplaats."]},{"naam":"Afzet","bands":["Zet af met twee of de verkeerde voet; geen hoogte.","Eenvoetige afzet maar zonder opspring.","Eenvoetige afzet met opwaartse impuls.","Krachtige afzet met actief zwaaibeen; maximale hoogte."]},{"naam":"Zweeftechniek & landing","bands":["Raakt de lat of landt onveilig.","Over de lat maar met aanraking of onzuiver.","Zuivere overgang over de lat en veilige landing.","Vlotte techniek over de lat met gecontroleerde landing op de mat."]}],"M":[[10,1.45],[9.5,1.4],[9,1.35],[8.5,1.3],[8,1.25],[7.5,1.2],[7,1.15],[6.5,1.1],[6,1.05],[5.5,1],[5,0.95],[4.5,0.9],[4,0.85]],"J":[[10,1.6],[9.5,1.55],[9,1.5],[8.5,1.45],[8,1.4],[7.5,1.35],[7,1.3],[6.5,1.25],[6,1.2],[5.5,1.15],[5,1.1],[4.5,1.05],[4,1]]},"Schaarsprong":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen schuine aanloop.","Schuine aanloop zonder ritme.","Schuine aanloop met ritme.","Schuine, versnellende aanloop met juist afzetpunt."]},{"naam":"Afzet","bands":["Verkeerde afzetvoet of geen hoogte.","Afzet met het binnenste been.","Afzet met het verste been, opwaarts.","Krachtige afzet met knie/zwaaibeen actief omhoog."]},{"naam":"Schaarbeweging & landing","bands":["Geen schaarbeweging; raakt de lat.","Beperkte beenwissel over de lat.","Duidelijke schaarbeweging, beide benen over de lat.","Vloeiende schaar met rechte romp en veilige landing op de voeten."]}],"M":[[10,1.4],[9.5,1.35],[9,1.3],[8.5,1.25],[8,1.2],[7.5,1.15],[7,1.1],[6.5,1.05],[6,1],[5.5,0.95],[5,0.9],[4.5,0.85],[4,0.8]],"J":[[10,1.5],[9.5,1.45],[9,1.4],[8.5,1.35],[8,1.3],[7.5,1.25],[7,1.2],[6.5,1.15],[6,1.1],[5.5,1.05],[5,1],[4.5,0.95],[4,0.9]]},"60m sprint":{"eenheid":"sec","techniek":[{"naam":"Start / vertrek","bands":["Reageert traag of vertrekt vanuit een verkeerde houding.","Vertrekt rechtop, zonder versnelling.","Lage starthouding met duidelijke versnelling.","Explosieve start met geleidelijk oprichten."]},{"naam":"Loophouding & armzwaai","bands":["Stijve of voorovergebogen houding; geen armzwaai.","Onregelmatige armzwaai.","Rechte romp met actieve armzwaai.","Ontspannen, rechte sprinthouding met krachtige tegengestelde armzwaai."]},{"naam":"Snelheidsbehoud","bands":["Valt sterk terug of stopt voor de finish.","Vertraagt duidelijk in de tweede helft.","Behoudt de snelheid tot net voor de finish.","Loopt volgehouden/versneld door tot voorbij de finish."]}],"M":[[10,9],[9.5,9.4],[9,9.7],[8.5,10],[8,10.5],[7.5,11],[7,11.5],[6.5,12],[6,12.5],[5.5,13],[5,13.5],[4.5,14],[4,14.5]],"J":[[10,8],[9.5,8.3],[9,8.5],[8.5,8.8],[8,9],[7.5,9.3],[7,9.5],[6.5,9.8],[6,10],[5.5,10.3],[5,10.5],[4.5,10.8],[4,11]]},"Afstandslopen 1000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,6],[9.5,6.2],[9,6.4],[8.5,7],[8,7.2],[7.5,7.4],[7,8],[6.5,8.2],[6,8.4],[5.5,9],[5,9.2],[4.5,9.4],[4,10]],"J":[[10,4.5],[9.5,5.1],[9,5.3],[8.5,5.5],[8,6.1],[7.5,6.3],[7,6.5],[6.5,7.1],[6,7.3],[5.5,7.5],[5,8.1],[4.5,8.3],[4,8.5]]},"Afstandslopen 2000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,16],[9.5,16.25],[9,16.5],[8.5,16.75],[8,17],[7.5,17.25],[7,17.5],[6.5,17.75],[6,18],[5.5,19],[5,20],[4.5,21],[4,22]],"J":[[10,12],[9.5,12.25],[9,12.5],[8.5,12.75],[8,13],[7.5,13.25],[7,13.5],[6.5,13.75],[6,14],[5.5,15],[5,16],[4.5,17],[4,18]]},"Afstandslopen 3000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,22],[9.5,23],[9,24],[8.5,25],[8,26],[7.5,27],[7,28],[6.5,29],[6,30],[5.5,31],[5,32],[4.5,33],[4,34]],"J":[[10,17],[9.5,18],[9,19],[8.5,20],[8,21],[7.5,22],[7,23],[6.5,24],[6,25],[5.5,26],[5,27],[4.5,28],[4,29]]}}},
+  atletiek: {"label":"Atletiek","type":"meting","lpdTechniek":"LPD 1 (technieken uitvoeren)","lpdPrestatie":"LPD 3 (vorderingen) en LPD 4 (fysieke capaciteiten)","sporten":["Kogelstoten","Verspringen","Hoogspringen","Schaarsprong","60m sprint","Afstandslopen 1000m","Afstandslopen 2000m","Afstandslopen 3000m"],"onderdelen":{"Kogelstoten":{"eenheid":"m","techniek":[{"naam":"Uitgangshouding & greep","bands":["Houdt de kogel verkeerd vast of neemt een onveilige houding aan.","Correcte greep maar verkeerde uitgangshouding.","Correcte greep én uitgangshouding (kogel in de hals, lichaam zijwaarts).","Vlotte, stabiele uitgangshouding, klaar voor een krachtige afstoot."]},{"naam":"Stootbeweging (benen-romp-arm)","bands":["Gooit i.p.v. te stoten; geen krachtoverdracht.","Stoot, maar zonder beengebruik of juiste volgorde.","Gebruikt benen-romp-arm in de juiste volgorde.","Vloeiende stootketting met volledige strekking en polsklap."]},{"naam":"Veiligheid & uitvoering","bands":["Werkt onveilig of stoort de afspraken.","Volgt de afspraken enkel na aansporing.","Stoot veilig en respecteert de zone-afspraken.","Werkt veilig en zelfstandig en helpt mee bij de organisatie."]}],"M":[[10,8],[9.5,7.5],[9,7],[8.5,6.5],[8,6],[7.5,5.5],[7,5],[6.5,4.5],[6,4],[5.5,3.5],[5,3],[4.5,2.5],[4,2]],"J":[[10,10.5],[9.5,10],[9,9.5],[8.5,9],[8,8.5],[7.5,8],[7,7.5],[6.5,7],[6,6.5],[5.5,6],[5,5.5],[4.5,5],[4,4.5]]},"Verspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen ritme; stopt of remt af voor de afzet.","Loopt aan maar zonder versnelling.","Regelmatige aanloop met versnelling naar de balk.","Gecontroleerde, versnellende aanloop met juiste afzetpas."]},{"naam":"Afzet","bands":["Geen duidelijke of dubbele afzet.","Zet af, maar ver achter of over de balk.","Eenvoetige afzet kort bij de balk.","Krachtige eenvoetige afzet met duidelijke opwaartse impuls."]},{"naam":"Zweef & landing","bands":["Valt ongecontroleerd; landt op rug of handen achter.","Landt op twee voeten maar zakt achterover.","Landt gecontroleerd op twee voeten.","Actieve zweef en landing met voeten vooruit; gewicht volgt."]}],"M":[[10,3.5],[9.5,3.25],[9,3],[8.5,2.75],[8,2.5],[7.5,2.25],[7,2],[6.5,1.9],[6,1.8],[5.5,1.7],[5,1.6],[4.5,1.3],[4,1]],"J":[[10,4.5],[9.5,4.25],[9,4],[8.5,3.75],[8,3.5],[7.5,3.25],[7,3],[6.5,2.75],[6,2.5],[5.5,2.3],[5,2],[4.5,1.8],[4,1.6]]},"Hoogspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen aangepaste aanloop.","Rechte aanloop zonder ritme.","Aanloop met ritme richting de lat.","Aangepaste (gebogen) aanloop met versnelling en juiste afzetplaats."]},{"naam":"Afzet","bands":["Zet af met twee of de verkeerde voet; geen hoogte.","Eenvoetige afzet maar zonder opspring.","Eenvoetige afzet met opwaartse impuls.","Krachtige afzet met actief zwaaibeen; maximale hoogte."]},{"naam":"Zweeftechniek & landing","bands":["Raakt de lat of landt onveilig.","Over de lat maar met aanraking of onzuiver.","Zuivere overgang over de lat en veilige landing.","Vlotte techniek over de lat met gecontroleerde landing op de mat."]}],"M":[[10,1.45],[9.5,1.4],[9,1.35],[8.5,1.3],[8,1.25],[7.5,1.2],[7,1.15],[6.5,1.1],[6,1.05],[5.5,1],[5,0.95],[4.5,0.9],[4,0.85]],"J":[[10,1.6],[9.5,1.55],[9,1.5],[8.5,1.45],[8,1.4],[7.5,1.35],[7,1.3],[6.5,1.25],[6,1.2],[5.5,1.15],[5,1.1],[4.5,1.05],[4,1]]},"Schaarsprong":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen schuine aanloop.","Schuine aanloop zonder ritme.","Schuine aanloop met ritme.","Schuine, versnellende aanloop met juist afzetpunt."]},{"naam":"Afzet","bands":["Verkeerde afzetvoet of geen hoogte.","Afzet met het binnenste been.","Afzet met het verste been, opwaarts.","Krachtige afzet met knie/zwaaibeen actief omhoog."]},{"naam":"Schaarbeweging & landing","bands":["Geen schaarbeweging; raakt de lat.","Beperkte beenwissel over de lat.","Duidelijke schaarbeweging, beide benen over de lat.","Vloeiende schaar met rechte romp en veilige landing op de voeten."]}],"M":[[10,1.4],[9.5,1.35],[9,1.3],[8.5,1.25],[8,1.2],[7.5,1.15],[7,1.1],[6.5,1.05],[6,1],[5.5,0.95],[5,0.9],[4.5,0.85],[4,0.8]],"J":[[10,1.5],[9.5,1.45],[9,1.4],[8.5,1.35],[8,1.3],[7.5,1.25],[7,1.2],[6.5,1.15],[6,1.1],[5.5,1.05],[5,1],[4.5,0.95],[4,0.9]]},"60m sprint":{"eenheid":"sec","techniek":[{"naam":"Start / vertrek","bands":["Reageert traag of vertrekt vanuit een verkeerde houding.","Vertrekt rechtop, zonder versnelling.","Lage starthouding met duidelijke versnelling.","Explosieve start met geleidelijk oprichten."]},{"naam":"Loophouding & armzwaai","bands":["Stijve of voorovergebogen houding; geen armzwaai.","Onregelmatige armzwaai.","Rechte romp met actieve armzwaai.","Ontspannen, rechte sprinthouding met krachtige tegengestelde armzwaai."]},{"naam":"Snelheidsbehoud","bands":["Valt sterk terug of stopt voor de finish.","Vertraagt duidelijk in de tweede helft.","Behoudt de snelheid tot net voor de finish.","Loopt volgehouden/versneld door tot voorbij de finish."]}],"M":[[10,9],[9.5,9.4],[9,9.7],[8.5,10],[8,10.5],[7.5,11],[7,11.5],[6.5,12],[6,12.5],[5.5,13],[5,13.5],[4.5,14],[4,14.5]],"J":[[10,8],[9.5,8.3],[9,8.5],[8.5,8.8],[8,9],[7.5,9.3],[7,9.5],[6.5,9.8],[6,10],[5.5,10.3],[5,10.5],[4.5,10.8],[4,11]]},"Afstandslopen 1000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,6],[9.5,6.2],[9,6.4],[8.5,7],[8,7.2],[7.5,7.4],[7,8],[6.5,8.2],[6,8.4],[5.5,9],[5,9.2],[4.5,9.4],[4,10]],"J":[[10,4.5],[9.5,5.1],[9,5.3],[8.5,5.5],[8,6.1],[7.5,6.3],[7,6.5],[6.5,7.1],[6,7.3],[5.5,7.5],[5,8.1],[4.5,8.3],[4,8.5]]},"Afstandslopen 2000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,16],[9.5,16.25],[9,16.5],[8.5,16.75],[8,17],[7.5,17.25],[7,17.5],[6.5,17.75],[6,18],[5.5,19],[5,20],[4.5,21],[4,22]],"J":[[10,12],[9.5,12.25],[9,12.5],[8.5,12.75],[8,13],[7.5,13.25],[7,13.5],[6.5,13.75],[6,14],[5.5,15],[5,16],[4.5,17],[4,18]]},"Afstandslopen 3000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,22],[9.5,23],[9,24],[8.5,25],[8,26],[7.5,27],[7,28],[6.5,29],[6,30],[5.5,31],[5,32],[4.5,33],[4,34]],"J":[[10,17],[9.5,18],[9,19],[8.5,20],[8,21],[7.5,22],[7,23],[6.5,24],[6,25],[5.5,26],[5,27],[4.5,28],[4,29]]}}},
   trefspelen:{
     label:"Trefspelen",
     rubriek:"Tussen twee vuren",
@@ -441,8 +442,7 @@ const RUBRIEKEN = {
       {key:"samenspel",   naam:"Samenspel & aanvallend spel",       lpd:"LPD 2",        max:3},
       {key:"inzicht",     naam:"Spelinzicht, regels & tactiek",     lpd:"LPD 2, 8",     max:3},
       {key:"samenwerken", naam:"Samenwerken, fair play & coaching", lpd:"LPD 10, 11",   max:3},
-      {key:"inzet",       naam:"Inzet & attitude",                  lpd:"LPD 12",       max:3},
-      {key:"kledij",      naam:"Kledij & veiligheid",               lpd:"LPD 8",        max:2}
+      {key:"inzet",       naam:"Inzet & attitude",                  lpd:"LPD 12",       max:3}
     ],
     bands:{
       "1ste":{
@@ -451,8 +451,7 @@ const RUBRIEKEN = {
         samenspel:["Speelt de bal niet door.","Houdt de bal te lang vast.","Speelt de bal door naar een medespeler.","Speelt samen met het veld én het vuur om kansen te maken."],
         inzicht:["Kent de basisregels niet.","Kent enkele regels maar past ze nauwelijks toe.","Kent en past de basisregels toe (raken, gevangen bal, lijnen, naar het vuur).","Past de regels vlot toe en speelt eenvoudig tactisch."],
         samenwerken:["Werkt niet samen en geeft niet toe dat hij geraakt is.","Speelt samen maar discussieert over treffers.","Werkt samen en geeft eerlijk toe wanneer hij geraakt is.","Werkt samen, speelt eerlijk en moedigt medeleerlingen aan."],
-        inzet:["Toont weinig inzet en haakt af.","Wisselende inzet.","Doet actief en gemotiveerd mee.","Toont voortdurend inzet en blijft positief, ook na een treffer."],
-        kledij:KLEDIJ_BANDS
+        inzet:["Toont weinig inzet en haakt af.","Wisselende inzet.","Doet actief en gemotiveerd mee.","Toont voortdurend inzet en blijft positief, ook na een treffer."]
       },
       "2de":{
         werpen:["Mikt niet doelgericht.","Mikt enkel op dichte, stilstaande tegenstanders.","Mikt gericht op bewegende tegenstanders.","Mikt snel en gericht op de zwakst gedekte tegenstander."],
@@ -460,8 +459,7 @@ const RUBRIEKEN = {
         samenspel:["Werkt niet samen met het team of het vuur.","Speelt soms samen maar zonder plan.","Speelt de bal snel rond en betrekt het vuur.","Combineert veld en vuur om tegenstanders in te sluiten en te raken."],
         inzicht:["Speelt zonder inzicht of tactiek.","Volgt de regels maar speelt voorspelbaar.","Speelt tactisch (zwakke posities mikken, het vuur inschakelen).","Doorziet het spel en kiest steeds de juiste tactische oplossing."],
         samenwerken:["Werkt niet samen.","Speelt samen maar stuurt of helpt niet.","Speelt samen en past spontaan de afspraken toe.","Stuurt het team, neemt en aanvaardt leiding en speelt steeds fair."],
-        inzet:["Respecteert de afspraken niet.","Heeft het moeilijk met winst en verlies.","Zet zich in en gaat correct om met winst en verlies.","Toont voortdurend inzet, blijft sportief en stimuleert anderen."],
-        kledij:KLEDIJ_BANDS
+        inzet:["Respecteert de afspraken niet.","Heeft het moeilijk met winst en verlies.","Zet zich in en gaat correct om met winst en verlies.","Toont voortdurend inzet, blijft sportief en stimuleert anderen."]
       },
       "3de":{
         werpen:["Zet zijn worp niet in voor het team.","Werpt vooral individueel, zonder plan.","Kiest het juiste moment en doel om te werpen.","Werpt tactisch (afleiden, samen mikken) om het team punten te laten maken."],
@@ -469,8 +467,7 @@ const RUBRIEKEN = {
         samenspel:["Draagt niet bij aan de teamaanval.","Neemt deel maar zonder samenspel.","Bouwt samen met het team aanvallen op via veld en vuur.","Stuurt het samenspel, zet tegenstanders onder druk en creëert scoringskansen voor het team."],
         inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen sturende rol op.","Past de regels toe en denkt mee over tactiek en varianten.","Leidt het spel mee, legt regels en varianten uit en arbitreert."],
         samenwerken:["Neemt geen ondersteunende rol op.","Helpt enkel na aansturing.","Coacht medeleerlingen en houdt het spel eerlijk.","Leidt en coacht het team zelfstandig en geeft inzichten door aan minder ervaren spelers."],
-        inzet:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en draagt bij tot een positieve sfeer."],
-        kledij:KLEDIJ_BANDS
+        inzet:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en draagt bij tot een positieve sfeer."]
       }
     }
   },
@@ -484,8 +481,7 @@ const RUBRIEKEN = {
       {key:"verdedigend",   naam:"Verdedigend spel & omschakelen",   lpd:"LPD 2",         max:3},
       {key:"inzicht",       naam:"Spelinzicht, regels & rollen",     lpd:"LPD 2, 8",      max:3},
       {key:"samenwerken",   naam:"Samenwerken, coachen & spelleiding",lpd:"LPD 10, 11",   max:3},
-      {key:"fairplay",      naam:"Fair play, inzet & attitude",      lpd:"LPD 8, 12",     max:3},
-      {key:"kledij",        naam:"Kledij & veiligheid",              lpd:"LPD 8",         max:2}
+      {key:"fairplay",      naam:"Fair play, inzet & attitude",      lpd:"LPD 8, 12",     max:3}
     ],
     bands:{
       "1ste":{
@@ -494,8 +490,7 @@ const RUBRIEKEN = {
         verdedigend:["Verdedigt niet mee.","Verdedigt met minimale inzet en blijft staan.","Verdedigt mee en probeert de bal te onderscheppen.","Neemt positie tussen tegenstander en doel en verovert de bal."],
         inzicht:["Kent de speelregels niet en neemt geen gepaste beslissingen.","Kent enkele regels maar past ze nauwelijks toe.","Past de speelregels en een basistactiek toe.","Past regels en basistactiek vlot toe en kiest gepaste oplossingen."],
         samenwerken:["Speelt individueel en werkt niet samen.","Speelt soms samen maar communiceert nauwelijks.","Speelt samen, luistert en toont oefenbereidheid.","Speelt samen, moedigt aan en neemt een begeleide scheidsrechterrol op."],
-        fairplay:["Houdt zich niet aan de afspraken en toont weinig inzet.","Wisselende inzet; gaat in discussie over fouten.","Zet zich in, speelt fair en gaat respectvol om met het materiaal.","Toont voortdurend inzet, geeft eigen fouten toe en werkt positief op de groep."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Houdt zich niet aan de afspraken en toont weinig inzet.","Wisselende inzet; gaat in discussie over fouten.","Zet zich in, speelt fair en gaat respectvol om met het materiaal.","Toont voortdurend inzet, geeft eigen fouten toe en werkt positief op de groep."]
       },
       "2de":{
         balvaardigheid:["Heeft weinig balcontrole in beweging.","Neemt de bal aan maar verliest controle onder lichte druk.","Neemt gecontroleerd aan, speelt in en werkt af in beweging (lay-up/sprongworp).","Combineert techniek vlot in beweging (give & go) en blijft in balbezit onder druk."],
@@ -503,8 +498,7 @@ const RUBRIEKEN = {
         verdedigend:["Heeft geen verdedigende positie.","Verdedigt passief, verliest de bal of de man uit het oog.","Stelt zich op tussen man en doel en verdedigt actief.","Schakelt tussen man- en zoneverdediging en onderschept doelgericht."],
         inzicht:["Past de spelregels niet toe.","Kent de regels maar past ze inconsistent toe.","Past de spelregels toe en kan een wedstrijd mee leiden als scheidsrechter.","Past regels en tactiek vlot toe en leidt zelfstandig een wedstrijd als scheidsrechter."],
         samenwerken:["Werkt niet samen en coacht niet.","Speelt samen maar stuurt of helpt medeleerlingen niet.","Speelt samen en stuurt medeleerlingen tijdens oefenmomenten.","Neemt de rol van coach op en stuurt/motiveert het team gericht."],
-        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en gaat correct om met winst/verlies.","Toont voortdurend inzet, blijft sportief bij winst én verlies en stimuleert anderen."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en gaat correct om met winst/verlies.","Toont voortdurend inzet, blijft sportief bij winst én verlies en stimuleert anderen."]
       },
       "3de":{
         balvaardigheid:["Kan de bal niet gecontroleerd hanteren in het volledige spel.","Hanteert de bal enkel in eenvoudige situaties zonder verdediger.","Gaat gecontroleerd met de bal om volgens de eigen mogelijkheden en werkt af.","Beheerst techniek en afwerking (lay-up, gesprongen shot, smash) ook tegen actieve tegenstand."],
@@ -512,8 +506,7 @@ const RUBRIEKEN = {
         verdedigend:["Onderneemt geen verdedigende acties.","Verdedigt enkel in de buurt van de bal.","Verdedigt georganiseerd (man/zone) en bewaakt het doelgebied.","Verovert de bal en organiseert vanuit balwinst meteen een tegenaanval (omschakelen)."],
         inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over organisatie (teams, timing, materiaal).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi."],
         samenwerken:["Neemt geen ondersteunende rol op.","Helpt enkel na aansturing.","Coacht medeleerlingen en geeft eigen inzichten door.","Coacht, leidt het spel zelfstandig en geeft inzichten door aan minder ervaren spelers."],
-        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en toont een houding gericht op levenslang bewegen."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in en speelt sportief.","Neemt verantwoordelijkheid, motiveert anderen en toont een houding gericht op levenslang bewegen."]
       }
     }
   },
@@ -527,8 +520,7 @@ const RUBRIEKEN = {
       {key:"aanvallend", naam:"Aanvallend spel & afwerken",         lpd:"LPD 2",        max:3},
       {key:"verdedigend",naam:"Terugslag & verdediging",            lpd:"LPD 2",        max:3},
       {key:"inzicht",    naam:"Spelinzicht, regels & spelleiding",  lpd:"LPD 2, 8, 11", max:3},
-      {key:"fairplay",   naam:"Samenwerken, fair play & inzet",     lpd:"LPD 10, 11, 12",max:3},
-      {key:"kledij",     naam:"Kledij & veiligheid",                lpd:"LPD 8",        max:2}
+      {key:"fairplay",   naam:"Samenwerken, fair play & inzet",     lpd:"LPD 10, 11, 12",max:3}
     ],
     bands:{
       "1ste":{
@@ -537,8 +529,7 @@ const RUBRIEKEN = {
         aanvallend:["Onderneemt geen poging om te scoren.","Probeert af te werken maar zonder controle.","Werkt eenvoudige kansen af (gerichte pas/slag over het net).","Kiest een gericht moment om aanvallend af te werken en scoort."],
         verdedigend:["Reageert niet op de bal die naar hem komt.","Reageert traag en verwerkt de bal zelden.","Verwerkt de aankomende bal en speelt hem terug.","Verwerkt de bal gecontroleerd en houdt de rally gaande."],
         inzicht:["Kent de basisregels niet.","Kent enkele regels maar past ze nauwelijks toe.","Kent en past de basisregels toe (telling, lijnen, net, beurten).","Past de regels vlot toe en kan een eenvoudige beurt mee leiden of tellen."],
-        fairplay:["Werkt niet samen en houdt zich niet aan de afspraken.","Wisselende inzet; discussieert over punten.","Zet zich in, speelt fair en gaat respectvol om met het materiaal.","Toont voortdurend inzet, geeft punten eerlijk toe en moedigt anderen aan."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Werkt niet samen en houdt zich niet aan de afspraken.","Wisselende inzet; discussieert over punten.","Zet zich in, speelt fair en gaat respectvol om met het materiaal.","Toont voortdurend inzet, geeft punten eerlijk toe en moedigt anderen aan."]
       },
       "2de":{
         techniek:["Heeft weinig balcontrole in beweging.","Voert de slag uit maar verliest controle onder lichte druk.","Speelt gericht in beweging (gerichte bovenhandse pas / forehand, clear, drop).","Combineert verschillende slagen gecontroleerd, ook onder lichte druk."],
@@ -546,8 +537,7 @@ const RUBRIEKEN = {
         aanvallend:["Bouwt geen aanval op.","Speelt individueel en creëert zelden een kans.","Bouwt een aanval op (via netspeler of gerichte opbouw) en werkt af.","Bouwt aanvallen op en werkt af met een gerichte smash of aanvalsslag."],
         verdedigend:["Verwerkt aankomende ballen niet.","Verdedigt passief en verliest vaak de bal.","Verdedigt actief en zet de bal om in opbouw.","Verdedigt een harde bal of smash en schakelt om naar een tegenaanval."],
         inzicht:["Past de spelregels niet toe.","Kent de regels maar past ze inconsistent toe.","Past de regels (enkel- en dubbelspel) toe en kan als scheidsrechter optreden.","Past regels en tactiek vlot toe en leidt zelfstandig een wedstrijd of beurt."],
-        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en neemt en aanvaardt leiding.","Toont voortdurend inzet, blijft sportief en stuurt of motiveert medespelers."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en neemt en aanvaardt leiding.","Toont voortdurend inzet, blijft sportief en stuurt of motiveert medespelers."]
       },
       "3de":{
         techniek:["Hanteert de slagen niet gecontroleerd in het volledige spel.","Beheerst de slagen enkel in eenvoudige situaties zonder druk.","Wendt verschillende slagen gecontroleerd aan volgens de eigen mogelijkheden.","Beheerst een breed slagenarsenaal (incl. gesprongen smash), ook onder actieve tegenstand."],
@@ -555,8 +545,7 @@ const RUBRIEKEN = {
         aanvallend:["Draagt niet bij aan de aanvalsopbouw.","Neemt deel maar speelt voorspelbaar.","Bouwt mee op en werkt aanvallen gericht af (smash/afwerking).","Stuurt de aanvalsopbouw (ook in dubbelspel) en zet medespelers vrij om te scoren."],
         verdedigend:["Onderneemt geen verdedigende acties.","Verdedigt enkel eenvoudige ballen.","Verdedigt georganiseerd en bouwt van daaruit een tegenaanval op.","Verdedigt onder druk (smashverdediging) en organiseert meteen de tegenaanval."],
         inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over tactiek en organisatie (dubbelspel, tornooischema).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi (opstelling, timing, schema)."],
-        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in, speelt sportief en gaat gepast om met het materiaal.","Neemt verantwoordelijkheid, coacht anderen en draagt bij tot een positieve sfeer gericht op levenslang bewegen."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in, speelt sportief en gaat gepast om met het materiaal.","Neemt verantwoordelijkheid, coacht anderen en draagt bij tot een positieve sfeer gericht op levenslang bewegen."]
       }
     }
   },
@@ -570,8 +559,7 @@ const RUBRIEKEN = {
       {key:"combinatie", naam:"Vloeiende combinatie & verbinding",lpd:"LPD 1",    max:3},
       {key:"controle",   naam:"Controle, stabiliteit & landing",  lpd:"LPD 1",    max:3},
       {key:"helpen",     naam:"Helpen & veilig begeleiden",       lpd:"LPD 6, 9", max:3},
-      {key:"zelfstandig",naam:"Zelfstandig & verantwoord werken", lpd:"LPD 3, 8", max:3},
-      {key:"kledij",     naam:"Kledij & veiligheid",              lpd:"LPD 8",    max:2}
+      {key:"zelfstandig",naam:"Zelfstandig & verantwoord werken", lpd:"LPD 3, 8", max:3}
     ],
     bands:{
       "1ste":{
@@ -580,8 +568,7 @@ const RUBRIEKEN = {
         combinatie:["Verbindt geen elementen; voert ze los uit.","Plakt twee elementen aan elkaar met onderbreking.","Verbindt enkele elementen tot een eenvoudige combinatie.","Voert een vloeiende combinatie uit zonder onderbrekingen."],
         controle:["Verliest steeds het evenwicht of landt ongecontroleerd.","Landt of houdt wankel en moet bijsturen.","Landt of houdt de positie gecontroleerd.","Sluit elk element gecontroleerd en stabiel af (vaste landing of houding)."],
         helpen:["Helpt niet en let niet op de veiligheid van anderen.","Helpt enkel na aansporing.","Helpt medeleerlingen gestuurd en veilig.","Helpt zelfstandig en correct en let op de veiligheid van de groep."],
-        zelfstandig:["Houdt zich niet aan de afspraken en gaat onzorgvuldig om met het materiaal.","Werkt en ruimt enkel op na aansporing.","Werkt zelfstandig in kleine groep en respecteert materiaal en afspraken.","Werkt zelfstandig, schat met een aangereikt criterium de eigen uitvoering in en gaat zorgzaam om met het materiaal."],
-        kledij:KLEDIJ_BANDS
+        zelfstandig:["Houdt zich niet aan de afspraken en gaat onzorgvuldig om met het materiaal.","Werkt en ruimt enkel op na aansporing.","Werkt zelfstandig in kleine groep en respecteert materiaal en afspraken.","Werkt zelfstandig, schat met een aangereikt criterium de eigen uitvoering in en gaat zorgzaam om met het materiaal."]
       },
       "2de":{
         techniek:["Beheerst de gevraagde elementen niet.","Voert de elementen enkel los of met hulp uit.","Voert de gevraagde elementen (bv. handenstand doorrollen, rad, sprong, rekstokvorm) correct uit.","Beheerst de elementen zuiver, ook moeilijker varianten."],
@@ -589,8 +576,7 @@ const RUBRIEKEN = {
         combinatie:["Verbindt de elementen niet.","Verbindt elementen met duidelijke onderbrekingen.","Verbindt de elementen tot een vloeiende combinatie.","Voert een vloeiende, verzorgde combinatie uit met goede overgangen."],
         controle:["Landt of houdt onveilig en ongecontroleerd.","Landt of houdt wankel.","Landt en sluit gecontroleerd af.","Landt steeds stabiel en beheerst, ook bij sprongen of op de balk."],
         helpen:["Helpt niet mee en bewaakt de veiligheid niet.","Helpt enkel na aansturing.","Past de juiste helperstechniek toe en helpt veilig.","Helpt correct, rugvriendelijk en zelfstandig en aanvaardt zelf hulp."],
-        zelfstandig:["Werkt niet zelfstandig en negeert afspraken.","Werkt onregelmatig zelfstandig.","Werkt zelfstandig een opdrachtenfiche af en gaat ergonomisch om met materiaal.","Werkt zelfstandig, gebruikt criteria om de eigen uitvoering bij te sturen en plaatst materiaal rugvriendelijk."],
-        kledij:KLEDIJ_BANDS
+        zelfstandig:["Werkt niet zelfstandig en negeert afspraken.","Werkt onregelmatig zelfstandig.","Werkt zelfstandig een opdrachtenfiche af en gaat ergonomisch om met materiaal.","Werkt zelfstandig, gebruikt criteria om de eigen uitvoering bij te sturen en plaatst materiaal rugvriendelijk."]
       },
       "3de":{
         techniek:["Beheerst de elementen van het volledige niveau niet.","Voert enkel eenvoudige elementen zonder druk uit.","Voert de elementen (rad, handstand doorrollen, sprongen, draaien) gecontroleerd uit volgens de eigen mogelijkheden.","Beheerst een breed gamma elementen zuiver (incl. moeilijke zoals salto of molendraai)."],
@@ -598,8 +584,7 @@ const RUBRIEKEN = {
         combinatie:["Maakt geen samenhangende combinatie of oefening.","Voert elementen na elkaar uit zonder verbinding.","Stelt een eigen oefening samen met verschillende elementen en niveaus en verbindt ze.","Voert een vloeiende, gevarieerde eigen oefening uit met verzorgde overgangen en niveaus."],
         controle:["Heeft geen controle bij landingen of evenwicht.","Landt of houdt vaak onstabiel.","Landt en houdt elementen stabiel en beheerst.","Toont volledige controle en stabiliteit, ook bij moeilijke landingen of partnervormen."],
         helpen:["Neemt geen helpersrol op.","Helpt enkel na aansturing.","Past helperstechnieken correct en veilig toe en aanvaardt hulp.","Begeleidt medeleerlingen zelfstandig en veilig naar een hoger niveau en geeft gerichte feedback."],
-        zelfstandig:["Toont weinig zelfstandigheid en verantwoordelijkheid.","Werkt enkel zelfstandig na aansturing.","Werkt zelfstandig, evalueert de eigen uitvoering kritisch (video of criteria) en werkt verantwoord.","Neemt verantwoordelijkheid, stuurt zichzelf en anderen bij via zelf- en peerevaluatie en werkt veilig en ergonomisch."],
-        kledij:KLEDIJ_BANDS
+        zelfstandig:["Toont weinig zelfstandigheid en verantwoordelijkheid.","Werkt enkel zelfstandig na aansturing.","Werkt zelfstandig, evalueert de eigen uitvoering kritisch (video of criteria) en werkt verantwoord.","Neemt verantwoordelijkheid, stuurt zichzelf en anderen bij via zelf- en peerevaluatie en werkt veilig en ergonomisch."]
       }
     }
   },
@@ -613,8 +598,7 @@ const RUBRIEKEN = {
       {key:"honkenspel", naam:"Loop- & honkenspel (aanvallend)",   lpd:"LPD 2",         max:3},
       {key:"veldtactiek",naam:"Veldspel & omschakelen (verdedigend)",lpd:"LPD 2",       max:3},
       {key:"inzicht",    naam:"Spelinzicht, regels & spelleiding", lpd:"LPD 2, 8, 11",  max:3},
-      {key:"fairplay",   naam:"Samenwerken & fair play",           lpd:"LPD 10, 11, 12",max:3},
-      {key:"kledij",     naam:"Kledij & veiligheid",               lpd:"LPD 8",         max:2}
+      {key:"fairplay",   naam:"Samenwerken & fair play",           lpd:"LPD 10, 11, 12",max:3}
     ],
     bands:{
       "1ste":{
@@ -623,8 +607,7 @@ const RUBRIEKEN = {
         honkenspel:["Loopt niet of in de verkeerde richting na het slaan.","Loopt naar een honk maar zonder inzicht.","Loopt na het slaan naar het juiste honk.","Loopt vlot en kiest het juiste moment om door te lopen."],
         veldtactiek:["Neemt geen plaats in het veld in.","Staat in het veld maar onderneemt niets.","Vangt of stopt ballen in het veld en speelt ze door.","Kiest een goede veldpositie en speelt de bal gericht door."],
         inzicht:["Kent de basisregels niet.","Kent enkele regels maar past ze nauwelijks toe.","Kent en past de basisregels toe (slagbeurt, honken, uit).","Past de regels vlot toe en kan een beurt mee tellen of leiden."],
-        fairplay:["Werkt niet samen en houdt zich niet aan de afspraken.","Wisselende inzet; discussieert over beslissingen.","Zet zich in, speelt fair en moedigt het team aan.","Toont voortdurend inzet, geeft beslissingen eerlijk toe en helpt medespelers."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Werkt niet samen en houdt zich niet aan de afspraken.","Wisselende inzet; discussieert over beslissingen.","Zet zich in, speelt fair en moedigt het team aan.","Toont voortdurend inzet, geeft beslissingen eerlijk toe en helpt medespelers."]
       },
       "2de":{
         slag:["Heeft weinig controle bij het batten.","Raakt de bal maar zonder richting of kracht.","Slaat de bal gericht naar een vrije zone in het veld.","Slaat gecontroleerd en varieert in richting en kracht."],
@@ -632,8 +615,7 @@ const RUBRIEKEN = {
         honkenspel:["Loopt zonder inzicht tussen de honken.","Loopt enkel veilig en neemt geen risico.","Kiest gericht wanneer hij doorloopt of blijft staan.","Speelt slim honkenspel en zet druk met goed getimede loopacties."],
         veldtactiek:["Heeft geen verdedigende veldpositie.","Verdedigt passief en speelt de bal te laat door.","Stelt zich goed op en speelt de bal naar het juiste honk om uit te maken.","Anticipeert, dekt zones af en schakelt snel om om punten te voorkomen."],
         inzicht:["Past de spelregels niet toe.","Kent de regels maar past ze inconsistent toe.","Past de regels toe en kan een wedstrijd mee leiden als scheidsrechter.","Past regels en tactiek vlot toe en leidt zelfstandig een beurt of wedstrijd."],
-        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en neemt en aanvaardt leiding.","Toont voortdurend inzet, blijft sportief en stuurt of motiveert medespelers."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Respecteert de afspraken of de tegenstander niet.","Heeft het moeilijk met winst en verlies.","Zet zich in, speelt sportief en neemt en aanvaardt leiding.","Toont voortdurend inzet, blijft sportief en stuurt of motiveert medespelers."]
       },
       "3de":{
         slag:["Beheerst de slagtechniek niet in het volledige spel.","Slaat enkel in eenvoudige situaties zonder druk.","Slaat gecontroleerd en plaatst de bal volgens de veldopstelling.","Slaat tactisch (plaatsing in functie van vrije zones en lopers), ook onder druk."],
@@ -641,8 +623,7 @@ const RUBRIEKEN = {
         honkenspel:["Draagt niet bij aan het aanvallende honkenspel.","Loopt mee maar zonder tactiek.","Bouwt mee aanvallend honkenspel op en kiest gerichte loopmomenten.","Stuurt het aanvallende honkenspel en zet de verdediging onder druk."],
         veldtactiek:["Onderneemt geen georganiseerde veldacties.","Verdedigt enkel in de eigen zone.","Verdedigt georganiseerd en organiseert uitmaakacties.","Leidt het veldspel, dekt zones af en schakelt meteen om naar de aanval."],
         inzicht:["Heeft geen overzicht over regels en organisatie.","Volgt de regels maar neemt geen organiserende rol op.","Past de regels toe en denkt mee over tactiek en organisatie (opstelling, beurten).","Organiseert en arbitreert zelfstandig een wedstrijd of tornooi."],
-        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in, speelt sportief en gaat gepast om met het materiaal.","Neemt verantwoordelijkheid, coacht anderen en draagt bij tot een positieve sfeer gericht op levenslang bewegen."],
-        kledij:KLEDIJ_BANDS
+        fairplay:["Toont weinig betrokkenheid.","Neemt deel maar zonder eigen initiatief.","Zet zich zelfstandig in, speelt sportief en gaat gepast om met het materiaal.","Neemt verantwoordelijkheid, coacht anderen en draagt bij tot een positieve sfeer gericht op levenslang bewegen."]
       }
     }
   },
@@ -656,8 +637,7 @@ const RUBRIEKEN = {
       {key:"coordinatie",naam:"Coördinatie & moeilijkheidsgraad",lpd:"LPD 1, 4",    max:3},
       {key:"compositie", naam:"Reeks samenstellen & afwerken",  lpd:"LPD 1, 3",      max:3},
       {key:"expressie",  naam:"Expressie, durf & uitstraling",  lpd:"LPD 1",         max:3},
-      {key:"samenwerken",naam:"Samenwerken, leiden & volgen",   lpd:"LPD 10, 11, 12",max:3},
-      {key:"kledij",     naam:"Kledij & veiligheid",            lpd:"LPD 8",         max:2}
+      {key:"samenwerken",naam:"Samenwerken, leiden & volgen",   lpd:"LPD 10, 11, 12",max:3}
     ],
     bands:{
       "1ste":{
@@ -666,8 +646,7 @@ const RUBRIEKEN = {
         coordinatie:["Mist coördinatie tussen arm- en beenbeweging.","Coördineert eenvoudige bewegingen met moeite.","Coördineert de bewegingen vlot in een eenvoudige reeks.","Coördineert vloeiend, ook bij iets moeilijkere combinaties."],
         compositie:["Kan geen reeks onthouden of aaneenschakelen.","Schakelt twee bewegingen aan elkaar.","Voert een korte aangeleerde reeks (8-tijden) zelfstandig uit.","Voert een langere reeks zelfstandig en correct uit."],
         expressie:["Toont geen inzet of durf.","Beweegt gesloten en aarzelend.","Beweegt met een open houding en durft te tonen.","Straalt uit, beweegt expressief en met inzet."],
-        samenwerken:["Werkt niet samen met de groep.","Volgt de groep met moeite.","Werkt samen en stemt af op de groep.","Werkt vlot samen en helpt de groep gelijk te lopen."],
-        kledij:KLEDIJ_BANDS
+        samenwerken:["Werkt niet samen met de groep.","Volgt de groep met moeite.","Werkt samen en stemt af op de groep.","Werkt vlot samen en helpt de groep gelijk te lopen."]
       },
       "2de":{
         ritme:["Houdt de maat niet aan.","Verliest regelmatig de maat.","Houdt de maat aan in een langere reeks.","Speelt met het ritme en blijft strak op de maat."],
@@ -675,8 +654,7 @@ const RUBRIEKEN = {
         coordinatie:["Mist coördinatie in de combinaties.","Coördineert enkel eenvoudige combinaties.","Coördineert vlot, ook met richting- of niveauwissels.","Coördineert vloeiend met een hogere moeilijkheidsgraad."],
         compositie:["Bedenkt of onthoudt geen reeks.","Bedenkt een zeer korte reeks met hulp.","Bedenkt en schakelt bewegingen samen tot één geheel (intro–eindhouding).","Stelt een verzorgde reeks samen en bouwt ze logisch op."],
         expressie:["Toont weinig inzet of durf.","Beweegt nog gesloten.","Beweegt expressief met een open houding.","Brengt de reeks overtuigend en met uitstraling."],
-        samenwerken:["Werkt niet samen in het groepje.","Werkt samen maar overlegt of stuurt niet.","Werkt per groepje samen tot één geheel.","Neemt en aanvaardt leiding en stemt het groepje op elkaar af."],
-        kledij:KLEDIJ_BANDS
+        samenwerken:["Werkt niet samen in het groepje.","Werkt samen maar overlegt of stuurt niet.","Werkt per groepje samen tot één geheel.","Neemt en aanvaardt leiding en stemt het groepje op elkaar af."]
       },
       "3de":{
         ritme:["Beweegt niet op de maat in het volledige nummer.","Houdt de maat enkel bij eenvoudige delen.","Houdt de maat aan doorheen de hele reeks.","Beheerst ritme en flow volledig, ook bij moeilijke passages."],
@@ -684,8 +662,7 @@ const RUBRIEKEN = {
         coordinatie:["Mist coördinatie en flow.","Coördineert enkel trage of eenvoudige delen.","Coördineert de combinatie vlot met goede flow.","Toont vloeiende, complexe coördinatie met hoge moeilijkheidsgraad."],
         compositie:["Stelt geen eigen reeks samen.","Voegt elementen samen zonder opbouw.","Stelt een eigen reeks (4x8) samen volgens de eigen mogelijkheden.","Stelt een verzorgde, gevarieerde reeks samen met duidelijke opbouw en moeilijkheidsgraad."],
         expressie:["Toont geen uitstraling of durf.","Brengt de reeks vlak.","Brengt de reeks expressief en verzorgd.","Brengt de reeks overtuigend, met sterke uitstraling en eigen accenten."],
-        samenwerken:["Neemt geen rol op in de groep.","Volgt enkel, neemt geen initiatief.","Kan in het groepje leiden én volgen en toont respect voor de partner.","Stuurt het groepje, geeft gerichte feedback en houdt iedereen mee."],
-        kledij:KLEDIJ_BANDS
+        samenwerken:["Neemt geen rol op in de groep.","Volgt enkel, neemt geen initiatief.","Kan in het groepje leiden én volgen en toont respect voor de partner.","Stuurt het groepje, geeft gerichte feedback en houdt iedereen mee."]
       }
     }
   },
@@ -699,8 +676,7 @@ const RUBRIEKEN = {
       {key:"kamp",       naam:"Toepassing in kamp & verdediging", lpd:"LPD 2, 3",   max:3},
       {key:"veiligheid", naam:"Veiligheid & afspraken (afkloppen)",lpd:"LPD 8",     max:3},
       {key:"helpen",     naam:"Helpen, coachen & kamp leiden",    lpd:"LPD 10, 11", max:3},
-      {key:"respect",    naam:"Respect & verantwoord gedrag",     lpd:"LPD 12",     max:3},
-      {key:"kledij",     naam:"Kledij & veiligheid",              lpd:"LPD 8",      max:2}
+      {key:"respect",    naam:"Respect & verantwoord gedrag",     lpd:"LPD 12",     max:3}
     ],
     bands:{
       "1ste":{
@@ -709,8 +685,7 @@ const RUBRIEKEN = {
         kamp:["Neemt niet deel aan het stoeien of kamp.","Stoeit zonder inzicht of controle.","Past de basisafspraken toe tijdens het stoeien.","Gebruikt eenvoudige principes (evenwicht, kracht) in het stoeien."],
         veiligheid:["Negeert de veiligheidsafspraken (afkloppen).","Volgt de afspraken enkel na aansporing.","Klopt af en respecteert de veiligheidsafspraken.","Werkt steeds veilig, klopt af en reageert gepast op onveilige situaties."],
         helpen:["Helpt de partner niet.","Helpt enkel na aansporing.","Helpt de partner gestuurd bij een opdracht.","Helpt de partner correct en let op diens veiligheid."],
-        respect:["Toont geen respect voor de partner.","Gaat ruw of onvoorzichtig om met de partner.","Gaat respectvol en voorzichtig om met de partner.","Toont voortdurend respect en zorgt voor een veilige sfeer."],
-        kledij:KLEDIJ_BANDS
+        respect:["Toont geen respect voor de partner.","Gaat ruw of onvoorzichtig om met de partner.","Gaat respectvol en voorzichtig om met de partner.","Toont voortdurend respect en zorgt voor een veilige sfeer."]
       },
       "2de":{
         valtechniek:["Valt onveilig in dynamische situaties.","Valt veilig enkel bij trage oefeningen.","Valt veilig in de meeste kampsituaties.","Valt steeds gecontroleerd en veilig, ook onder lichte druk."],
@@ -718,8 +693,7 @@ const RUBRIEKEN = {
         kamp:["Past de technieken niet toe in kamp.","Kampt zonder de technieken te gebruiken.","Past de technieken toe in een kamp (grondvechten).","Gebruikt de beweging van de tegenstander en kampt tactisch."],
         veiligheid:["Respecteert de veiligheidsregels niet.","Volgt de regels inconsistent.","Past de afspraken en het reglement toe en klopt af.","Werkt veilig, past het reglement toe en kan een kamp mee leiden."],
         helpen:["Helpt of begeleidt de partner niet.","Helpt enkel na aansturing.","Helpt de partner en geeft eenvoudige feedback.","Begeleidt de partner correct en kan een kamp leiden als scheidsrechter."],
-        respect:["Gaat onrespectvol of ruw om met de partner.","Heeft het moeilijk met winst en verlies.","Gaat respectvol om met de partner en aanvaardt de uitslag.","Toont voortdurend respect, fair play en verantwoord gedrag."],
-        kledij:KLEDIJ_BANDS
+        respect:["Gaat onrespectvol of ruw om met de partner.","Heeft het moeilijk met winst en verlies.","Gaat respectvol om met de partner en aanvaardt de uitslag.","Toont voortdurend respect, fair play en verantwoord gedrag."]
       },
       "3de":{
         valtechniek:["Valt onveilig bij worpen.","Valt veilig enkel bij begeleide worpen.","Valt veilig bij worpen (begeleid vallen).","Valt steeds gecontroleerd en veilig, ook bij een heupworp."],
@@ -727,51 +701,75 @@ const RUBRIEKEN = {
         kamp:["Past de technieken niet toe in kamp of zelfverdediging.","Past ze enkel in eenvoudige situaties toe.","Past de technieken toe in kamp en demonstreert zelfgekozen zelfverdedigingstechnieken.","Combineert technieken tactisch in kamp en past zelfverdediging zelfstandig en doordacht toe."],
         veiligheid:["Werkt onveilig en negeert het reglement.","Volgt het reglement enkel na aansturing.","Werkt veilig, past het reglement toe en leidt mee.","Werkt steeds veilig, leidt zelfstandig een kamp als scheidsrechter en bewaakt de veiligheid."],
         helpen:["Neemt geen begeleidende rol op.","Helpt enkel na aansturing.","Begeleidt de partner en geeft gerichte feedback (ook via video).","Coacht zelfstandig, geeft kwaliteitsvolle feedback en leidt het werk in kleine groep."],
-        respect:["Toont weinig respect of verantwoordelijkheid.","Neemt deel maar zonder verantwoord gedrag.","Gaat respectvol en verantwoord om met partner en materiaal.","Neemt verantwoordelijkheid, toont voorbeeldgedrag en let op de kwetsbaarheid van anderen."],
-        kledij:KLEDIJ_BANDS
+        respect:["Toont weinig respect of verantwoordelijkheid.","Neemt deel maar zonder verantwoord gedrag.","Gaat respectvol en verantwoord om met partner en materiaal.","Neemt verantwoordelijkheid, toont voorbeeldgedrag en let op de kwetsbaarheid van anderen."]
       }
     }
   },
   conditie:{
     label:"Conditie & kracht",
     rubriek:"Conditie, kracht en gezonde levensstijl",
-    sporten:["Conditiecircuit (lichaamsgewicht)","Krachttraining","Duur- & hartslagtraining"],
+    sporten:["Conditiespelen & beweegparcours","Conditiecircuit (lichaamsgewicht)","Krachttraining (2de-3de graad)","Duur- & hartslagtraining"],
     criteria:[
-      {key:"uitvoering", naam:"Krachtoefeningen — uitvoering & techniek",lpd:"LPD 1, 4", max:3},
-      {key:"houding",    naam:"Lichaamshouding & ergonomie",            lpd:"LPD 6",    max:3},
-      {key:"uithouding", naam:"Uithouding & volgehouden inzet",         lpd:"LPD 4",    max:3},
-      {key:"schema",     naam:"Trainingsschema opstellen & opvolgen",   lpd:"LPD 3, 5", max:3},
-      {key:"levensstijl",naam:"Gezonde & actieve levensstijl",          lpd:"LPD 5",    max:3},
-      {key:"zelfstandig",naam:"Veilig & zelfstandig werken",            lpd:"LPD 8",    max:3},
-      {key:"kledij",     naam:"Kledij & veiligheid",                    lpd:"LPD 8",    max:2}
+      {key:"uitvoering", naam:"Krachtoefeningen \u2014 uitvoering & techniek", lpd:"LPD 1, 4", max:3},
+      {key:"houding",    naam:"Lichaamshouding & ergonomie",                   lpd:"LPD 6",    max:3},
+      {key:"uithouding", naam:"Uithouding, inzet & doorzetting",              lpd:{"1ste":"LPD 4, 13","2de":"LPD 4, 13","3de":"LPD 4, 12, 13"}, max:3},
+      {key:"schema",     naam:"Trainingsprogramma volgen & eigen vorderingen opvolgen", lpd:{"1ste":"LPD 3, 4","2de":"LPD 3, 4, 5","3de":"LPD 3, 4, 5"}, max:3},
+      {key:"levensstijl",naam:"Gezonde & actieve levensstijl",                 lpd:"LPD 5",    max:3},
+      {key:"zelfstandig",naam:"Veilig & zelfstandig werken, medeleerlingen helpen", lpd:{"1ste":"LPD 8","2de":"LPD 8, 9","3de":"LPD 8, 9, 10, 12"}, max:3}
     ],
     bands:{
       "1ste":{
-        uitvoering:["Voert de oefeningen niet of fout uit.","Voert eenvoudige oefeningen enkel voorgedaan uit.","Voert de basisoefeningen met lichaamsgewicht correct uit.","Voert de oefeningen vlot en met goede controle uit."],
-        houding:["Werkt met een verkeerde, onveilige houding.","Let enkel na aanwijzing op de houding.","Werkt met een correcte houding en aandacht voor core-stability.","Houdt voortdurend een correcte, stabiele houding (rechte rug, gespannen romp)."],
-        uithouding:["Haakt snel af en zet zich niet in.","Wisselende inzet; pauzeert veel.","Houdt het circuit met inzet vol.","Werkt volgehouden en met volle inzet doorheen het circuit."],
-        schema:["Volgt geen enkele opbouw of afspraak.","Volgt het opgelegde circuit enkel met begeleiding.","Volgt het opgelegde circuit (oefeningen, beurten, rust) correct.","Volgt het circuit zelfstandig en let op een correcte opbouw."],
-        levensstijl:["Toont geen besef van het nut van bewegen.","Benoemt nauwelijks waarom bewegen gezond is.","Begrijpt waarom opwarming en bewegen belangrijk zijn.","Legt het verband tussen bewegen en gezondheid en past het toe in de les."],
-        zelfstandig:["Negeert de veiligheids- en materiaalafspraken.","Volgt de afspraken enkel na aansporing.","Werkt veilig en zorgzaam met het materiaal.","Werkt veilig, zelfstandig en helpt mee bij de organisatie."],
-        kledij:KLEDIJ_BANDS
+        uitvoering:["Doet de bewegingen niet of onveilig mee.","Doet enkel mee wanneer de leerkracht het voordoet.","Voert de oefeningen correct uit.","Voert de oefeningen vlot en gecontroleerd uit en houdt vormspanning aan in plank- en balansoefeningen."],
+        houding:["Beweegt met een onveilige houding (bolle rug, geblokkeerde knie\u00ebn).","Let enkel na aanwijzing op de houding.","Beweegt met een correcte, veilige houding.","Houdt ook tijdens spel en tempo een correcte houding aan."],
+        uithouding:["Weigert deel te nemen of haakt meteen af.","Doet mee, maar pauzeert te veel en werkt niet alle opdrachten af.","Houdt de opdrachten vol tot het einde.","Doet actief mee en gaat tot het uiterste van wat hij kan."],
+        schema:["Doet niet actief mee aan het programma.","Werkt de opdrachten enkel af na aanmoediging van de leerkracht.","Neemt actief deel en kan over de eigen uitvoering reflecteren.","Werkt gemotiveerd en gaat zelf na of hij vorderingen maakt."],
+        levensstijl:["Toont geen besef van het nut van bewegen.","Zegt met hulp waarom bewegen deugd doet.","Weet waarom opwarmen en bewegen gezond zijn.","Legt uit waarom bewegen gezond is en beweegt ook buiten de les."],
+        zelfstandig:["Negeert de veiligheids- en materiaalafspraken.","Volgt de afspraken enkel na aansporing.","Werkt veilig en gaat zorgzaam om met het materiaal.","Werkt veilig en helpt spontaan bij klaarzetten en opruimen."]
       },
       "2de":{
         uitvoering:["Beheerst de krachtoefeningen niet.","Voert de oefeningen onzuiver uit.","Voert de krachtoefeningen met lichaamsgewicht correct en gecontroleerd uit.","Voert ze verzorgd uit en doseert de intensiteit bewust."],
         houding:["Werkt met een onveilige houding.","Let onvoldoende op houding en ergonomie.","Past een correcte lichaamshouding en ergonomische principes toe (heffen, tillen, rechte rug).","Werkt steeds ergonomisch en corrigeert zichzelf en anderen."],
-        uithouding:["Levert weinig of geen inspanning.","Inspanning is onregelmatig.","Houdt een gepaste inspanning vol gedurende het circuit.","Houdt de inspanning vol en stuurt op basis van hartslag bij."],
-        schema:["Kan geen eigen schema volgen of opstellen.","Volgt een aangereikt schema met moeite.","Volgt een trainingsschema en houdt de hartslag in de gaten.","Stelt met hulp een eenvoudig schema op en stuurt op basis van hartslag of belasting bij."],
+        uithouding:["Weigert deel te nemen of haakt meteen af.","Doet mee, maar pauzeert te veel en werkt niet alle opdrachten af.","Houdt de opdrachten vol tot het einde.","Doet actief mee en gaat tot het uiterste van wat hij kan."],
+        schema:["Doet niet actief mee aan het programma.","Werkt de opdrachten enkel af na aanmoediging van de leerkracht.","Neemt actief deel en kan over de eigen uitvoering reflecteren.","Werkt gemotiveerd en gaat zelf na of hij vorderingen maakt."],
         levensstijl:["Toont geen inzicht in een gezonde levensstijl.","Benoemt enkele beweegrichtlijnen.","Past beweegrichtlijnen toe en kent het belang van belasting en belastbaarheid.","Legt het verband tussen conditie, hartslag en gezondheid en past het bewust toe."],
-        zelfstandig:["Werkt onveilig en houdt zich niet aan de afspraken.","Werkt enkel veilig na aansturing.","Werkt veilig en zelfstandig met aandacht voor het materiaal.","Werkt zelfstandig, veilig en ondersteunt medeleerlingen."],
-        kledij:KLEDIJ_BANDS
+        zelfstandig:["Werkt onveilig en houdt zich niet aan de afspraken.","Werkt enkel veilig na aansturing.","Werkt veilig en zelfstandig met aandacht voor het materiaal.","Werkt zelfstandig, veilig en ondersteunt medeleerlingen."]
       },
       "3de":{
         uitvoering:["Beheerst de oefeningen niet in een volledige training.","Voert enkel eenvoudige oefeningen correct uit.","Voert de oefeningen gecontroleerd uit volgens de eigen mogelijkheden.","Beheerst een gevarieerd oefenrepertoire en doseert intensiteit en herhalingen doelgericht."],
         houding:["Werkt onveilig en zonder aandacht voor ergonomie.","Let enkel bij eenvoudige oefeningen op de houding.","Past ergonomische principes en een correcte houding consequent toe.","Traint ergonomisch verantwoord, voorkomt overbelasting en bewaakt de houding van anderen."],
-        uithouding:["Levert geen volgehouden inspanning.","Houdt de inspanning enkel kort vol.","Houdt een doelgerichte inspanning vol en traint op hartslag.","Traint volgehouden en doelgericht (hartslagzones) en verlegt veilig de eigen grenzen."],
-        schema:["Stelt geen trainingsschema op.","Stelt met veel hulp een schema op.","Stelt een eigen trainingsschema op en voert het uit met hartslagopvolging.","Stelt zelfstandig een onderbouwd schema op (opbouw, belasting/belastbaarheid) en stuurt het bij op basis van vorderingen."],
+        uithouding:["Weigert deel te nemen of haakt meteen af.","Doet mee, maar pauzeert te veel en werkt niet alle opdrachten af.","Houdt de opdrachten vol tot het einde.","Doet actief mee en gaat tot het uiterste van wat hij kan."],
+        schema:["Doet niet actief mee aan het programma.","Werkt de opdrachten enkel af na aanmoediging van de leerkracht.","Neemt actief deel en kan over de eigen uitvoering reflecteren.","Werkt gemotiveerd en gaat zelf na of hij vorderingen maakt."],
         levensstijl:["Toont weinig besef van levenslang bewegen.","Benoemt beweegrichtlijnen zonder ze toe te passen.","Past beweegrichtlijnen toe en kan een gezonde, actieve levensstijl toelichten.","Integreert beweegrichtlijnen doordacht in functie van levenslang bewegen en blessurepreventie."],
-        zelfstandig:["Werkt onveilig en onzelfstandig.","Werkt enkel veilig na aansturing.","Traint zelfstandig en veilig met correct materiaalgebruik.","Traint volledig zelfstandig en veilig en neemt verantwoordelijkheid voor de groep."],
-        kledij:KLEDIJ_BANDS
+        zelfstandig:["Werkt onveilig en onzelfstandig.","Werkt enkel veilig na aansturing.","Traint zelfstandig en veilig met correct materiaalgebruik.","Traint volledig zelfstandig en veilig en neemt verantwoordelijkheid voor de groep."]
+      }
+    }
+  },
+  conditietest:{
+    label:"Conditie \u2013 testen (meting)",
+    type:"meting",
+    lpdTechniek:"LPD 4 (fysieke capaciteiten) en LPD 13 (grenzen verleggen)",
+    lpdPrestatie:"LPD 3 (vorderingen), LPD 4 en LPD 5 (gezonde, actieve levensstijl)",
+    sporten:["Coopertest (12 min)","3 km-test"],
+    onderdelen:{
+      "Coopertest (12 min)":{
+        eenheid:"m",
+        techniek:[
+          {naam:"Tempo-indeling over 12 minuten",bands:["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt in de laatste minuten."]},
+          {naam:"Loophouding & ademhaling",bands:["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},
+          {naam:"Doorzetting & eigen grenzen verleggen",bands:["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige 12 minuten met inzet.","Zet volgehouden door en verlegt veilig de eigen grens."]}
+        ],
+        M:[[10,2200],[9,2100],[8,2000],[7,1900],[6,1800],[5,1650],[4,1500]],
+        J:[[10,2800],[9,2650],[8,2500],[7,2350],[6,2200],[5,2000],[4,1800]]
+      },
+      "3 km-test":{
+        eenheid:"min",
+        techniek:[
+          {naam:"Tempo-indeling",bands:["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},
+          {naam:"Loophouding & ademhaling",bands:["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},
+          {naam:"Doorzetting & eigen grenzen verleggen",bands:["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Zet volgehouden door en verlegt veilig de eigen grens."]}
+        ],
+        M:[[10,22],[9.5,23],[9,24],[8.5,25],[8,26],[7.5,27],[7,28],[6.5,29],[6,30],[5.5,31],[5,32],[4.5,33],[4,34]],
+        J:[[10,17],[9.5,18],[9,19],[8.5,20],[8,21],[7.5,22],[7,23],[6.5,24],[6,25],[5.5,26],[5,27],[4.5,28],[4,29]]
       }
     }
   },
@@ -827,6 +825,7 @@ function crits(){
   if(r.type==="meting"){const od=r.onderdelen[state.sport];if(!od)return [];return od.techniek.map((t,i)=>({key:"t"+i,naam:t.naam,max:3,bands:t.bands}));}
   return r.criteria;
 }
+function lpdFor(c,graad){if(!c||!c.lpd)return "";if(typeof c.lpd==="string")return c.lpd;const g=graad||(typeof state!=="undefined"&&state&&state.graad)||"2de";return c.lpd[g]||c.lpd["2de"]||"";}
 function bandsFor(c){return c.bands?c.bands:curRubriek().bands[state.graad][c.key];}
 function sportLabel(){return state.sport+(state.spec?(" – "+state.spec):"");}
 /* geslacht per leerling (M = meisje, J = jongen) */
@@ -1008,7 +1007,7 @@ function buildSheet(){
     if(!state.enabled[c.key])return;
     const block=document.createElement("div");block.className="critblock";
     const cn=document.createElement("div");cn.className="crit-label";
-    cn.innerHTML='<span>'+c.naam+(c.lpd?' <span class="lpd">'+c.lpd+'</span>':'')+'</span>';
+    const _lpd=lpdFor(c);cn.innerHTML='<span>'+c.naam+(_lpd?' <span class="lpd">'+_lpd+'</span>':'')+'</span>';
     const info=document.createElement("span");info.className="info";info.textContent="banden";
     const bands=document.createElement("div");bands.className="bands";
     const labels=c.max===3?LABELS3:LABELS2;
@@ -1077,15 +1076,15 @@ function buildCSV(){
   const R=curRubriek();
   if(R.type==="meting"){
     const od=R.onderdelen[state.sport];
-    push(["RUBRIEK","Atletiek – "+state.sport]);
+    push(["RUBRIEK",curRubriek().label+" – "+state.sport]);
     push(["Klas",state.klas,"Datum",state.datum]);
     push(["Details/periode",state.spec||""]);
     push([]);
-    push(["Techniek-criteria (elk 0-3; samen herschaald naar /10) — Leerplandoel: LPD 1 (technieken uitvoeren)"]);
+    push(["Techniek-criteria (elk 0-3; samen herschaald naar /10) — Leerplandoel: "+(curRubriek().lpdTechniek||"LPD 1 (technieken uitvoeren)")]);
     push(["Criterium","0","1","2","3"]);
     od.techniek.forEach(t=>push([t.naam,"0 "+t.bands[0],"1 "+t.bands[1],"2 "+t.bands[2],"3 "+t.bands[3]]));
     push([]);
-    push(["Prestatietabel "+state.sport+" (meting "+od.eenheid+" -> punt /10; tussenwaarden lineair) — Leerplandoel: LPD 3 (vorderingen) en LPD 4 (fysieke capaciteiten)"]);
+    push(["Prestatietabel "+state.sport+" (meting "+od.eenheid+" -> punt /10; tussenwaarden lineair) — Leerplandoel: "+(curRubriek().lpdPrestatie||"LPD 3 (vorderingen) en LPD 4 (fysieke capaciteiten)")]);
     push(["Punt /10","Meisje","Jongen"]);
     for(let i=0;i<od.M.length;i++)push([od.M[i][0],od.M[i][1],od.J[i][1]]);
     push([]);
@@ -1116,7 +1115,7 @@ function buildCSV(){
     const bands=curRubriek().bands[state.graad][c.key];
     const cells=["","","",""];
     for(let i=0;i<4;i++){cells[i]=bands[i]?(i+" "+labels[i]+": "+bands[i]):"";}
-    push([c.naam,c.lpd||"",state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]);
+    push([c.naam,lpdFor(c),state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]);
   });
   push([]);
   push(["Legende: cijfer per criterium = behaalde score. Leeg = niet beoordeeld. Afwezig/Doktersattest = geen score."]);
@@ -1198,16 +1197,16 @@ async function buildWeekXLSX(){
     byKlas[klas].sort((a,b)=>(a.datum||"").localeCompare(b.datum||"")||(a.sport||"").localeCompare(b.sport||"")).forEach(st=>{
       state=st;if(!state.categorie)state.categorie="trefspelen";
       const R=curRubriek();
-      const hd=ws.addRow([(R.type==="meting"?("Atletiek – "+st.sport):R.rubriek)+"   ·   "+st.datum+(st.spec?("   ·   "+st.spec):"")+(R.type==="meting"?"":("   ·   "+st.graad+" graad"))]);
+      const hd=ws.addRow([(R.type==="meting"?(R.label+" – "+st.sport):R.rubriek)+"   ·   "+st.datum+(st.spec?("   ·   "+st.spec):"")+(R.type==="meting"?"":("   ·   "+st.graad+" graad"))]);
       hd.font={bold:true,size:12,color:{argb:TAUPE}};hd.eachCell(c=>{c.fill={type:"pattern",pattern:"solid",fgColor:{argb:GOLD}};});
       ws.addRow([]);
       if(R.type==="meting"){
         const od=R.onderdelen[st.sport];
-        ws.addRow(["Techniek-criteria (elk 0-3 → samen /10) — Leerplandoel: LPD 1"]).font={bold:true};
+        ws.addRow(["Techniek-criteria (elk 0-3 → samen /10) — Leerplandoel: "+(R.lpdTechniek||"LPD 1")]).font={bold:true};
         styleHead(ws.addRow(["Criterium","0","1","2","3"]));
         od.techniek.forEach(t=>wrapRow(ws.addRow([t.naam,"0 — "+t.bands[0],"1 — "+t.bands[1],"2 — "+t.bands[2],"3 — "+t.bands[3]])));
         ws.addRow([]);
-        ws.addRow(["Prestatietabel "+st.sport+" (meting "+od.eenheid+" → /10) — Leerplandoel: LPD 3, 4"]).font={bold:true};
+        ws.addRow(["Prestatietabel "+st.sport+" (meting "+od.eenheid+" → /10) — Leerplandoel: "+(R.lpdPrestatie||"LPD 3, 4")]).font={bold:true};
         styleHead(ws.addRow(["Punt /10","Meisje","Jongen"]));
         for(let i=0;i<od.M.length;i++){const rr=ws.addRow([od.M[i][0],od.M[i][1],od.J[i][1]]);rr.eachCell(c=>bord(c));}
         ws.addRow([]);
@@ -1226,7 +1225,7 @@ async function buildWeekXLSX(){
         ws.addRow(["Beoordelingscriteria — scorebanden + leerplandoel (referentie voor doorlichting)"]).font={bold:true};
         styleHead(ws.addRow(["Criterium","Leerplandoel (KOV LO)","Meegerekend","0","1","2","3"]));
         crits().forEach(c=>{const labels=c.max===3?LABELS3:LABELS2;const bands=R.bands[state.graad][c.key];const cells=[];for(let i=0;i<4;i++)cells.push(bands[i]?(i+" "+labels[i]+": "+bands[i]):"");
-          wrapRow(ws.addRow([c.naam,c.lpd||"",state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]));});
+          wrapRow(ws.addRow([c.naam,lpdFor(c),state.enabled[c.key]?"ja":"nee",cells[0],cells[1],cells[2],cells[3]]));});
         ws.addRow([]);
         const cols=["Leerling","Status"].concat(crits().map(c=>c.naam+(state.enabled[c.key]?"":" (uit)"))).concat(["Behaald","Max","%","Score/10"]);
         styleHead(ws.addRow(cols));
@@ -1395,7 +1394,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v41";
+const APP_VERSION="v42";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1680,7 +1679,7 @@ function buildEvolutieCSV(klas,naam,cat){
     push(["Criterium"].concat(evs.map(s=>s.datum)).concat(["Verschil begin→laatst","Leerplandoel"]));
     R.criteria.forEach(c=>{const row=[c.naam];let first=null,last=null;
       evs.forEach(st=>{const stt=(st.status&&st.status[naam])||"aanwezig";const v=(stt==="aanwezig"&&st.data&&st.data[naam])?st.data[naam][c.key]:null;row.push(v==null?(stt!=="aanwezig"?statusLabel(stt):""):v);if(v!=null){if(first==null)first=v;last=v;}});
-      const dl=(first!=null&&last!=null)?(last-first):null;row.push(dl==null?"":(dl>0?"+"+dl:""+dl));row.push(c.lpd||"");push(row);});
+      const dl=(first!=null&&last!=null)?(last-first):null;row.push(dl==null?"":(dl>0?"+"+dl:""+dl));row.push(lpdFor(c));push(row);});
     const trow=["Totaal %"];let pf=null,pl=null;
     evs.forEach(st=>{state=st;const sc=scoreFor(naam);const stt=(st.status&&st.status[naam])||"aanwezig";const p=(stt==="aanwezig"&&sc.count>0)?Math.round(sc.pct*100):null;trow.push(p==null?"":p+"%");if(p!=null){if(pf==null)pf=p;pl=p;}});
     state=cur;const pd=(pf!=null&&pl!=null)?(pl-pf):null;trow.push(pd==null?"":(pd>0?"+"+pd+"%":pd+"%"));trow.push("");push(trow);
