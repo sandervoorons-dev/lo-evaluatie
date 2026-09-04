@@ -232,6 +232,7 @@
     </div>
     <div class="card">
       <div class="crithead"><span class="critttl clkbl" id="critCollapseBtn">Criteria meenemen <span id="critChev">▾</span></span><span class="uitlegtoggle" id="critUitlegBtn">uitleg ▾</span></div>
+      <div class="hint" id="graadinfo" style="margin-top:4px"></div>
       <div id="critBody">
         <div class="crittoggles" id="toggles"></div>
         <div class="hint collapsed" id="critUitleg">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu in het focuspaneel; die krijgt dan geen score.</div>
@@ -431,6 +432,33 @@ const KLEDIJ_BANDS = ["Geen sportkledij bij.","Sportkledij onvolledig (bv. geen 
 
 /* ---------- SPORTKLASSEN + RUBRIEKEN ---------- */
 const RUBRIEKEN = {
+  lesbeoordeling:{
+    label:"Inzet & progressie (elke les)",
+    rubriek:"Inzet, progressie en samenwerking per les",
+    sporten:["Lesbeoordeling"],
+    criteria:[
+      {key:"inzet",       naam:"Inzet & meedoen",            lpd:"LPD 4, 13", max:3},
+      {key:"progressie",  naam:"Progressie & leerbereidheid", lpd:"LPD 3, 4",  max:3},
+      {key:"samenwerking",naam:"Samenwerken & afspraken",     lpd:{"1ste":"LPD 8, 12","2de":"LPD 8, 10, 12","3de":"LPD 8, 10, 11, 12"}, max:3}
+    ],
+    bands:{
+      "1ste":{
+        inzet:["Weigert deel te nemen of haakt meteen af.","Doet mee, maar pauzeert te veel en werkt niet alle opdrachten af.","Houdt de opdrachten vol tot het einde.","Doet actief mee en gaat tot het uiterste van wat hij kan."],
+        progressie:["Wil niets proberen en herhaalt dezelfde fouten.","Probeert enkel na aansporing iets bij te leren.","Probeert de tips van de leerkracht toe te passen.","Past feedback meteen toe en gaat zichtbaar vooruit."],
+        samenwerking:["Stoort de les of houdt zich niet aan de afspraken.","Volgt de afspraken enkel na aansporing.","Volgt de afspraken en werkt vlot samen met anderen.","Werkt met iedereen samen en helpt medeleerlingen uit zichzelf."]
+      },
+      "2de":{
+        inzet:["Weigert deel te nemen of haakt meteen af.","Doet mee, maar pauzeert te veel en werkt niet alle opdrachten af.","Houdt de opdrachten vol tot het einde.","Doet actief mee en gaat tot het uiterste van wat hij kan."],
+        progressie:["Wil niets proberen en herhaalt dezelfde fouten.","Probeert enkel na aansporing bij te leren.","Past de feedback toe en oefent gericht verder.","Werkt gemotiveerd, past feedback toe en gaat na of hij vorderingen maakt."],
+        samenwerking:["Stoort de les of houdt zich niet aan de afspraken.","Volgt de afspraken enkel na aansporing.","Volgt de afspraken en werkt vlot samen.","Werkt met iedereen samen, geeft feedback en helpt medeleerlingen."]
+      },
+      "3de":{
+        inzet:["Weigert deel te nemen of haakt meteen af.","Doet mee, maar pauzeert te veel en werkt niet alle opdrachten af.","Houdt de opdrachten vol tot het einde.","Doet actief mee en gaat tot het uiterste van wat hij kan."],
+        progressie:["Toont geen leerbereidheid.","Werkt enkel bij na aansporing van de leerkracht.","Past feedback toe en benoemt zelf waar hij aan moet werken.","Stuurt zichzelf bij, stelt eigen doelen en toont zichtbare groei."],
+        samenwerking:["Stoort de les of houdt zich niet aan de afspraken.","Volgt de afspraken enkel na aansporing.","Werkt vlot samen, geeft bruikbare feedback en volgt de afspraken.","Neemt verantwoordelijkheid in de groep: coacht, verdeelt taken en zorgt dat iedereen mee kan."]
+      }
+    }
+  },
   atletiek: {"label":"Atletiek","type":"meting","lpdTechniek":"LPD 1 (technieken uitvoeren)","lpdPrestatie":"LPD 3 (vorderingen) en LPD 4 (fysieke capaciteiten)","sporten":["Kogelstoten","Verspringen","Hoogspringen","Schaarsprong","60m sprint","Afstandslopen 1000m","Afstandslopen 2000m","Afstandslopen 3000m"],"onderdelen":{"Kogelstoten":{"eenheid":"m","techniek":[{"naam":"Uitgangshouding & greep","bands":["Houdt de kogel verkeerd vast of neemt een onveilige houding aan.","Correcte greep maar verkeerde uitgangshouding.","Correcte greep én uitgangshouding (kogel in de hals, lichaam zijwaarts).","Vlotte, stabiele uitgangshouding, klaar voor een krachtige afstoot."]},{"naam":"Stootbeweging (benen-romp-arm)","bands":["Gooit i.p.v. te stoten; geen krachtoverdracht.","Stoot, maar zonder beengebruik of juiste volgorde.","Gebruikt benen-romp-arm in de juiste volgorde.","Vloeiende stootketting met volledige strekking en polsklap."]},{"naam":"Veiligheid & uitvoering","bands":["Werkt onveilig of stoort de afspraken.","Volgt de afspraken enkel na aansporing.","Stoot veilig en respecteert de zone-afspraken.","Werkt veilig en zelfstandig en helpt mee bij de organisatie."]}],"M":[[10,8],[9.5,7.5],[9,7],[8.5,6.5],[8,6],[7.5,5.5],[7,5],[6.5,4.5],[6,4],[5.5,3.5],[5,3],[4.5,2.5],[4,2]],"J":[[10,10.5],[9.5,10],[9,9.5],[8.5,9],[8,8.5],[7.5,8],[7,7.5],[6.5,7],[6,6.5],[5.5,6],[5,5.5],[4.5,5],[4,4.5]]},"Verspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen ritme; stopt of remt af voor de afzet.","Loopt aan maar zonder versnelling.","Regelmatige aanloop met versnelling naar de balk.","Gecontroleerde, versnellende aanloop met juiste afzetpas."]},{"naam":"Afzet","bands":["Geen duidelijke of dubbele afzet.","Zet af, maar ver achter of over de balk.","Eenvoetige afzet kort bij de balk.","Krachtige eenvoetige afzet met duidelijke opwaartse impuls."]},{"naam":"Zweef & landing","bands":["Valt ongecontroleerd; landt op rug of handen achter.","Landt op twee voeten maar zakt achterover.","Landt gecontroleerd op twee voeten.","Actieve zweef en landing met voeten vooruit; gewicht volgt."]}],"M":[[10,3.5],[9.5,3.25],[9,3],[8.5,2.75],[8,2.5],[7.5,2.25],[7,2],[6.5,1.9],[6,1.8],[5.5,1.7],[5,1.6],[4.5,1.3],[4,1]],"J":[[10,4.5],[9.5,4.25],[9,4],[8.5,3.75],[8,3.5],[7.5,3.25],[7,3],[6.5,2.75],[6,2.5],[5.5,2.3],[5,2],[4.5,1.8],[4,1.6]]},"Hoogspringen":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen aangepaste aanloop.","Rechte aanloop zonder ritme.","Aanloop met ritme richting de lat.","Aangepaste (gebogen) aanloop met versnelling en juiste afzetplaats."]},{"naam":"Afzet","bands":["Zet af met twee of de verkeerde voet; geen hoogte.","Eenvoetige afzet maar zonder opspring.","Eenvoetige afzet met opwaartse impuls.","Krachtige afzet met actief zwaaibeen; maximale hoogte."]},{"naam":"Zweeftechniek & landing","bands":["Raakt de lat of landt onveilig.","Over de lat maar met aanraking of onzuiver.","Zuivere overgang over de lat en veilige landing.","Vlotte techniek over de lat met gecontroleerde landing op de mat."]}],"M":[[10,1.45],[9.5,1.4],[9,1.35],[8.5,1.3],[8,1.25],[7.5,1.2],[7,1.15],[6.5,1.1],[6,1.05],[5.5,1],[5,0.95],[4.5,0.9],[4,0.85]],"J":[[10,1.6],[9.5,1.55],[9,1.5],[8.5,1.45],[8,1.4],[7.5,1.35],[7,1.3],[6.5,1.25],[6,1.2],[5.5,1.15],[5,1.1],[4.5,1.05],[4,1]]},"Schaarsprong":{"eenheid":"m","techniek":[{"naam":"Aanloop","bands":["Geen schuine aanloop.","Schuine aanloop zonder ritme.","Schuine aanloop met ritme.","Schuine, versnellende aanloop met juist afzetpunt."]},{"naam":"Afzet","bands":["Verkeerde afzetvoet of geen hoogte.","Afzet met het binnenste been.","Afzet met het verste been, opwaarts.","Krachtige afzet met knie/zwaaibeen actief omhoog."]},{"naam":"Schaarbeweging & landing","bands":["Geen schaarbeweging; raakt de lat.","Beperkte beenwissel over de lat.","Duidelijke schaarbeweging, beide benen over de lat.","Vloeiende schaar met rechte romp en veilige landing op de voeten."]}],"M":[[10,1.4],[9.5,1.35],[9,1.3],[8.5,1.25],[8,1.2],[7.5,1.15],[7,1.1],[6.5,1.05],[6,1],[5.5,0.95],[5,0.9],[4.5,0.85],[4,0.8]],"J":[[10,1.5],[9.5,1.45],[9,1.4],[8.5,1.35],[8,1.3],[7.5,1.25],[7,1.2],[6.5,1.15],[6,1.1],[5.5,1.05],[5,1],[4.5,0.95],[4,0.9]]},"60m sprint":{"eenheid":"sec","techniek":[{"naam":"Start / vertrek","bands":["Reageert traag of vertrekt vanuit een verkeerde houding.","Vertrekt rechtop, zonder versnelling.","Lage starthouding met duidelijke versnelling.","Explosieve start met geleidelijk oprichten."]},{"naam":"Loophouding & armzwaai","bands":["Stijve of voorovergebogen houding; geen armzwaai.","Onregelmatige armzwaai.","Rechte romp met actieve armzwaai.","Ontspannen, rechte sprinthouding met krachtige tegengestelde armzwaai."]},{"naam":"Snelheidsbehoud","bands":["Valt sterk terug of stopt voor de finish.","Vertraagt duidelijk in de tweede helft.","Behoudt de snelheid tot net voor de finish.","Loopt volgehouden/versneld door tot voorbij de finish."]}],"M":[[10,9],[9.5,9.4],[9,9.7],[8.5,10],[8,10.5],[7.5,11],[7,11.5],[6.5,12],[6,12.5],[5.5,13],[5,13.5],[4.5,14],[4,14.5]],"J":[[10,8],[9.5,8.3],[9,8.5],[8.5,8.8],[8,9],[7.5,9.3],[7,9.5],[6.5,9.8],[6,10],[5.5,10.3],[5,10.5],[4.5,10.8],[4,11]]},"Afstandslopen 1000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,6],[9.5,6.2],[9,6.4],[8.5,7],[8,7.2],[7.5,7.4],[7,8],[6.5,8.2],[6,8.4],[5.5,9],[5,9.2],[4.5,9.4],[4,10]],"J":[[10,4.5],[9.5,5.1],[9,5.3],[8.5,5.5],[8,6.1],[7.5,6.3],[7,6.5],[6.5,7.1],[6,7.3],[5.5,7.5],[5,8.1],[4.5,8.3],[4,8.5]]},"Afstandslopen 2000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,16],[9.5,16.25],[9,16.5],[8.5,16.75],[8,17],[7.5,17.25],[7,17.5],[6.5,17.75],[6,18],[5.5,19],[5,20],[4.5,21],[4,22]],"J":[[10,12],[9.5,12.25],[9,12.5],[8.5,12.75],[8,13],[7.5,13.25],[7,13.5],[6.5,13.75],[6,14],[5.5,15],[5,16],[4.5,17],[4,18]]},"Afstandslopen 3000m":{"eenheid":"min","techniek":[{"naam":"Tempo-indeling","bands":["Start te snel en valt stil of begint te wandelen.","Onregelmatig tempo met veel snelheidswisselingen.","Houdt een gelijkmatig tempo aan.","Verdeelt de inspanning slim en versnelt op het einde."]},{"naam":"Loophouding & ademhaling","bands":["Verkrampte houding; oncontroleerbare ademhaling.","Onregelmatige ademhaling; gespannen houding.","Ontspannen houding met geregelde ademhaling.","Economische looptechniek met beheerste ademhaling."]},{"naam":"Volgehouden inzet","bands":["Geeft op of stapt het grootste deel.","Wisselende inzet; stapt af en toe.","Loopt de volledige afstand met inzet.","Toont doorzettingsvermogen en blijft pushen tot het einde."]}],"M":[[10,22],[9.5,23],[9,24],[8.5,25],[8,26],[7.5,27],[7,28],[6.5,29],[6,30],[5.5,31],[5,32],[4.5,33],[4,34]],"J":[[10,17],[9.5,18],[9,19],[8.5,20],[8,21],[7.5,22],[7,23],[6.5,24],[6,25],[5.5,26],[5,27],[4.5,28],[4,29]]}}},
   trefspelen:{
     label:"Trefspelen",
@@ -931,6 +959,13 @@ function scoreFor(naam){
 
 /* ---------- RENDER ---------- */
 function renderToggles(){
+  const gi=$("graadinfo");
+  if(gi){
+    const R=curRubriek();
+    gi.innerHTML=(R.type==="meting")
+      ? "Techniekcriteria en prestatietabel zijn <b>gelijk voor alle graden</b>; de omzetting hangt af van M/J per leerling."
+      : "Scorebanden van de <b>"+state.graad+" graad</b> — afgeleid uit klas "+state.klas+".";
+  }
   const t=$("toggles");t.innerHTML="";
   crits().forEach(c=>{
     const on=state.enabled[c.key];
@@ -1394,7 +1429,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v42";
+const APP_VERSION="v44";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1696,7 +1731,7 @@ function buildEvolutieCSV(klas,naam,cat){
 
 function refreshAll(){
   renderDateStrip();
-  if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">▾</span>';
+  if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">· '+graadVoorKlas(state.klas)+' gr ▾</span>';
   renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();populateEv();
   if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
 }
