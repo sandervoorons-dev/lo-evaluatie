@@ -372,19 +372,49 @@
 
 /* ---------- KLASLIJSTEN (instelbaar via 'Klassen beheren'; standaard = voorbeeldklassen) ---------- */
 const DEFAULT_KLASSEN = {
-  "3HS1": ["Ahmed Adnan","Ahmed Emre","Akbulut Zeynep","Beyhan Okan","De Cubber Emma","Demirov Nedzhatin","Garcia Martinez Yana","Gezova Michaela","Köksoy Efe","Öngel Kübra","Simsek Fazli","Sirmov Rumen","Thienpont Xina","Zhekova Anelia"],
-  "3HS2": ["Alieva Nazli","Asenov Fernando Zhanov","De Schepper Navaro","Dobreva Gyoksel","Ignatov Behti","Ismailov Alish","Kizilkiliç Ravza","Krasimirova Valentina","Kucukkaya Ali-Naki","Mehmed Ayfer","Mustafa Andi","Nikolova Yordanka","Radoeva Aysemin","Ramkddam Salma","von der Crone Lisa"],
-  "3HS3": ["Batur Melek","Deleman Viktor","El Bachiri Noa","Gauwberg Jazzness","Incigüz Asya","Ivanov Orlin","Ivanov Zeki","Krokova Sanela","Miroslavov Svetoslav","Oduro Alycia Denise L.","Ognyanova Severina","Shefket Kader","Sultani Besmillah","Valerieva Azra","Vasviev Dzhan","Wittevrongel Febe"],
-  "3OL": ["Amiri Emranullah","Baddou Mohamed","Celik Melis","Evangelatos Selena","Hasan Omar Daniel","Horváth Nikolas","Maxamud Nuur Cali","Mutlu Azad","Nohut Zehra","Said Hila","Vermaerke Seppe","Yavuzey Irmak","Yordanova Marcela","Zbidi Rayane"],
-  "3RK": ["Balci Arda","Carrasco Jimenez Orlando","Cöris Nicholas","Deveci Yasin Halil","Gaspar Suzanna","Gurgul Radoslav","Hricko Alexander","Maes Milan","Naseri Mansoor Khan","Salim Kalonda Della-Lo Leeroy"],
-  "3ZW": ["Akay Dilara","Badová Gracie","Bolaboto-Mpembe Keithia","Branimirova Melisa","Celik Bedia","De Vriendt Laura","Florencio Joaquin Hulbelys","Kursun Umut","Meganck Aïfé","Shinwari Sabit","Shirzad Abdul","Sofi Zada Sharifa","Tiendrebeogo Nyron"],
-  "4OL1": ["Ahmedov Baran","Aliju Azize","Atanasova Ivelina","Avduli Bayram","Callaert Elias","Ciftci Süleyman","El Houari Enes","Janova Jessica","Kuru Kuzey","Logbo Lenny","Mollov Ersen","Papagianni Maria","Stoyanova Yordanka","Sultan Sacha","Victoriano Da Silva Demilson"],
-  "4OL2": ["Abujalhoum Omar","Almashharawi Firas","Arab Anamullah","Bayat Berranur","El Abid Ilham","Galabov Martin","Horvath Mathias","Mekov William","Metodiev Metodi","Mircheva Diana","Ramkddam Dina","Redessi Adem","Sargsyan Elen","Vispoel Fallou","Yeboah Bright"],
-  "4RK": ["Abuzarifa Kamal","Bagseven Kerem","Berkova Gloria","Brenner Talia","Brusseel Maxim","Kumari Sara","Matta Martin","Mehmed Denis","Muradi Sulaiman","Nikolov Nikola","Safi Bilal","Sana Dario","Serafimov Svetlin","Vereecken Zidane","Yonkova Danaya"],
-  "4ZW": ["Ali Maria","Arab Shafiullah","Arsamakova Medina","Bas Sena","De Vreese Cassidy","Jans Brith","Karani Selime","Madani Safa","MOHAMMADI Fazal","Mohammadi Obaidullah","Mohamud Ali Iqro","Peers Liebe","Rashkova Viktoria","Van den Bergh Lovely","Zia Mirab"],
-  "6SV": ["Akcinar Nur","Aleksandrova Valeriia","Chernovska Viktoriia","Cipolletta Nena","Dupré Zoë","Laroche Imani","Malik Khel Madina","Noa Anaïs"]
+  "3HS1": ["Angelova Zoya","Antonova Vasilka Veslinova","Arif Samet","Cankirli Ensar","Çuna Yusuf","Dag Zehra","Dogan Aysu","Feradova Kubra","Gabor  Licia","Karsikaya Veli","Köksoy Zeynep","Köycü Hazal","Kursun Kader","Polat Yilmaz","Shefket Ahmed","Teixeira Magalhães Vera"],
+  "3HS2": ["Ahmedova Melek","Aleksandrova Elizabeta","Aliev Altai","Atanasova Galena","Chakarov Can","Issa Mustafa","Kazankaya Burak","Kouziuberdin Eva","Lakatos Anita","Lossie Lianna","Mehmedova Bihter","Niyazi Elif","Sasheva Melda","Vasviev Dzhan","Yordanov Aliz","Yordanova Nisaa"],
+  "3HS3": ["Alabd Omar","Albayrak Cesur","Aliev Alpai Saliev","Alieva Nazli","Arsanbekov Rahman","Bakro Stella","De Milliano Amelia","Ivanova Nana","Karagöz Sila","Laref Amira","Masa Gökünas","Mohamed Maleen","Mustafova Meral","Sabri Ilmie","Sahin Kardelen"],
+  "3OL": ["Ater Zaid","Baleci Taulant","Buzlu Benay","Gül Selahattin","Hricko Alexander","Kahya Samet","Koçak Ogulcan","Mehmed Ayrie","Mihaylov Alex","Nadzhi Selay Gyurhan","Todorova Itsova Anelia","Tokar Antonio","Tourk Lina","Zdobnikova Karolina"],
+  "3RK": ["Bikar Patrik","Bouganzir Mohamed","D'hont Djenna","Naseri Sabar Khan","Naseri Sabor Khan","Stanev Stivan","Todorov Feymi","Ullah Anouar","Veldwijk Zafier"],
+  "3ZW": ["Bas Nisa","Bolaboto-Mpembe Keithia","Deleman Viktor","Ercan Melike","Krai Niya","Meganck Aïfé","Mohamed Umeyma","Nzuzi Ndaya Eunice","Sehan Ikra","Sinan Melek","Van de Velde Jalissa","YAQUBI Asifa","Yildiz Hilal"],
+  "4HS3": ["Aljerf Mohammed","Celik Melis","Elçin Veli","Gezova Laura","Hasanova Naz","Ivanov Orlin","Ivanov Zeki","Krokova Sanela","Mrichko Ivanna","Sahin Melih","Shefket Kader","Sultani Besmillah"],
+  "4OL": ["Albattniji Karim","Arab Anamullah","Ben Allouch Ahmed","El Bachiri Noa","Evangelatos Selena","Hasan Omar Daniel","Horváth Nikolas","Mutlu Azad","Nohut Zehra","Papagianni Maria","Petrov Daniel","Said Hila","Sirmov Rumen","Tiendrebeogo Nyron","Vermaerke Seppe","Yordanova Marcela","Zbidi Rayane"],
+  "4RK": ["Abdulrahimzai Zohaib","Berkova Gloria","Borisov David","Carrasco Jimenez Orlando","Gaspar Suzanna","Gurgul Radoslav","Maes Milan","Safi Sahil","Sequeira Martins Amalia","Yonkova Danaya"],
+  "4ZW": ["Abrha Kidane","Akay Dilara","Baddou Mohamed","Badová Gracie","Celik Bedia","De Vriendt Laura","El Bazioui El Osrouti Loubna","El Bazioui El Osrouti Yasmina","Gebrehiwet Merhawi","Momand Parmina","Naseri Mansoor Khan","Ognyanova Severina","Shinwari Sabit","Sofi Zada Sharifa","Sumer Ceren","Valerieva Azra"],
+  "6HV2": ["Abdullah Thomas","Hriczkova Jennifer","Macová Katarina","Matieva Liana","Radkova Melek","Shaheen Ola","Van Antenhove Heaven","Zigova Adriana"],
+  "6SV": ["Henderick Shaniqua","Nassar Saja","Testaert Noa"],
+  "1B1": ["Alieva Ayça","Bado Karol","Bezi Maryem","Citak Gülfida","Delemanova Asiela","Haddi Amal","IMOROU Sakina","Jalilov Abdurakhmon","Osman Ozan","Yankov Ezel","Zazuliak Daria"],
+  "1B2": ["Achour Kenza","Balkan Aylin","Devogelaere Fay","Dimova Teodora","Madani Isam","Plavci Almir","Rumenova Meryem","Shefket Dzhaner","Todorova Neli","Verhasselt Ariany","Verhelst Hope"],
+  "1B3": ["Aliev Erhan","Davies Eziaku","Deniz Zeynep","Devos Mattio","Ivanova Gultin","Sahin Elif","Stoynova Sasheva Ayten","Tourk Fateh","Van de Walle Jente","Vasileva Milena","Yordanova Gabriela"],
+  "1B4": ["Amoah Genita","Demaj Sarah","Dzhevatova Leylya","Groeninckx Maarten","Horváthová Lucrecia","Mehmed Elaydin","Mizigarova Sarlotta","Osman Samara","Sinzey Nafisa","Van Damme Thibeau","Vasvi Emirdzhan"],
+  "2MWEO": ["Ahmed Anil Ahmed","Alieva Keren","Anatolieva Mariyana","Asenov Atilla","Boakyewaa Jessica","Demir Zehra","Elet Xiomara","Georgieva Stanislava","Ismailova Elis","Kocabas Ecrin","Mustafova Alev","Öztürk Ecem Su","Üçkuyulu Nisanur"],
+  "2MWVH1": ["Akbel Hanife","De Maesschalck Shenaia","Fevzi Onur","Georgiev Viktor","Haes Nora","Ivanova Jeren","Kalchev Antonio","Krasimirov Keren","Marinova Sabrina","Mollov Ronaldo","Sacirovic Elmedina","Sahin Gülce","Yuliyanova Persia"],
+  "2MWVH2": ["Ahadri Nouhad","Aissa Aymane","Alekov Leo","Aliev Can","Asare Ezekiela","Broche Lian","Georgieva Emilia","Hyussein Sevinc","Isaeva Shenazie","Ivanova Vanesa","Kiran Dilara","Pomak Mert","Shafie Nasrin","Van Cutsem Ilyana","Van Damme Shania"],
+  "2MWVH3": ["Alekova Veronika","Aliev Can","Amoah Beatrice","Asenov Dani","Hristov Hristo","Kamenova Rumyana","Kaya Zehra","Kizilkiliç Necdet","Lambrecht Faye","Metodieva Ani","Mihaylov Sian","Peprah Sarah","Radev Ronaldo","Sequeira Martins Madalina","Varbanova Denisa"],
+  "4HS1": ["Ahmed Adnan","Ahmed Emre","Akbayir Medine","Akbulut Zeynep","Beyhan Okan","De Boever Miel","De Cubber Emma","Demirov Nedzhatin","Gezova Michaela","Köksoy Efe","Krajnák Diana","Öngel Kübra","Simsek Fazli","Thienpont Xina","Zhekova Anelia"],
+  "4HS2": ["Asenov Fernando Zhanov","Dobreva Gyoksel","Ismailov Alish","Kaddaha Naser","Kizilkiliç Ravza","Krasimirova Valentina","Kucukkaya Ali-Naki","Mehmed Ayfer","Mustafa Andi","Nikolova Yordanka","Radoeva Aysemin","Ramkddam Salma","Yuseinov Seynur","Zambov Reyhan"],
+  "5AWZW": ["Ahmadi Ehsanullah","Arsamakova Medina","Bas Sena"],
+  "5GKC": ["Abuzarifa Kamal","Bagseven Kerem","Kirer Muhammed","Kumari Sara","Mehmed Denis","Sabri Sabri","Sana Dario"],
+  "5HV": ["Atanasova Ivelina","Belcheva Ivana","Brunsman Robin","Cetinkaya Sidelya","Duran Kerrar","Godlova Viktoria","Goranov Goran","Govaert Alice","Kalinova Indzhi","Mehmed Abdullah","Messiaen Alice","Mircheva Diana","Peers Liebe","Redzepi Mejdina","Sabri Eirin","Serafimov Serafim"],
+  "5OOS1": ["Ahmedov Baran","Aliju Azize","Baleci Shlirim","Cardon Arthur","Demirkaya Rustem","El Houari Enes","Florea Mihai","Matta Martin","Milea Gabriel","Mollov Ersen","Sashev Ersin","Stoyanova Yordanka","Sultan Sacha","Van Gansbeke Ilani","Zia Mirab"],
+  "5OOS2": ["Abujalhoum Omar","Almashharawi Firas","De Vreese Cassidy","Galabov Martin","Madani Safa","Manolov Martin","Metodiev Metodi","Nikolov Nikola","Öztürk Minel","Ramkddam Dina","Sargsyan Elen","Vispoel Fallou","Yeboah Bright"],
+  "5SV": ["Baert Marthe","Boddaert Caitlin","Dogan Irem","Ibrahimrahal Bidawr","Karani Selime","Krokova Annamaria","Mussche Eloise","Rashkova Viktoria","Van Haute Zenna","Yilmaz Ebru"],
+  "6AWZW": ["Amiri Marwa","De Metsenaere Guus","Gabriël  Noah","Girmay Yanit","Zamani Asma"],
+  "6GKC": ["Aissa Alaeddine","Hrickova Katarina","Hyseni Xheneta","Samkova Sarah","Slepcikova Dajana","Steenbeke Demis","Towheedyaar Mujahid"],
+  "6HV1": ["Abdul Rahimzai Omid","Almohammad Fayad","Alnazal Maladh","Dimova Bozhidara","Et-hemi Kledjola","Et-hemi Klesilda","Güvenç Adnan","Izetov Izet","Kazankaya Hiranur","Qafaj Arjola","Rumenova Nadezhda","Van den Bossche Ona","Zlatanova Gyumyush"],
+  "6OOS": ["Ahmedov Memet","Alshammari Abdul","Alufohai Alison","Baloghova Michaella","Gök Arda","Gujda Gabriel","Haddi Kawthar","Hellebaut Jayden","Hellebaut Nathan","Kordieh Tala","Krai Heytham","Malkoç Ali","Qorar Romaissa","Shibilova Emel","Tareen Safeer"]
 };
-const LS_KLASSEN="lo_tv_klassen_v2";
+/* Wie geeft welke klas? Bepaalt de leerkracht-filter in de klaskiezer. */
+const KLAS_LK = {
+  "3HS1":"Sander","3HS2":"Sander","3HS3":"Sander","3OL":"Sander","3RK":"Sander","3ZW":"Sander","4HS3":"Sander","4OL":"Sander","4RK":"Sander","4ZW":"Sander","6HV2":"Sander","6SV":"Sander","1B1":"Gilles","1B2":"Gilles","1B3":"Gilles","1B4":"Gilles","2MWEO":"Gilles","2MWVH1":"Gilles","2MWVH2":"Gilles","2MWVH3":"Gilles","4HS1":"Gilles","4HS2":"Gilles","5AWZW":"Ellen","5GKC":"Ellen","5HV":"Ellen","5OOS1":"Ellen","5OOS2":"Ellen","5SV":"Ellen","6AWZW":"Ellen","6GKC":"Ellen","6HV1":"Ellen","6OOS":"Ellen"
+};
+const LK_LIST=["Sander","Gilles","Ellen","Alle"];
+const LS_LK="lo_lk";
+function curLk(){return localStorage.getItem(LS_LK)||"Sander";}
+function setLk(v){localStorage.setItem(LS_LK,v);}
+function klassenVoorLk(lk){const ks=Object.keys(KLASSEN);if(lk==="Alle")return ks;return ks.filter(k=>!KLAS_LK[k]||KLAS_LK[k]===lk);}
+const LS_KLASSEN="lo_tv_klassen_v3";
 let KLASSEN={};
 function loadKlassen(){
   try{const s=JSON.parse(localStorage.getItem(LS_KLASSEN));if(s&&Object.keys(s).length){KLASSEN=s;return;}}catch(e){}
@@ -1259,7 +1289,7 @@ function renderKlasBeheer(){
   const box=$("klasbeheer");if(!box)return;box.innerHTML="";
   Object.keys(KLASSEN).forEach(k=>{
     const row=document.createElement("div");row.className="savedrow";
-    const lbl=document.createElement("div");lbl.textContent=k+" · "+KLASSEN[k].length+" lln";
+    const lbl=document.createElement("div");lbl.textContent=k+" · "+KLASSEN[k].length+" lln"+(KLAS_LK[k]?" · "+KLAS_LK[k]:"");
     const acts=document.createElement("div");
     const ed=document.createElement("a");ed.textContent="bewerken";ed.style.marginRight="12px";
     ed.onclick=()=>openKlasForm(k);
@@ -1344,7 +1374,17 @@ function openKlasPicker(){
   const h=document.createElement("div");h.className="sheethead";h.innerHTML='<span class="sheetnm">Kies een klas</span>';
   const done=document.createElement("button");done.className="doneBtn";done.textContent="Sluit";done.onclick=closeSheet;h.appendChild(done);
   box.appendChild(h);
-  Object.keys(KLASSEN).forEach(k=>{
+  const lkseg=document.createElement("div");lkseg.className="seg";
+  LK_LIST.forEach(lk=>{
+    const b=document.createElement("div");b.textContent=lk;
+    b.className="segopt"+(lk===curLk()?" on":"");
+    b.onclick=()=>{setLk(lk);openKlasPicker();};
+    lkseg.appendChild(b);
+  });
+  box.appendChild(lkseg);
+  const lijst=klassenVoorLk(curLk());
+  if(!lijst.length){const e=document.createElement("div");e.className="sheetnote";e.textContent="Geen klassen voor deze leerkracht.";box.appendChild(e);}
+  lijst.forEach(k=>{
     const r=document.createElement("div");r.className="pickrow"+(k===state.klas?" on":"");
     r.textContent=k+"  ·  "+KLASSEN[k].length+" lln";
     r.onclick=()=>{$("klas").value=k;closeSheet();reloadEvaluation();};
@@ -1355,7 +1395,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v40";
+const APP_VERSION="v41";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
