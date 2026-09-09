@@ -1429,7 +1429,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v44";
+const APP_VERSION="v45";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1478,10 +1478,9 @@ function regCell(v){
 }
 function renderReg(){
   const wrap=$("reglist");if(!wrap)return;wrap.innerHTML="";
-  const blank=(regJustSaved===selDate);
-  if(blank){const note=document.createElement("div");note.className="regsavednote";note.textContent="✓ Afwezigheden opgeslagen — leeg blad klaar";wrap.appendChild(note);}
+  if(regJustSaved===selDate){const note=document.createElement("div");note.className="regsavednote";note.textContent="✓ Opgeslagen — je kan nog aanpassen; kies een andere dag voor een nieuw blad";wrap.appendChild(note);}
   KLASSEN[state.klas].forEach(naam=>{
-    const cur=blank?"":regGet(state.klas,selDate,naam);
+    const cur=regGet(state.klas,selDate,naam);
     const row=document.createElement("div");row.className="regrow";
     const nm=document.createElement("div");nm.className="rn";nm.textContent=naam;
     const dots=document.createElement("div");dots.className="regdots";
