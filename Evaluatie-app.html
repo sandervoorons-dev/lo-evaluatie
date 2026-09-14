@@ -162,7 +162,7 @@
   .day.sel{background:var(--dark);border-color:var(--dark)}
   .day.sel .dw{color:#d2cdbd}.day.sel .dn{color:var(--dark-ink)}
   .day.today .dn{text-decoration:underline}
-  .daycal{flex:0 0 auto;width:42px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:14px;color:#7a6f53;position:relative;overflow:hidden;font-size:18px}
+  .daycal{flex:0 0 auto;width:42px;position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:14px;color:#7a6f53;overflow:hidden;font-size:18px}
   .daycal input{position:absolute;inset:0;opacity:0;cursor:pointer}
   .grouped{padding:0;overflow:hidden}
   .grow{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 13px;gap:16px}
@@ -289,8 +289,12 @@
 
   <div id="tab-meer" class="tabview">
     <div class="card">
-      <button class="btn primary" id="dlweek" style="width:100%">Download evaluaties van deze week</button>
+      <button class="btn primary" id="dlweek" style="width:100%">Download nieuwe evaluaties</button>
       <div class="muted" id="weekinfo" style="margin-top:8px"></div>
+      <div class="hint" style="margin-top:6px">Alles wat je nog niet downloadde, komt in één Excel-bestand met een tabblad per klas. Wat je al downloadde, blijft bewaard in de app maar zit er niet meer in. <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles als gedownload markeren</a></div>
+      <div class="critttl" style="margin:14px 0 4px">Of per klas apart</div>
+      <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan — handig om in OneDrive in een map per klas te bewaren.</div>
+      <div id="perklas"></div>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Jaarplanning</div>
@@ -1182,38 +1186,87 @@ function download(name,text,type){
   setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},400);
 }
 function fname(){return (state.datum+"_"+state.klas.replace(/[^\w]+/g,"-")+"_Evaluatie_"+sportLabel().replace(/[^\w]+/g,"-")+".csv");}
-function weekRange(iso){const d=parseISO(iso)||parseISO(todayISO());const dow=(d.getDay()+6)%7;const mon=new Date(d);mon.setDate(d.getDate()-dow);const sun=new Date(mon);sun.setDate(mon.getDate()+6);return [localISO(mon),localISO(sun)];}
-function buildWeekCSV(){
-  const [mon,sun]=weekRange(todayISO());
+const LS_DL="lo_dl_done";
+function getDl(){try{return JSON.parse(localStorage.getItem(LS_DL))||{};}catch(e){return {};}}
+function isDl(k){return !!getDl()[k];}
+function markDl(keys){const d=getDl();keys.forEach(k=>{d[k]=todayISO();});localStorage.setItem(LS_DL,JSON.stringify(d));}
+function unmarkDl(k){const d=getDl();delete d[k];localStorage.setItem(LS_DL,JSON.stringify(d));}
+/* alle opgeslagen evaluaties die nog niet gedownload zijn */
+function nieuweEvaluaties(){
   const items=[];
-  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
     let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
-    if(!st||!st.datum||st.datum<mon||st.datum>sun)continue;
+    if(!st||!st.datum)continue;
+    if(st.saved===false)continue;
     if(!KLASSEN[st.klas]||!RUBRIEKEN[st.categorie])continue;
-    items.push(st);}
+    if(isDl(k))continue;
+    items.push({k,st});
+  }
+  items.sort((a,b)=>(a.st.datum||"").localeCompare(b.st.datum||"")||(a.st.klas||"").localeCompare(b.st.klas||""));
+  return items;
+}
+function bundelNaam(items,ext){
+  const d=items.map(x=>x.st.datum).sort();
+  const van=d[0],tot=d[d.length-1];
+  return "Evaluaties_"+(van===tot?van:(van+"_tot_"+tot))+"."+ext;
+}
+function weekRange(iso){const d=parseISO(iso)||parseISO(todayISO());const dow=(d.getDay()+6)%7;const mon=new Date(d);mon.setDate(d.getDate()-dow);const sun=new Date(mon);sun.setDate(mon.getDate()+6);return [localISO(mon),localISO(sun)];}
+function buildWeekCSV(items){
+  items=items||nieuweEvaluaties();
   if(!items.length)return null;
-  items.sort((a,b)=>(a.datum||"").localeCompare(b.datum||"")||(a.klas||"").localeCompare(b.klas||""));
   const cur=state;const SEP="\r\n\r\n==================================================\r\n\r\n";
-  let out="﻿";
-  items.forEach((st,i)=>{state=st;if(!state.categorie)state.categorie="trefspelen";const body=buildCSV().replace(/^﻿/,"");out+=(i?SEP:"")+body;});
+  let out="\ufeff";
+  items.forEach((it,i)=>{state=it.st;if(!state.categorie)state.categorie="trefspelen";const body=buildCSV().replace(/^\ufeff/,"");out+=(i?SEP:"")+body;});
   state=cur;
   return out;
 }
-function updateWeekInfo(){const el=$("weekinfo");if(!el)return;const r=weekRange(todayISO());let n=0;
-  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
-    if(st&&st.datum&&st.datum>=r[0]&&st.datum<=r[1]&&KLASSEN[st.klas]&&RUBRIEKEN[st.categorie])n++;}
-  el.textContent="Week "+r[0]+" t/m "+r[1]+": "+n+" evaluatie"+(n===1?"":"s")+" worden gebundeld in één Excel-bestand (tabblad per klas).";}
+function updateWeekInfo(){
+  const el=$("weekinfo");
+  if(el){
+    const items=nieuweEvaluaties();
+    if(!items.length)el.textContent="Alle opgeslagen evaluaties zijn al gedownload.";
+    else{const d=items.map(x=>x.st.datum).sort();
+      el.textContent=items.length+" evaluatie"+(items.length===1?"":"s")+" nog niet gedownload — van "+d[0]+" t/m "+d[d.length-1]+".";}
+  }
+  renderPerKlas();
+}
+async function downloadBundel(items,prefix){
+  if(!items.length)return false;
+  const keys=items.map(x=>x.k);
+  const naam=(prefix?prefix+"_":"")+bundelNaam(items,"xlsx");
+  if(typeof ExcelJS!=="undefined"){
+    try{const blob=await buildWeekXLSX(items);
+      if(blob){downloadBlob(naam,blob);markDl(keys);updateWeekInfo();renderSaved();return true;}
+    }catch(e){console.error(e);}
+  }
+  const t=buildWeekCSV(items);if(!t)return false;
+  download((prefix?prefix+"_":"")+bundelNaam(items,"csv"),t);markDl(keys);updateWeekInfo();renderSaved();return true;
+}
+function renderPerKlas(){
+  const box=$("perklas");if(!box)return;box.innerHTML="";
+  const items=nieuweEvaluaties();
+  if(!items.length){box.innerHTML='<div class="muted">Niets meer te downloaden.</div>';return;}
+  const byKlas={};items.forEach(it=>{(byKlas[it.st.klas]=byKlas[it.st.klas]||[]).push(it);});
+  Object.keys(byKlas).sort().forEach(klas=>{
+    const lijst=byKlas[klas];
+    const row=document.createElement("div");row.className="savedrow";
+    const lbl=document.createElement("div");
+    const d=lijst.map(x=>x.st.datum).sort();
+    lbl.textContent=klas+" · "+lijst.length+" evaluatie"+(lijst.length===1?"":"s")+" · "+(d[0]===d[d.length-1]?d[0]:(d[0]+" t/m "+d[d.length-1]));
+    const a=document.createElement("a");a.textContent="download";
+    a.onclick=async ()=>{const ok=await downloadBundel(lijst,klas.replace(/[^\w]+/g,"-"));
+      toast(ok?(klas+" gedownload"):"Downloaden lukte niet");};
+    row.appendChild(lbl);row.appendChild(a);box.appendChild(row);
+  });
+}
 function downloadBlob(name,blob){const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);}
-async function buildWeekXLSX(){
+async function buildWeekXLSX(lijst){
   if(typeof ExcelJS==="undefined")return null;
-  const [mon,sun]=weekRange(todayISO());
-  const items=[];
-  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
-    let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
-    if(!st||!st.datum||st.datum<mon||st.datum>sun)continue;
-    if(!KLASSEN[st.klas]||!RUBRIEKEN[st.categorie])continue;
-    items.push(st);}
-  if(!items.length)return null;
+  lijst=lijst||nieuweEvaluaties();
+  if(!lijst.length)return null;
+  const items=lijst.map(x=>x.st);
+  const dd=items.map(st=>st.datum).sort();const mon=dd[0],sun=dd[dd.length-1];
   const byKlas={};items.forEach(st=>{(byKlas[st.klas]=byKlas[st.klas]||[]).push(st);});
   const TAUPE="FF5D594C",LINE="FFCBBF9E",GOLD="FFF7E6BC";
   const THIN={style:"thin",color:{argb:LINE}};
@@ -1227,7 +1280,7 @@ async function buildWeekXLSX(){
     ws.getColumn(1).width=28;ws.getColumn(2).width=18;ws.getColumn(3).width=12;
     for(let c=4;c<=7;c++)ws.getColumn(c).width=46;
     ws.pageSetup={margins:{left:0.5,right:0.5,top:0.6,bottom:0.6,header:0.3,footer:0.3}};
-    const tr=ws.addRow([klas+" — week "+mon+" t/m "+sun]);tr.font={bold:true,size:14,color:{argb:TAUPE}};
+    const tr=ws.addRow([klas+" — evaluaties "+(mon===sun?mon:(mon+" t/m "+sun))]);tr.font={bold:true,size:14,color:{argb:TAUPE}};
     ws.addRow([]);
     byKlas[klas].sort((a,b)=>(a.datum||"").localeCompare(b.datum||"")||(a.sport||"").localeCompare(b.sport||"")).forEach(st=>{
       state=st;if(!state.categorie)state.categorie="trefspelen";
@@ -1297,10 +1350,12 @@ function renderSaved(){
     const row=document.createElement("div");row.className="savedrow";
     const lbl=document.createElement("div");
     const sp=it.st.sport||"";
-    lbl.textContent=it.st.datum+" · "+it.st.klas+" · "+sp+(it.st.spec?(" – "+it.st.spec):"");
+    lbl.innerHTML=(isDl(it.k)?"":'<span style="color:var(--accent-deep);font-weight:700">nieuw</span> · ')+
+      (it.st.datum+" · "+it.st.klas+" · "+sp+(it.st.spec?(" – "+it.st.spec):"")).replace(/</g,"&lt;");
     const acts=document.createElement("div");
     const dl=document.createElement("a");dl.textContent="download";dl.style.marginRight="12px";
-    dl.onclick=()=>{const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";download(fname(),buildCSV());state=cur;};
+    dl.onclick=()=>{const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";download(fname(),buildCSV());state=cur;
+      markDl([it.k]);updateWeekInfo();renderSaved();};
     const del=document.createElement("a");del.textContent="wis";del.style.color="#c33";
     del.onclick=()=>{if(confirm("Deze evaluatie wissen?")){localStorage.removeItem(it.k);renderSaved();}};
     acts.appendChild(dl);acts.appendChild(del);
@@ -1385,7 +1440,7 @@ function renderDateStrip(){
   cal.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>';
   const inp=document.createElement("input");inp.type="date";inp.value=selDate;
   inp.onchange=()=>{if(inp.value){regJustSaved=null;selDate=inp.value;reloadEvaluation();}};
-  cal.appendChild(inp);strip.appendChild(cal);
+  cal.appendChild(inp);strip.insertBefore(cal,strip.firstChild);
   const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
 }
 
@@ -1429,7 +1484,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v45";
+const APP_VERSION="v48";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1761,9 +1816,16 @@ function init(){
     KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);if(curRubriek().type==="meting")state.data[n].__meting="";state.status[n]="aanwezig";});
     state.saved=false;localStorage.removeItem(keyFor(state.klas,state.datum,sportLabel()));refreshAll();toast("Evaluatie gewist");};
   $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
-  $("dlweek").onclick=async ()=>{const r=weekRange(todayISO());
-    if(typeof ExcelJS!=="undefined"){try{const blob=await buildWeekXLSX();if(!blob){toast("Geen evaluaties deze week");return;}downloadBlob("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".xlsx",blob);toast("Week-evaluaties (Excel) gedownload");return;}catch(e){console.error(e);}}
-    const t=buildWeekCSV();if(!t){toast("Geen evaluaties deze week");return;}download("Evaluaties_week_"+r[0]+"_tot_"+r[1]+".csv",t);toast("Gedownload als CSV");};
+  $("dlweek").onclick=async ()=>{
+    const items=nieuweEvaluaties();
+    if(!items.length){toast("Alles is al gedownload");return;}
+    const ok=await downloadBundel(items,"");
+    toast(ok?(items.length+" evaluaties gedownload"):"Downloaden lukte niet");};
+  $("dlreset").onclick=()=>{
+    const items=nieuweEvaluaties();
+    if(!items.length){toast("Er is niets nieuws");return;}
+    if(!confirm(items.length+" evaluaties als gedownload markeren? Ze zitten dan niet meer in de volgende bundel."))return;
+    markDl(items.map(x=>x.k));updateWeekInfo();renderSaved();toast("Gemarkeerd als gedownload");};
   $("dlall").onclick=()=>{
     const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0||k===LS_FB||k===LS_PLAN||k===LS_PLANCFG)all[k]=localStorage.getItem(k);}
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
