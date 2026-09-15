@@ -164,6 +164,26 @@
   .day.today .dn{text-decoration:underline}
   .daycal{flex:0 0 auto;width:42px;position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:14px;color:#7a6f53;overflow:hidden;font-size:18px}
   .daycal input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .day.nles .dn{opacity:.4}
+  .day.nles::after{content:"";display:block;width:4px;height:4px;border-radius:50%;margin:-2px auto 0}
+  .day.nles.geel::after{background:#e3b91f}.day.nles.groen::after{background:#5fa878}.day.nles.blauw::after{background:#4aa8cc}
+  .lesbar{margin:-6px 0 12px}
+  .lesrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px}
+  .lesrow::-webkit-scrollbar{display:none}
+  .lesrow.dim .lesblok{opacity:.45}
+  .lesrow.dim .lesblok.on{opacity:1}
+  .lesblok{flex:0 0 auto;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:13px;padding:6px 12px;cursor:pointer;text-align:left}
+  .lesblok .lu{font-size:9.5px;color:var(--muted);white-space:nowrap}
+  .lesblok .lk{font-size:14px;font-weight:600;color:var(--ink);margin-top:1px}
+  .lesblok.on{background:var(--dark);border-color:var(--dark)}
+  .lesblok.on .lu{color:#d2cdbd}.lesblok.on .lk{color:var(--dark-ink)}
+  .geenles{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--ink);padding:8px 13px;border-radius:13px;margin-bottom:6px;border:1px solid var(--line)}
+  .geenles b{font-size:12.5px}
+  .geenles span{color:var(--muted)}
+  .geenles.geel{background:rgba(244,194,74,.3)}
+  .geenles.groen{background:rgba(124,191,140,.3)}
+  .geenles.blauw{background:rgba(130,213,242,.32)}
+  .geenles.vrij{background:rgba(255,255,255,.45)}
   .grouped{padding:0;overflow:hidden}
   .grow{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 13px;gap:16px}
   .glabel{font-size:13.5px;color:var(--ink)}
@@ -221,6 +241,7 @@
   <select id="klas" style="display:none"></select>
 
   <div class="datestrip" id="strip"></div>
+  <div class="lesbar" id="lesbar"></div>
 
   <div id="tab-evaluaties" class="tabview">
     <div class="card grouped">
@@ -423,6 +444,68 @@ function setLk(v){localStorage.setItem(LS_LK,v);}
 function klassenVoorLk(lk){const ks=Object.keys(KLASSEN);if(lk==="Alle")return ks;return ks.filter(k=>!KLAS_LK[k]||KLAS_LK[k]===lk);}
 const LS_KLASSEN="lo_tv_klassen_v3";
 const LS_SEED="lo_tv_klassen_seed";
+/* ---------- LESSENROOSTER 2026-2027 (Untis, geldig vanaf 1 sept 2026) ---------- */
+const LESUREN=[["08:30","09:20"],["09:20","10:10"],["10:25","11:15"],["11:15","12:05"],["13:05","13:55"],["13:55","14:45"],["15:00","15:50"],["15:50","16:40"]];
+/* per leerkracht, per weekdag (1=maandag … 5=vrijdag): blokken met lesuren + klas(sen) */
+const ROOSTER={"Sander":{"1":[{"u":[1,2],"k":["6HV2","6SV"]},{"u":[3,4],"k":["3RK"]},{"u":[5,6],"k":["3HS3"]}],"2":[{"u":[1,2],"k":["4RK"]},{"u":[5,6],"k":["4OL"]}],"3":[{"u":[1,2],"k":["4HS3"]}],"4":[{"u":[1,2],"k":["3HS1"]},{"u":[3,4],"k":["3ZW"]},{"u":[5,6],"k":["4ZW"]}],"5":[{"u":[1,2],"k":["3OL"]},{"u":[3,4],"k":["3HS2"]}]},"Gilles":{"1":[{"u":[1,2],"k":["2MWVH1"]},{"u":[5,6],"k":["2MWVH2"]}],"2":[{"u":[1,2],"k":["2MWVH3"]},{"u":[3,4],"k":["4HS2"]},{"u":[5,6],"k":["2MWEO"]}],"3":[],"4":[{"u":[1,2],"k":["4HS1"]},{"u":[3,4],"k":["1B1"]},{"u":[5,6],"k":["1B4"]}],"5":[{"u":[1,2],"k":["1B1"]},{"u":[3,4],"k":["1B2"]},{"u":[5,6],"k":["1B3"]}]},"Ellen":{"1":[{"u":[1,2],"k":["6AWZW","6BZO"]},{"u":[3,4],"k":["5GKC"]}],"2":[{"u":[1,2],"k":["6HV1"]},{"u":[3,4],"k":["5AWZW","5BZO"]},{"u":[5,6],"k":["6GKC"]}],"3":[{"u":[1,2],"k":["5OOS2"]},{"u":[3,4],"k":["5OOS1"]}],"4":[],"5":[{"u":[1,2],"k":["5HV"]},{"u":[3,4],"k":["5SV"]},{"u":[5,6],"k":["6OOS"]}]}};
+/* Dagen zonder gewone les. geel = school gesloten, groen = leerlingen thuis, blauw = alternatieve schoolactiviteit of afstandsonderwijs. */
+const GEEN_LES={"2026-09-01":["blauw","Opstartdag"],"2026-09-11":["blauw","OLVI in connectie 1"],"2026-09-25":["blauw","Sportdag"],"2026-09-28":["blauw","KR-dag 1 (afstandsonderwijs)"],"2026-11-01":["geel","Allerheiligen"],"2026-11-02":["geel","Herfstvakantie"],"2026-11-03":["geel","Herfstvakantie"],"2026-11-04":["geel","Herfstvakantie"],"2026-11-05":["geel","Herfstvakantie"],"2026-11-06":["geel","Herfstvakantie"],"2026-11-11":["geel","Wapenstilstand"],"2026-11-18":["blauw","Leerlingencontact 1 + rapport 2"],"2026-12-15":["blauw","Kerstontbijt + KR"],"2026-12-16":["groen","KR — leerlingen thuis"],"2026-12-17":["groen","KR — leerlingen thuis"],"2026-12-18":["blauw","KR + pedagogisch project + oudercontact 2"],"2026-12-21":["geel","Kerstvakantie"],"2026-12-22":["geel","Kerstvakantie"],"2026-12-23":["geel","Kerstvakantie"],"2026-12-24":["geel","Kerstvakantie"],"2026-12-25":["geel","Kerstvakantie"],"2026-12-26":["geel","Kerstvakantie"],"2026-12-27":["geel","Kerstvakantie"],"2026-12-28":["geel","Kerstvakantie"],"2026-12-29":["geel","Kerstvakantie"],"2026-12-30":["geel","Kerstvakantie"],"2026-12-31":["geel","Kerstvakantie"],"2027-01-01":["geel","Kerstvakantie"],"2027-01-02":["geel","Kerstvakantie"],"2027-01-03":["geel","Kerstvakantie"],"2027-02-02":["blauw","OLVI in connectie 2"],"2027-02-04":["blauw","KR-dag 2 (afstandsonderwijs)"],"2027-02-08":["geel","Krokusvakantie"],"2027-02-09":["geel","Krokusvakantie"],"2027-02-10":["geel","Krokusvakantie"],"2027-02-11":["geel","Krokusvakantie"],"2027-02-12":["geel","Krokusvakantie"],"2027-02-13":["geel","Krokusvakantie"],"2027-02-14":["geel","Krokusvakantie"],"2027-02-24":["blauw","Leerlingencontact 2 (afstandsonderwijs)"],"2027-03-24":["blauw","KR (afstandsonderwijs)"],"2027-03-25":["blauw","KR (afstandsonderwijs)"],"2027-03-26":["blauw","KR + pedagogisch project + oudercontact 3"],"2027-03-29":["geel","Paasvakantie"],"2027-03-30":["geel","Paasvakantie"],"2027-03-31":["geel","Paasvakantie"],"2027-04-01":["geel","Paasvakantie"],"2027-04-02":["geel","Paasvakantie"],"2027-04-03":["geel","Paasvakantie"],"2027-04-04":["geel","Paasvakantie"],"2027-04-05":["geel","Paasvakantie"],"2027-04-06":["geel","Paasvakantie"],"2027-04-07":["geel","Paasvakantie"],"2027-04-08":["geel","Paasvakantie"],"2027-04-09":["geel","Paasvakantie"],"2027-04-10":["geel","Paasvakantie"],"2027-04-11":["geel","Paasvakantie"],"2027-05-01":["geel","Feest van de arbeid"],"2027-05-06":["geel","Hemelvaart"],"2027-05-07":["geel","Brugdag"],"2027-05-17":["geel","Pinkstermaandag + Offerfeest"],"2027-05-19":["blauw","Leerlingencontact 3 + rapport 6"],"2027-06-04":["blauw","OLVI in connectie 3"],"2027-06-23":["blauw","Cultuurdag"],"2027-06-24":["groen","DKR — leerlingen thuis"],"2027-06-25":["groen","DKR — leerlingen thuis"],"2027-06-28":["groen","DKR + proclamatie"],"2027-06-29":["blauw","DKR + oudercontact 4 + rapport 7"],"2027-06-30":["blauw","Laatste schooldag — leerlingencontact 4"],"2027-07-01":["geel","Zomervakantie"],"2027-07-02":["geel","Zomervakantie"],"2027-07-03":["geel","Zomervakantie"],"2027-07-04":["geel","Zomervakantie"],"2027-07-05":["geel","Zomervakantie"],"2027-07-06":["geel","Zomervakantie"],"2027-07-07":["geel","Zomervakantie"],"2027-07-08":["geel","Zomervakantie"],"2027-07-09":["geel","Zomervakantie"],"2027-07-10":["geel","Zomervakantie"],"2027-07-11":["geel","Zomervakantie"],"2027-07-12":["geel","Zomervakantie"],"2027-07-13":["geel","Zomervakantie"],"2027-07-14":["geel","Zomervakantie"],"2027-07-15":["geel","Zomervakantie"],"2027-07-16":["geel","Zomervakantie"],"2027-07-17":["geel","Zomervakantie"],"2027-07-18":["geel","Zomervakantie"],"2027-07-19":["geel","Zomervakantie"],"2027-07-20":["geel","Zomervakantie"],"2027-07-21":["geel","Zomervakantie"],"2027-07-22":["geel","Zomervakantie"],"2027-07-23":["geel","Zomervakantie"],"2027-07-24":["geel","Zomervakantie"],"2027-07-25":["geel","Zomervakantie"],"2027-07-26":["geel","Zomervakantie"],"2027-07-27":["geel","Zomervakantie"],"2027-07-28":["geel","Zomervakantie"],"2027-07-29":["geel","Zomervakantie"],"2027-07-30":["geel","Zomervakantie"],"2027-07-31":["geel","Zomervakantie"],"2027-08-01":["geel","Zomervakantie"],"2027-08-02":["geel","Zomervakantie"],"2027-08-03":["geel","Zomervakantie"],"2027-08-04":["geel","Zomervakantie"],"2027-08-05":["geel","Zomervakantie"],"2027-08-06":["geel","Zomervakantie"],"2027-08-07":["geel","Zomervakantie"],"2027-08-08":["geel","Zomervakantie"],"2027-08-09":["geel","Zomervakantie"],"2027-08-10":["geel","Zomervakantie"],"2027-08-11":["geel","Zomervakantie"],"2027-08-12":["geel","Zomervakantie"],"2027-08-13":["geel","Zomervakantie"],"2027-08-14":["geel","Zomervakantie"],"2027-08-15":["geel","Zomervakantie"],"2027-08-16":["geel","Zomervakantie"],"2027-08-17":["geel","Zomervakantie"],"2027-08-18":["geel","Zomervakantie"],"2027-08-19":["geel","Zomervakantie"],"2027-08-20":["geel","Zomervakantie"],"2027-08-21":["geel","Zomervakantie"],"2027-08-22":["geel","Zomervakantie"],"2027-08-23":["geel","Zomervakantie"],"2027-08-24":["geel","Zomervakantie"],"2027-08-25":["geel","Zomervakantie"],"2027-08-26":["geel","Zomervakantie"],"2027-08-27":["geel","Zomervakantie"],"2027-08-28":["geel","Zomervakantie"],"2027-08-29":["geel","Zomervakantie"],"2027-08-30":["geel","Zomervakantie"],"2027-08-31":["geel","Zomervakantie"]};
+function lesurenLabel(u){return u[0]===u[u.length-1]?(u[0]+"e uur"):(u[0]+"-"+u[u.length-1]+"e uur");}
+function lesurenTijd(u){return LESUREN[u[0]-1][0]+"-"+LESUREN[u[u.length-1]-1][1];}
+function roosterVoor(iso){
+  const d=parseISO(iso);if(!d)return [];
+  const wd=d.getDay();if(wd<1||wd>5)return [];
+  const r=ROOSTER[curLk()];if(!r)return [];
+  return (r[String(wd)]||[]).map(b=>({u:b.u,k:b.k.filter(x=>KLASSEN[x])})).filter(b=>b.k.length);
+}
+function geenLes(iso){const g=GEEN_LES[iso];return g?{type:g[0],label:g[1]}:null;}
+function autoKlasVoor(iso){
+  if(geenLes(iso))return null;               /* vakantie of alternatieve activiteit: niets voorselecteren */
+  const bl=roosterVoor(iso);if(!bl.length)return null;
+  let kies=bl[0];
+  if(iso===localISO(new Date())){
+    const now=new Date(),mins=now.getHours()*60+now.getMinutes();
+    bl.forEach(b=>{const t=LESUREN[b.u[0]-1][0].split(":");if(mins>=(+t[0])*60+(+t[1])-15)kies=b;});
+  }
+  return kies.k[0];
+}
+/* Dag kiezen: zet meteen de klas van je eerste les klaar (of de les die nu bezig is). */
+function kiesDatum(iso){
+  regJustSaved=null;selDate=iso;
+  const k=autoKlasVoor(iso);
+  if(k&&$("klas")&&k!==$("klas").value){saveState();$("klas").value=k;}
+  reloadEvaluation();
+}
+function renderLesbar(){
+  const bar=$("lesbar");if(!bar)return;bar.innerHTML="";
+  if(currentTab==="meer"){bar.style.display="none";return;}
+  const g=geenLes(selDate),bl=roosterVoor(selDate);
+  if(g){
+    const w=document.createElement("div");w.className="geenles "+g.type;
+    w.innerHTML='<b>Geen les</b><span>'+g.label+'</span>';
+    bar.appendChild(w);
+  }
+  if(bl.length){
+    const row=document.createElement("div");row.className="lesrow"+(g?" dim":"");
+    bl.forEach(b=>b.k.forEach(k=>{
+      const el=document.createElement("div");
+      el.className="lesblok"+(k===state.klas?" on":"");
+      el.innerHTML='<div class="lu">'+lesurenLabel(b.u)+' · '+lesurenTijd(b.u)+'</div><div class="lk">'+k+'</div>';
+      el.onclick=()=>{if(k===state.klas)return;saveState();$("klas").value=k;reloadEvaluation();};
+      row.appendChild(el);
+    }));
+    bar.appendChild(row);
+  }else if(!g){
+    const d=parseISO(selDate),wd=d?d.getDay():0;
+    if(wd>=1&&wd<=5&&ROOSTER[curLk()]){
+      const w=document.createElement("div");w.className="geenles vrij";
+      w.innerHTML='<b>Geen les in je rooster</b><span>deze dag staat vrij</span>';
+      bar.appendChild(w);
+    }
+  }
+  bar.style.display=bar.children.length?"block":"none";
+}
+
 let KLASSEN={};
 function loadKlassen(){
   let s=null;
@@ -1448,15 +1531,17 @@ function renderDateStrip(){
   for(let i=0;i<43;i++){
     const d=new Date(start);d.setDate(start.getDate()+i);const iso=localISO(d);
     const el=document.createElement("div");
-    el.className="day"+(iso===selDate?" sel":"")+(iso===today?" today":"");
+    const g=geenLes(iso);
+    el.className="day"+(iso===selDate?" sel":"")+(iso===today?" today":"")+(g?" nles "+g.type:"");
+    if(g)el.title=g.label;
     el.innerHTML='<div class="dw">'+wk[d.getDay()]+'</div><div class="dn">'+d.getDate()+'</div>';
-    el.onclick=()=>{regJustSaved=null;selDate=iso;reloadEvaluation();};
+    el.onclick=()=>{kiesDatum(iso);};
     strip.appendChild(el);
   }
   const cal=document.createElement("label");cal.className="daycal";
   cal.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>';
   const inp=document.createElement("input");inp.type="date";inp.value=selDate;
-  inp.onchange=()=>{if(inp.value){regJustSaved=null;selDate=inp.value;reloadEvaluation();}};
+  inp.onchange=()=>{if(inp.value)kiesDatum(inp.value);};
   cal.appendChild(inp);strip.insertBefore(cal,strip.firstChild);
   const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
 }
@@ -1469,6 +1554,7 @@ function switchTab(t){
   });
   $("apptitle").textContent=(t==="evaluaties"?"Evaluaties":(t==="afwezigheden"?"Afwezigheden":"Meer"));
   $("strip").style.display=(t==="meer")?"none":"flex";
+  renderLesbar();
   $("klaschip").style.display=(t==="meer")?"none":"block";
   if(t==="afwezigheden")renderReg();
   if(t==="meer"){populateEv();renderEvolutie();renderPlanner();}
@@ -1501,7 +1587,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v49";
+const APP_VERSION="v52";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1801,7 +1887,7 @@ function buildEvolutieCSV(klas,naam,cat){
 }
 
 function refreshAll(){
-  renderDateStrip();
+  renderDateStrip();renderLesbar();
   if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">· '+graadVoorKlas(state.klas)+' gr ▾</span>';
   renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();populateEv();
   if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
@@ -1816,7 +1902,9 @@ function init(){
   loadKlassen();loadGes();fillKlas();
   const cs=$("categorie");Object.keys(RUBRIEKEN).forEach(id=>{const o=document.createElement("option");o.value=id;o.textContent=RUBRIEKEN[id].label;cs.appendChild(o);});
   cs.value="trefspelen";fillSport("trefspelen");
-  loadOrInit();refreshAll();renderKlasBeheer();
+  loadOrInit();
+  const ak=autoKlasVoor(selDate);if(ak&&$("klas")&&ak!==$("klas").value){$("klas").value=ak;loadOrInit();}
+  refreshAll();renderKlasBeheer();
   switchTab("afwezigheden");
 
   $("klaschip").onclick=openKlasPicker;
