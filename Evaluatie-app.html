@@ -171,6 +171,10 @@
   .lesrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px}
   .lesrow::-webkit-scrollbar{display:none}
   .lesrow.dim .lesblok{opacity:.45}
+  .dlundo{display:flex;align-items:center;gap:10px;justify-content:space-between;background:rgba(244,194,74,.28);border:1px solid var(--line);border-radius:13px;padding:9px 12px;margin-bottom:10px}
+  .dlutxt{display:flex;flex-direction:column;gap:1px;font-size:12.5px;line-height:1.35}
+  .dlutxt span{color:var(--muted)}
+  .dlundo button{flex:0 0 auto;border:none;background:var(--dark);color:var(--dark-ink);border-radius:10px;padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
   .lesrow.dim .lesblok.on{opacity:1}
   .lesblok{flex:0 0 auto;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.6);border-radius:13px;padding:6px 12px;cursor:pointer;text-align:left}
   .lesblok .lu{font-size:9.5px;color:var(--muted);white-space:nowrap}
@@ -310,9 +314,10 @@
 
   <div id="tab-meer" class="tabview">
     <div class="card">
+      <div class="dlundo" id="dlundo" style="display:none"></div>
       <button class="btn primary" id="dlweek" style="width:100%">Download nieuwe evaluaties</button>
       <div class="muted" id="weekinfo" style="margin-top:8px"></div>
-      <div class="hint" style="margin-top:6px">Alles wat je nog niet downloadde, komt in één Excel-bestand met een tabblad per klas. Wat je al downloadde, blijft bewaard in de app maar zit er niet meer in. <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles als gedownload markeren</a></div>
+      <div class="hint" style="margin-top:6px">Alles wat je nog niet downloadde, komt in één Excel-bestand met een tabblad per klas. Wat je al downloadde, blijft bewaard in de app maar zit er niet meer in. <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles als gedownload markeren</a> · <a id="dlreopen" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles opnieuw klaarzetten</a></div>
       <div class="critttl" style="margin:14px 0 4px">Of per klas apart</div>
       <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan — handig om in OneDrive in een map per klas te bewaren.</div>
       <div id="perklas"></div>
@@ -1291,6 +1296,21 @@ function getDl(){try{return JSON.parse(localStorage.getItem(LS_DL))||{};}catch(e
 function isDl(k){return !!getDl()[k];}
 function markDl(keys){const d=getDl();keys.forEach(k=>{d[k]=todayISO();});localStorage.setItem(LS_DL,JSON.stringify(d));}
 function unmarkDl(k){const d=getDl();delete d[k];localStorage.setItem(LS_DL,JSON.stringify(d));}
+function unmarkDlMany(keys){const d=getDl();keys.forEach(k=>{delete d[k];});localStorage.setItem(LS_DL,JSON.stringify(d));}
+function unmarkAllDl(){localStorage.removeItem(LS_DL);}
+/* Laatste download onthouden, zodat je hem kan terugzetten als het misliep
+   (bv. OneDrive vroeg om aan te melden en het bestand kwam nooit toe). */
+let lastDl=null;
+function showDlUndo(keys,label){
+  lastDl={keys:keys.slice(),label:label};
+  const el=$("dlundo");if(!el)return;
+  el.innerHTML="";
+  const t=document.createElement("div");t.className="dlutxt";
+  t.innerHTML="<b>"+label+"</b><span>Niet goed aangekomen? Zet ze terug in de lijst.</span>";
+  const b=document.createElement("button");b.textContent="Zet terug";
+  b.onclick=()=>{unmarkDlMany(lastDl.keys);lastDl=null;el.style.display="none";updateWeekInfo();renderSaved();toast("Terug in de lijst");};
+  el.appendChild(t);el.appendChild(b);el.style.display="flex";
+}
 /* alle opgeslagen evaluaties die nog niet gedownload zijn */
 function nieuweEvaluaties(){
   const items=[];
@@ -1337,11 +1357,11 @@ async function downloadBundel(items,prefix){
   const naam=(prefix?prefix+"_":"")+bundelNaam(items,"xlsx");
   if(typeof ExcelJS!=="undefined"){
     try{const blob=await buildWeekXLSX(items);
-      if(blob){downloadBlob(naam,blob);markDl(keys);updateWeekInfo();renderSaved();return true;}
+      if(blob){downloadBlob(naam,blob);markDl(keys);showDlUndo(keys,keys.length+" evaluatie"+(keys.length===1?"":"s")+" gedownload"+(prefix?(" ("+prefix+")"):""));updateWeekInfo();renderSaved();return true;}
     }catch(e){console.error(e);}
   }
   const t=buildWeekCSV(items);if(!t)return false;
-  download((prefix?prefix+"_":"")+bundelNaam(items,"csv"),t);markDl(keys);updateWeekInfo();renderSaved();return true;
+  download((prefix?prefix+"_":"")+bundelNaam(items,"csv"),t);markDl(keys);showDlUndo(keys,keys.length+" evaluatie"+(keys.length===1?"":"s")+" gedownload"+(prefix?(" ("+prefix+")"):""));updateWeekInfo();renderSaved();return true;
 }
 function renderPerKlas(){
   const box=$("perklas");if(!box)return;box.innerHTML="";
@@ -1455,7 +1475,11 @@ function renderSaved(){
     const acts=document.createElement("div");
     const dl=document.createElement("a");dl.textContent="download";dl.style.marginRight="12px";
     dl.onclick=()=>{const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";download(fname(),buildCSV());state=cur;
-      markDl([it.k]);updateWeekInfo();renderSaved();};
+      markDl([it.k]);showDlUndo([it.k],"1 evaluatie gedownload");updateWeekInfo();renderSaved();};
+    if(isDl(it.k)){const re=document.createElement("a");re.textContent="opnieuw";re.style.marginRight="12px";
+      re.title="Zet deze evaluatie terug bij de nog te downloaden evaluaties";
+      re.onclick=()=>{unmarkDl(it.k);updateWeekInfo();renderSaved();toast("Terug in de lijst");};
+      acts.appendChild(re);}
     const del=document.createElement("a");del.textContent="wis";del.style.color="#c33";
     del.onclick=()=>{if(confirm("Deze evaluatie wissen?")){localStorage.removeItem(it.k);renderSaved();}};
     acts.appendChild(dl);acts.appendChild(del);
@@ -1557,6 +1581,7 @@ function switchTab(t){
   renderLesbar();
   $("klaschip").style.display=(t==="meer")?"none":"block";
   if(t==="afwezigheden")renderReg();
+  if(t!=="meer"&&$("dlundo"))$("dlundo").style.display="none";
   if(t==="meer"){populateEv();renderEvolutie();renderPlanner();}
 }
 
@@ -1587,7 +1612,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v52";
+const APP_VERSION="v53";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1926,6 +1951,12 @@ function init(){
     if(!items.length){toast("Alles is al gedownload");return;}
     const ok=await downloadBundel(items,"");
     toast(ok?(items.length+" evaluaties gedownload"):"Downloaden lukte niet");};
+  $("dlreopen").onclick=()=>{
+    const n=Object.keys(getDl()).length;
+    if(!n){toast("Er staat niets als gedownload gemarkeerd");return;}
+    if(!confirm("Alle "+n+" evaluaties opnieuw klaarzetten om te downloaden?"))return;
+    unmarkAllDl();lastDl=null;if($("dlundo"))$("dlundo").style.display="none";
+    updateWeekInfo();renderSaved();toast("Alles staat weer klaar");};
   $("dlreset").onclick=()=>{
     const items=nieuweEvaluaties();
     if(!items.length){toast("Er is niets nieuws");return;}
