@@ -118,6 +118,20 @@
   .locbadge.poly{background:rgba(244,194,74,.22);color:#5a4a12}
   .locbadge.buiten{background:rgba(55,138,221,.16);color:#185fa5}
   .locbadge.vakb{background:#eceae3;color:#8a8a80}
+  .sancrow{display:flex;align-items:center;gap:10px;padding:10px 2px;border-top:1px solid var(--line)}
+  .sancrow:first-of-type{border-top:none}
+  .sancl{flex:1;min-width:0}
+  .sancnm{font-size:14px;color:var(--ink);font-weight:600}
+  .sanck{font-size:10.5px;font-weight:700;color:var(--accent-deep);letter-spacing:.04em}
+  .sancd{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .sancs{color:var(--accent-deep);font-weight:600}
+  .sancr{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .sancbadge{font-size:13px;font-weight:700;border-radius:9px;padding:4px 10px;background:rgba(120,100,60,.14);color:var(--ink)}
+  .sancbadge.raak{background:rgba(214,80,60,.2);color:#bb3326}
+  .sancrow.raak .sancnm{color:#bb3326}
+  .sancbtn{border:1px solid rgba(120,100,60,.35);background:rgba(255,255,255,.6);color:#7a6f53;border-radius:9px;
+    font-size:11.5px;font-weight:600;padding:5px 10px;cursor:pointer;white-space:nowrap}
+  .sancperiodes{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px}
   .lfrow{padding:11px 2px;border-top:1px solid var(--line);cursor:pointer}
   .lfrow:first-child{border-top:none}
   .lft{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.35}
@@ -346,6 +360,10 @@ html[data-thema="donker"] .pill.on{background:rgba(242,180,65,.2);border-color:r
 html[data-thema="donker"] .attchip{background:#272B31;border-color:var(--glassb);color:#B9C1CA}
 html[data-thema="donker"] .attchip.on{background:rgba(242,180,65,.22);border-color:rgba(242,180,65,.5);color:var(--accent)}
 html[data-thema="donker"] .attchip.op{color:#E0A45A}
+html[data-thema="donker"] .sancbadge{background:#2E333A;color:var(--ink)}
+html[data-thema="donker"] .sancbadge.raak{background:rgba(214,80,60,.24);color:#F3A092}
+html[data-thema="donker"] .sancrow.raak .sancnm{color:#F3A092}
+html[data-thema="donker"] .sancbtn{background:#272B31;border-color:var(--glassb);color:#B9C1CA}
 html[data-thema="donker"] .attbalk,
 html[data-thema="donker"] .bubanner,
 html[data-thema="donker"] .dlundo,
@@ -457,7 +475,21 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
     <div class="card" id="regovcard">
       <div class="critttl" style="margin-bottom:8px">Kledij &amp; aanwezigheid</div>
       <div class="ovwrap"><table class="ovtbl" id="regov"></table></div>
-      <div class="hint">Score /10 = (in orde + D) &divide; deelname &times; 10, en pas vanaf 50% deelname.</div>
+  <div class="hint">Score /10 = (in orde + D) &divide; deelname &times; 10, en pas vanaf 50% deelname.</div>
+    </div>
+    <div class="card">
+      <div class="critttl" style="margin-bottom:4px">Kledij &mdash; opvolging &amp; sanctie</div>
+      <div class="hint" style="margin-bottom:9px">Wie stond niet in orde, en hoe vaak? Vanaf de drempel volgt een sanctie. Noteer je die, dan telt de app daarna opnieuw vanaf nul.</div>
+      <div class="seg" id="sancseg"></div>
+      <div class="sancperiodes" id="sancper"></div>
+      <div class="row2" style="margin-bottom:9px">
+        <div><label class="fld">Van</label><input type="date" id="sancvan"></div>
+        <div><label class="fld">Tot</label><input type="date" id="sanctot"></div>
+      </div>
+      <label class="fld">Sanctie vanaf</label>
+      <div class="grouped"><div class="grow"><span class="glabel">keer niet in orde</span>
+        <select id="sancdrempel" class="gsel"><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
+      <div id="sanclijst" style="margin-top:12px"></div>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
@@ -495,6 +527,9 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       </div>
       <div class="critttl" style="margin:16px 0 4px">Register van vandaag</div>
       <button class="btn ghost" id="regcsv" style="width:100%">Download (CSV)</button>
+      <div class="critttl" style="margin:16px 0 4px">Kledijopvolging</div>
+      <div class="hint" style="margin-bottom:9px">De lijst met tellingen en sancties uit de periode die je hierboven koos &mdash; voor de leerlingbegeleiding of de klassenraad.</div>
+      <button class="btn ghost" id="sanccsv" style="width:100%">Download (CSV)</button>
     </div>
   </div>
 
@@ -1762,6 +1797,132 @@ function renderDateStrip(){
   const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
 }
 
+/* ---------- KLEDIJ-OPVOLGING EN SANCTIES ----------
+   Telt hoe vaak een leerling "niet in orde" (R) stond binnen een periode.
+   Vanaf de drempel (standaard 3) volgt een sanctie. Noteer je een sanctie,
+   dan telt de app daarna opnieuw vanaf nul — zo straf je niemand twee keer
+   voor dezelfde drie keer. */
+const LS_SANC="lo_sanctie_";
+const LS_DREMPEL="lo_kledij_drempel";
+function getSanc(klas){try{return JSON.parse(localStorage.getItem(LS_SANC+klas))||{};}catch(e){return {};}}
+function saveSanc(klas,o){localStorage.setItem(LS_SANC+klas,JSON.stringify(o));}
+function sanctiesVan(klas,naam){return (getSanc(klas)[naam]||[]).slice().sort();}
+/* De bewaarde datum is de LAATSTE keer die met deze sanctie afgehandeld is,
+   niet de dag van de strafstudie zelf. Alles daarna telt opnieuw mee. */
+function sanctieToevoegen(klas,naam,iso){const o=getSanc(klas);(o[naam]=o[naam]||[]).push(iso);saveSanc(klas,o);}
+function sanctieWissen(klas,naam,iso){const o=getSanc(klas);if(!o[naam])return;
+  o[naam]=o[naam].filter(d=>d!==iso);if(!o[naam].length)delete o[naam];saveSanc(klas,o);}
+function drempel(){const n=parseInt(localStorage.getItem(LS_DREMPEL),10);return (n>0&&n<20)?n:3;}
+function setDrempel(n){localStorage.setItem(LS_DREMPEL,String(n));}
+function dagNa(iso){const d=parseISO(iso);if(!d)return iso;d.setDate(d.getDate()+1);return localISO(d);}
+function laatsteSanctie(klas,naam,tot){const a=sanctiesVan(klas,naam).filter(d=>d<=tot);return a.length?a[a.length-1]:null;}
+/* de dagen waarop deze leerling niet in orde was, sinds de laatste sanctie */
+function kledijStrikes(klas,naam,van,tot){
+  const ls=laatsteSanctie(klas,naam,tot);
+  /* de periode blijft gelden: na een sanctie tellen we vanaf de laatste van die twee */
+  const na=ls?dagNa(ls):van;
+  const start=(na>van)?na:van;
+  return regDates(klas).filter(iso=>iso>=start&&iso<=tot&&regEff(klas,iso,naam)==="R");
+}
+/* periodes van 2 maanden binnen het schooljaar */
+const PERIODES=[["sep-okt",8,9],["nov-dec",10,11],["jan-feb",0,1],["mrt-apr",2,3],["mei-jun",4,5]];
+function periodeGrenzen(i,ankerISO){
+  const a=parseISO(ankerISO)||new Date();
+  const jaar=a.getFullYear(), m=a.getMonth();
+  const startJaar=(m>=7)?jaar:jaar-1;           /* schooljaar begint in september */
+  const pm=PERIODES[i];
+  const j1=(pm[1]>=7)?startJaar:startJaar+1;
+  const j2=(pm[2]>=7)?startJaar:startJaar+1;
+  const van=new Date(j1,pm[1],1);
+  const tot=new Date(j2,pm[2]+1,0);
+  return [localISO(van),localISO(tot)];
+}
+function huidigePeriode(ankerISO){
+  const a=parseISO(ankerISO)||new Date();const m=a.getMonth();
+  for(let i=0;i<PERIODES.length;i++){if(m===PERIODES[i][1]||m===PERIODES[i][2])return i;}
+  return 0;
+}
+let sancScope="klas";
+function sancVan(){return ($("sancvan")&&$("sancvan").value)||periodeGrenzen(huidigePeriode(selDate),selDate)[0];}
+function sancTot(){return ($("sanctot")&&$("sanctot").value)||periodeGrenzen(huidigePeriode(selDate),selDate)[1];}
+function sancKlassen(){return sancScope==="alle"?klassenVoorLk(curLk()).filter(k=>KLASSEN[k]):[state.klas];}
+function sancRijen(){
+  const van=sancVan(),tot=sancTot(),d=drempel(),uit=[];
+  sancKlassen().forEach(klas=>{
+    (KLASSEN[klas]||[]).forEach(naam=>{
+      const dagen=kledijStrikes(klas,naam,van,tot);
+      if(!dagen.length)return;
+      uit.push({klas,naam,dagen,n:dagen.length,raak:dagen.length>=d,
+                laatste:laatsteSanctie(klas,naam,tot),alle:sanctiesVan(klas,naam)});
+    });
+  });
+  uit.sort((a,b)=>b.n-a.n||a.klas.localeCompare(b.klas)||a.naam.localeCompare(b.naam));
+  return uit;
+}
+function renderSanctie(){
+  const box=$("sanclijst");if(!box||!state)return;
+  const seg=$("sancseg");
+  if(seg){seg.innerHTML="";
+    [["klas","Deze klas"],["alle","Al mijn klassen"]].forEach(o=>{
+      const b=document.createElement("div");b.textContent=o[1];
+      b.className="segopt"+(sancScope===o[0]?" on":"");
+      b.onclick=()=>{sancScope=o[0];renderSanctie();};seg.appendChild(b);});}
+  const pb=$("sancper");
+  if(pb){pb.innerHTML="";
+    const hp=huidigePeriode(selDate);
+    PERIODES.forEach((pp,i)=>{
+      const g=periodeGrenzen(i,selDate);
+      const b=document.createElement("div");b.textContent=pp[0];
+      b.className="pill"+((sancVan()===g[0]&&sancTot()===g[1])?" on":" off");
+      b.onclick=()=>{$("sancvan").value=g[0];$("sanctot").value=g[1];renderSanctie();};
+      pb.appendChild(b);});}
+  box.innerHTML="";
+  const d=drempel(),rijen=sancRijen();
+  const raak=rijen.filter(r=>r.raak).length;
+  const kop=document.createElement("div");kop.className="hint";kop.style.marginBottom="9px";
+  kop.innerHTML=rijen.length
+    ? ("<b>"+raak+"</b> leerling"+(raak===1?"":"en")+" op of boven de drempel van "+d+"&times;, "+
+       rijen.length+" met minstens &eacute;&eacute;n keer niet in orde.")
+    : "Niemand stond niet in orde in deze periode.";
+  box.appendChild(kop);
+  rijen.forEach(r=>{
+    const row=document.createElement("div");row.className="sancrow"+(r.raak?" raak":"");
+    const l=document.createElement("div");l.className="sancl";
+    l.innerHTML='<div class="sancnm">'+r.naam.replace(/</g,"&lt;")+(sancScope==="alle"?(' <span class="sanck">'+r.klas+'</span>'):"")+'</div>'+
+      '<div class="sancd">'+r.dagen.map(kortDat).join(" · ")+
+      (r.laatste?(' <span class="sancs">· sanctie afgehandeld t/m '+kortDat(r.laatste)+'</span>'):'')+'</div>';
+    const rechts=document.createElement("div");rechts.className="sancr";
+    const bad=document.createElement("div");bad.className="sancbadge"+(r.raak?" raak":"");
+    bad.textContent=r.n+"×";rechts.appendChild(bad);
+    if(r.raak){
+      const knop=document.createElement("button");knop.className="sancbtn";knop.textContent="sanctie";
+      knop.onclick=()=>{
+        const tm=r.dagen[r.dagen.length-1];
+        if(!confirm("Sanctie noteren voor "+r.naam+"?\n\nDaarmee zijn de "+r.n+" keer t/m "+kortDat(tm)+" afgehandeld. Wat daarna volgt, telt opnieuw vanaf nul."))return;
+        sanctieToevoegen(r.klas,r.naam,tm);renderSanctie();toast("Sanctie genoteerd");};
+      rechts.appendChild(knop);
+    }else if(r.laatste){
+      const u=document.createElement("button");u.className="sancbtn";u.textContent="↶";
+      u.title="Laatste sanctie ongedaan maken";
+      u.onclick=()=>{if(!confirm("De sanctie voor "+r.naam+" (afgehandeld t/m "+kortDat(r.laatste)+") verwijderen?"))return;
+        sanctieWissen(r.klas,r.naam,r.laatste);renderSanctie();toast("Sanctie verwijderd");};
+      rechts.appendChild(u);
+    }
+    row.appendChild(l);row.appendChild(rechts);box.appendChild(row);
+  });
+}
+function buildSanctieCSV(){
+  const van=sancVan(),tot=sancTot(),d=drempel();
+  const L=[];const add=a=>L.push(a.map(csvEscape).join(";"));
+  add(["Kledijopvolging LO"]);
+  add(["Periode",van,"tot",tot]);
+  add(["Drempel",d+" keer niet in orde"]);
+  add(["Telling start opnieuw na een genoteerde sanctie."]);
+  add([]);
+  add(["Klas","Leerling","Aantal keer niet in orde","Data","Sanctie afgehandeld t/m","Sanctie nodig"]);
+  sancRijen().forEach(r=>add([r.klas,r.naam,r.n,r.dagen.join(" "),r.laatste||"",r.raak?"JA":""]));
+  return "﻿"+L.join("\r\n");
+}
 /* ---------- TABBLAD LES: register of evaluatie ---------- */
 let lesDeel="register";
 function toonLesDeel(){
@@ -1792,6 +1953,13 @@ function toggleOpzet(){
   const l=$("opzetlink");if(l)l.innerHTML=open?"wijzig \u203a":"klaar";
 }
 /* ---------- TABBLAD KLAS: kopregel ---------- */
+function initSanctie(){
+  if($("sancvan")&&!$("sancvan").value){
+    const g=periodeGrenzen(huidigePeriode(selDate),selDate);
+    $("sancvan").value=g[0];$("sanctot").value=g[1];
+  }
+  if($("sancdrempel"))$("sancdrempel").value=String(drempel());
+}
 function renderKlasKop(){
   const k=$("klaskop"),sub=$("klassub");if(!k||!state)return;
   k.textContent=state.klas+" \u00b7 "+graadVoorKlas(state.klas)+" graad";
@@ -1818,7 +1986,7 @@ function switchTab(t){
   if(t==="les"){toonLesDeel();}
   if(t==="lesfiches")renderLesfiches();
   if(t!=="klas"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();}
+  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();initSanctie();renderSanctie();}
   if(t==="instellingen"){renderThemaKiezer();renderSaved();updateBackupStatus();}
 }
 
@@ -1849,7 +2017,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v58";
+const APP_VERSION="v59";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -2336,6 +2504,9 @@ function init(){
   try{if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(themaKeuze()==="auto")pasThemaToe();});}catch(e){}
   $("klaschip").onclick=openKlasPicker;
   $("opzetline").onclick=toggleOpzet;
+  $("sancvan").onchange=renderSanctie;$("sanctot").onchange=renderSanctie;
+  $("sancdrempel").onchange=()=>{setDrempel(parseInt($("sancdrempel").value,10));renderSanctie();};
+  $("sanccsv").onclick=()=>{const t=buildSanctieCSV();download("Kledijopvolging_"+sancVan()+"_tot_"+sancTot()+".csv",t);toast("Kledijopvolging gedownload");};
   $("lfzoek").oninput=()=>{lfZoek=$("lfzoek").value;lfOpen=null;lfBewerk=null;renderLesfiches();};
   $("lfnieuw").onclick=()=>{lfBewerk="";lfOpen=null;renderLesfiches();window.scrollTo(0,0);};
   $("categorie").onchange=()=>{fillSport($("categorie").value);reloadEvaluation();};
