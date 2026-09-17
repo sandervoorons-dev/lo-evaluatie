@@ -300,7 +300,7 @@
       </details>
     </div>
     <div class="card">
-      <button class="btn primary" id="saveeval" style="width:100%">Evaluatie opslaan</button>
+      <button class="btn primary" id="saveeval" style="width:100%">Nu al opslaan</button>
       <div class="muted" id="savestatus" style="margin-top:8px"></div>
       <div class="actions" style="margin-top:10px">
         <button class="btn ghost" id="dlcsv">Download (CSV)</button>
@@ -1037,6 +1037,32 @@ function defaultEnabled(cat){
   else r.criteria.forEach(c=>en[c.key]=true);
   return en;
 }
+/* ---------- AUTOMATISCH OPSLAAN ----------
+   Zodra elke leerling afgewerkt is (afwezig, of alle aangevinkte criteria ingevuld,
+   en bij een meting ook de meting zelf), slaat de app de evaluatie vanzelf op.
+   Zo kan je niet meer vergeten op "Evaluatie opslaan" te tikken. */
+function leerlingKlaar(naam){
+  if(!state||!state.data||!state.data[naam])return false;
+  if((state.status[naam]||"aanwezig")!=="aanwezig")return true;
+  const cs=crits().filter(c=>state.enabled[c.key]);
+  if(!cs.length)return false;
+  for(let i=0;i<cs.length;i++){const v=state.data[naam][cs[i].key];if(v===null||v===undefined)return false;}
+  if(curRubriek().type==="meting"&&!(state.data[naam].__meting||"").trim())return false;
+  return true;
+}
+function onvolledigeLeerlingen(){
+  if(!state||!KLASSEN[state.klas])return [];
+  return KLASSEN[state.klas].filter(n=>!leerlingKlaar(n));
+}
+function autoOpslaan(){
+  if(!state||state.saved===true)return false;
+  if(!hasContent(state))return false;
+  if(onvolledigeLeerlingen().length)return false;
+  state.saved=true;saveState();
+  renderSaved();updateSaveStatus();updateWeekInfo();
+  toast("Alle leerlingen ingevuld — evaluatie automatisch opgeslagen");
+  return true;
+}
 function saveState(){
   if(!state)return;
   const k=keyFor(state.klas,state.datum,sportLabel());
@@ -1161,7 +1187,7 @@ function buildSheet(){
   box.appendChild(head);
   const seg=document.createElement("div");seg.className="seg";
   STATUS.forEach(s=>{const o=document.createElement("div");o.className="segopt"+(stt===s.v?" on":"");o.textContent=s.l;
-    o.onclick=()=>{state.status[naam]=s.v;saveState();renderStudents();renderOverview();if(s.v!=="aanwezig"){gotoStudent(1);}else{buildSheet();}};seg.appendChild(o);});
+    o.onclick=()=>{state.status[naam]=s.v;saveState();autoOpslaan();renderStudents();renderOverview();if(s.v!=="aanwezig"){gotoStudent(1);}else{buildSheet();}};seg.appendChild(o);});
   box.appendChild(seg);
   if(stt!=="aanwezig"){const note=document.createElement("div");note.className="sheetnote";note.textContent=statusLabel(stt)+" — geen score voor deze leerling.";box.appendChild(note);addSheetNav(box);return;}
   if(curRubriek().type==="meting"){
@@ -1189,7 +1215,7 @@ function buildSheet(){
       const cc=(c.max===2)?["v0","v1","v3"][i]:("v"+i);
       o.className="opt "+cc+(state.data[naam][c.key]===i?" sel":"");
       o.textContent=i; o.title=lab;
-      o.onclick=()=>{state.data[naam][c.key]=(state.data[naam][c.key]===i)?null:i;saveState();buildSheet();renderStudents();renderOverview();};
+      o.onclick=()=>{state.data[naam][c.key]=(state.data[naam][c.key]===i)?null:i;saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
       opts.appendChild(o);
     });
     block.appendChild(opts);block.appendChild(bands);
@@ -1200,7 +1226,7 @@ function buildSheet(){
     const ml=document.createElement("div");ml.className="seglabel";ml.style.marginTop="9px";ml.textContent="Meting ("+(od?od.eenheid:"")+")";box.appendChild(ml);
     const inp=document.createElement("input");inp.type="text";inp.className="metinput";inp.value=state.data[naam].__meting||"";
     inp.placeholder=(od&&od.eenheid==="m"?"bv. 4.80":(od&&od.eenheid==="sec"?"bv. 9.8":"bv. 6.30"));
-    inp.onchange=()=>{state.data[naam].__meting=inp.value.trim();saveState();buildSheet();renderStudents();renderOverview();};
+    inp.onchange=()=>{state.data[naam].__meting=inp.value.trim();saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
     box.appendChild(inp);
     const res=document.createElement("div");res.className="resline";
     const g=getGes(naam);const parts=[];
@@ -1639,7 +1665,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v54";
+const APP_VERSION="v55";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -2084,9 +2110,11 @@ function refreshAll(){
   if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
 }
 function updateSaveStatus(){const el=$("savestatus");if(!el||!state)return;
-  if(state.saved===true)el.textContent="Opgeslagen in de app.";
-  else if(hasContent(state))el.textContent="Nog niet opgeslagen — tik op ‘Evaluatie opslaan’.";
-  else el.textContent="Nog niets ingevuld.";}
+  const open=onvolledigeLeerlingen();
+  const rest=open.length?("Nog "+open.length+" leerling"+(open.length===1?"":"en")+" zonder score: "+open.slice(0,3).join(", ")+(open.length>3?"…":"")+"."):"";
+  if(state.saved===true)el.textContent="Opgeslagen in de app."+(rest?(" "+rest):"");
+  else if(hasContent(state))el.textContent=rest?(rest+" Zodra iedereen ingevuld is, slaat de app vanzelf op."):"Nog niet opgeslagen — tik op ‘Evaluatie opslaan’.";
+  else el.textContent="Nog niets ingevuld. Vul je iedereen in, dan wordt er automatisch opgeslagen.";}
 function reloadEvaluation(){closeSheet();saveState();loadOrInit();refreshAll();}
 
 function init(){
@@ -2109,7 +2137,7 @@ function init(){
   if(localStorage.getItem("lo_crit_collapsed")==="1"){$("critBody").classList.add("collapsed");$("critChev").textContent="▸";}
   $("critCollapseBtn").onclick=()=>{const c=$("critBody").classList.toggle("collapsed");$("critChev").textContent=c?"▸":"▾";localStorage.setItem("lo_crit_collapsed",c?"1":"0");};
 
-  $("saveeval").onclick=()=>{if(!state)return;state.saved=true;saveState();renderSaved();updateSaveStatus();toast("Evaluatie opgeslagen");};
+  $("saveeval").onclick=()=>{if(!state)return;if(!hasContent(state)){toast("Er is nog niets ingevuld");return;}state.saved=true;saveState();renderSaved();updateSaveStatus();updateWeekInfo();toast("Evaluatie opgeslagen");};
   $("delEval").onclick=()=>{if(!state)return;if(!confirm("Deze evaluatie volledig wissen (scores én status)? Dit kan niet ongedaan worden gemaakt."))return;
     KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);if(curRubriek().type==="meting")state.data[n].__meting="";state.status[n]="aanwezig";});
     state.saved=false;localStorage.removeItem(keyFor(state.klas,state.datum,sportLabel()));refreshAll();toast("Evaluatie gewist");};
