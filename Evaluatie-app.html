@@ -119,9 +119,29 @@
   .locbadge.poly{background:rgba(244,194,74,.22);color:#5a4a12}
   .locbadge.buiten{background:rgba(55,138,221,.16);color:#185fa5}
   .locbadge.vakb{background:#eceae3;color:#8a8a80}
-  .planmonth{margin-top:4px;font-size:13.5px;font-weight:700;color:var(--ink);padding:10px 2px;border-top:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
-  .planmonth .pchev{color:var(--accent-deep);font-weight:400}
-  .planmonthbody.collapsed{display:none}
+  .lfrow{padding:11px 2px;border-top:1px solid var(--line);cursor:pointer}
+  .lfrow:first-child{border-top:none}
+  .lft{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.35}
+  .lfm{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.02em}
+  .lfeigen{color:var(--accent-deep);font-weight:700}
+  .lfterug{background:none;border:none;color:var(--accent-deep);font-size:13.5px;font-weight:600;cursor:pointer;padding:0 0 10px}
+  .lfkop{margin-bottom:6px}
+  .lfttl{font-size:18px;font-weight:700;color:var(--ink);line-height:1.3}
+  .lfsec{border-top:1px solid var(--line);padding:2px 0}
+  .lfsk{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 2px;cursor:pointer;
+    font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-deep);user-select:none}
+  .lfsk .ch{font-weight:400}
+  .lfsb{font-size:13.5px;line-height:1.6;color:var(--ink);padding:0 2px 10px}
+  .lfsb.collapsed{display:none}
+  .lfsb p{margin:0 0 9px}.lfsb ul,.lfsb ol{margin:0 0 9px;padding-left:20px}.lfsb li{margin:2px 0}
+  .lfacts{display:flex;gap:9px;margin-top:12px}.lfacts .btn{flex:1}
+  .lfnot{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+  .lfnr{position:relative;background:rgba(244,194,74,.16);border-radius:12px;padding:9px 40px 9px 12px;margin-bottom:7px}
+  .lfnm{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-deep)}
+  .lfnt{font-size:13px;line-height:1.5}.lfnt p{margin:2px 0 0}
+  .lfnw{position:absolute;top:8px;right:11px;font-size:11px;color:#b5772a;cursor:pointer;text-decoration:underline}
+  .lfta{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.7);
+    padding:10px 12px;font:inherit;font-size:13.5px;line-height:1.5;color:var(--ink);resize:vertical;box-sizing:border-box}
   .fase{font-size:10.5px;font-weight:600;border-radius:6px;padding:1px 6px}
   .fase.oef{background:rgba(244,194,74,.22);color:#5a4a12}
   .fase.eval{background:rgba(46,170,110,.18);color:#1c7a45}
@@ -201,7 +221,15 @@
   .gdiv{height:1px;background:var(--line);margin-left:13px}
   .regrow{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid var(--line)}
   .regrow:first-child{border-top:none}
-  .regrow .rn{flex:1;font-size:13.5px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .regrow .rn{flex:1;min-width:0;display:flex;align-items:center;gap:7px}
+  .rnm{font-size:13.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .attchip{flex:0 0 auto;border:1px solid rgba(120,100,60,.35);background:rgba(255,255,255,.6);color:#7a6f53;
+    border-radius:20px;font-size:10.5px;font-weight:600;padding:3px 9px;cursor:pointer;white-space:nowrap;line-height:1.2}
+  .attchip.on{background:rgba(244,194,74,.5);border-color:rgba(154,123,31,.5);color:var(--accent-ink)}
+  .attchip.op{border-style:dashed;color:#b5772a}
+  .attbalk{font-size:12px;color:var(--ink);background:rgba(244,194,74,.26);border-radius:12px;padding:9px 12px;margin-bottom:4px;line-height:1.5}
+  .attbalk b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-deep);margin-bottom:2px}
+  .attbalk span{color:var(--muted)}
   .regdots{display:flex;align-items:center;gap:9px;flex-shrink:0}
   .rdot{width:30px;height:30px;border-radius:50%;border:2px solid;cursor:pointer;background:transparent}
   .rdot.g{border-color:#2faa57}.rdot.g.on{background:#2faa57}
@@ -312,6 +340,14 @@
     </div>
   </div>
 
+  <div id="tab-lesfiches" class="tabview">
+    <div class="card">
+      <input type="search" id="lfzoek" class="ginput" style="width:100%;text-align:left" placeholder="Zoek in je lesfiches…">
+      <div id="lfbody" style="margin-top:10px"></div>
+      <button class="btn ghost" id="lfnieuw" style="width:100%;margin-top:14px">Eigen lesfiche toevoegen</button>
+    </div>
+  </div>
+
   <div id="tab-meer" class="tabview">
     <div class="card">
       <div class="dlundo" id="dlundo" style="display:none"></div>
@@ -321,19 +357,6 @@
       <div class="critttl" style="margin:14px 0 4px">Of per klas apart</div>
       <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan — handig om in OneDrive in een map per klas te bewaren.</div>
       <div id="perklas"></div>
-    </div>
-    <div class="card">
-      <div class="critttl" style="margin-bottom:6px">Jaarplanning</div>
-      <div class="hint" style="margin-bottom:9px">Plan logisch over het jaar. De app toont per week of je <b>sportzaal</b>, <b>polyzaal</b> of <b>buiten</b> hebt (beurtrol 2/2/2) met een seizoensadvies (binnen-/buitensport). Vul per week je domein/sport in. Let op: schoolvakanties kunnen de beurtrol verschuiven — pas dan de startdatum aan.</div>
-      <label class="fld">Start schooljaar (een maandag)</label>
-      <input type="date" id="plstart">
-      <label class="fld">Einde</label>
-      <input type="date" id="pleind">
-      <label class="fld">Jouw locatie in de eerste 2 weken</label>
-      <select id="plbegin"><option value="sportzaal">Sportzaal</option><option value="poly">Polyzaal</option><option value="buiten">Buiten</option></select>
-      <button class="btn ghost" id="plgen" style="width:100%;margin-top:10px">Planning tonen / verversen</button>
-      <div id="planlist" style="margin-top:11px"></div>
-      <button class="btn primary" id="pldl" style="width:100%;margin-top:10px">Download jaarplanning (CSV)</button>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
@@ -391,6 +414,8 @@
     <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v2.5h-5z"/><path d="M9 13l2 2 4-4.5"/></svg></span><span class="lbl">Evaluaties</span></div>
   <div class="tabitem" id="tabbtn-afwezigheden" onclick="switchTab('afwezigheden')">
     <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.4l2.4 2.4 4.7-5.2"/></svg></span><span class="lbl">Afwezigheden</span></div>
+  <div class="tabitem" id="tabbtn-lesfiches" onclick="switchTab('lesfiches')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z"/></svg></span><span class="lbl">Lesfiches</span></div>
   <div class="tabitem" id="tabbtn-meer" onclick="switchTab('meer')">
     <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></span><span class="lbl">Meer</span></div>
 </div>
@@ -483,7 +508,7 @@ function kiesDatum(iso){
 }
 function renderLesbar(){
   const bar=$("lesbar");if(!bar)return;bar.innerHTML="";
-  if(currentTab==="meer"){bar.style.display="none";return;}
+  if(currentTab==="meer"||currentTab==="lesfiches"){bar.style.display="none";return;}
   const g=geenLes(selDate),bl=roosterVoor(selDate);
   if(g){
     const w=document.createElement("div");w.className="geenles "+g.type;
@@ -1572,17 +1597,19 @@ function renderDateStrip(){
 
 function switchTab(t){
   currentTab=t;
-  ["evaluaties","afwezigheden","meer"].forEach(x=>{
+  ["evaluaties","afwezigheden","lesfiches","meer"].forEach(x=>{
     const v=document.getElementById("tab-"+x);if(v)v.classList.toggle("on",x===t);
     const b=document.getElementById("tabbtn-"+x);if(b)b.classList.toggle("on",x===t);
   });
-  $("apptitle").textContent=(t==="evaluaties"?"Evaluaties":(t==="afwezigheden"?"Afwezigheden":"Meer"));
-  $("strip").style.display=(t==="meer")?"none":"flex";
+  const zonderDag=(t==="meer"||t==="lesfiches");
+  $("apptitle").textContent=(t==="evaluaties"?"Evaluaties":(t==="afwezigheden"?"Afwezigheden":(t==="lesfiches"?"Lesfiches":"Meer")));
+  $("strip").style.display=zonderDag?"none":"flex";
   renderLesbar();
-  $("klaschip").style.display=(t==="meer")?"none":"block";
+  $("klaschip").style.display=zonderDag?"none":"block";
   if(t==="afwezigheden")renderReg();
+  if(t==="lesfiches")renderLesfiches();
   if(t!=="meer"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="meer"){populateEv();renderEvolutie();renderPlanner();}
+  if(t==="meer"){populateEv();renderEvolutie();}
 }
 
 function openKlasPicker(){
@@ -1612,7 +1639,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v53";
+const APP_VERSION="v54";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1636,10 +1663,169 @@ function getReg(klas){try{return JSON.parse(localStorage.getItem(LS_REG+klas))||
 function saveReg(klas,obj){localStorage.setItem(LS_REG+klas,JSON.stringify(obj));}
 function regSet(klas,iso,naam,val){const r=getReg(klas);if(!r[iso])r[iso]={};if(val==null)delete r[iso][naam];else r[iso][naam]=val;if(!Object.keys(r[iso]).length)delete r[iso];saveReg(klas,r);}
 function regGet(klas,iso,naam){const r=getReg(klas);return (r[iso]&&r[iso][naam])||"";}
+/* ---------- DOKTERSATTEST MET EINDDATUM ----------
+   Eén lopend attest per leerling per klas: {van,tot}. Zolang het loopt telt elke
+   lesdag als D, tenzij je voor die dag zelf iets anders aanduidt. */
+/* ---------- LESFICHE-BIBLIOTHEEK ----------
+   INGEBOUWD komt uit de .md-bestanden in OneDrive\school\evaluaties\Lesfiches en wordt
+   met elke app-update vernieuwd. Eigen fiches en notities staan in localStorage en
+   blijven dus staan bij een update; ze zitten ook in de back-up. */
+const LESFICHES_INGEBOUWD=[{"id":"kennismaking-park","titel":"Gouden weken: kennismaken, afspraken en spel in het park","onder":"Kennismaken, afspraken en spel in het park (2de graad)","labels":["3DE JAAR","4DE JAAR","PE 1","TEAMBUILDING","GOUDEN WEKEN"],"secties":[{"kop":"INFO VOOR DE LEERLING","tekst":"Deze les krijg je je sportkledij en overlopen we samen de afspraken voor LO: wat je meebrengt, waar je je omkleedt, wat er gebeurt als je ziek bent of je kledij vergeet.\n\nDaarna gaan we te voet naar het park. We spelen kennismakingsspelletjes, dus je hoeft niets te kunnen — meedoen en meepraten volstaat.\n\nBreng mee: sportkledij en sportschoenen, een drinkbus, en kledij die tegen het weer kan (we zijn buiten)."},{"kop":"ORGANISATIE OF VERLOOP","tekst":"**Onthaal en kledij (15')**\nSportkledij uitdelen, maten controleren. Afspraken overlopen aan de hand van vier vragen die je op het bord zet: *Wat breng je mee? Waar kleed je je om? Wat als je ziek bent? Wat als je je kledij vergeet?* Laat leerlingen zelf antwoorden formuleren voor je ze aanvult — dan blijft het hangen. Kort ook: gsm, drinkbus, juwelen, brillen, en hoe je het meldt als er iets pijn doet.\n\n**Verplaatsing naar het park (10')**\nVooraf: verzamelpunt afspreken, per twee, wachten aan elk kruispunt. Koppen tellen bij vertrek en bij aankomst. EHBO-kit mee.\n\n**Kennismakingsspelen (20')**\n\n*De knoop* — groepjes van acht in een kring, iedereen neemt met beide handen twee verschillende handen vast. De groep ontwart zichzelf zonder los te laten. Werkt zonder taal, dwingt tot overleggen en er staat vanzelf iemand op die de leiding neemt.\n\n*Cirkel-telspel* — in een kring samen luidop tellen tot twintig, in willekeurige volgorde, zonder afspraak over wie wanneer spreekt. Spreken er twee tegelijk, dan begin je opnieuw. Leert luisteren en ruimte laten; vaak lukt het pas als ze stil worden.\n\n*Weerwolven* — kringspel met rollen: de weerwolven kiezen 's nachts iemand, overdag overlegt de groep wie ze verdenken. Houd de rondes kort en de beschuldigingen luchtig; bij een groep die elkaar nog niet kent, speel je beter met \"de gevangene wordt bevrijd\" in plaats van uitgeschakeld.\n\n**Slot (5')**\nKring: elke leerling noemt één naam van iemand die hij vandaag heeft leren kennen. Afspraken kort herhalen. Samen terug naar school, koppen tellen.\n\n**Materiaal**\nSportkledij per leerling, klaslijst, EHBO-kit, drinkwater, eventueel rolkaartjes voor weerwolven.\n\n**Differentiatie**\nDe knoop en het cirkeltelspel werken zonder taal — start daarmee bij een klas met veel nieuwkomers, en doe de regels voor in plaats van ze uit te leggen. Bij weerwolven gebruik je rolkaartjes met een tekening; laat wie nog weinig Nederlands spreekt eerst een ronde meekijken. Wie niet in de kring wil zitten, krijgt de rol van spelleider of tijdbewaker.\n\n**Veiligheid**\nVerkeersafspraken vooraf, vaste verzamelplaats in het park, koppen tellen bij elk vertrek en elke aankomst."},{"kop":"DOELEN","tekst":"Kies het leerplan **Lichamelijke opvoeding B - II - DDAA** (2de graad) en vink aan:\n\n- **8** — De leerlingen nemen in bewegingssituaties verantwoordelijkheid op door regels, afspraken en veiligheidsvoorschriften na te leven.\n- **11** — De leerlingen nemen leiding en aanvaarden leiding in verschillende bewegingsdomeinen.\n- **12** — De leerlingen hanteren bij het uitvoeren van verschillende rollen principes van verantwoord en veilig gedrag."},{"kop":"EVALUATIE","tekst":"Startpunt van het afwezigheden- en kledijregister: noteer wie in orde is met kledij, zodat de opvolging vanaf les 1 loopt. Optioneel scoor je in de evaluatie-app onder **Inzet & progressie (elke les)**, onderwerp \"Kennismaking — park\", als beginmeting. Geen punten."}]},{"id":"vlaggenroof","titel":"Teambuilding: vlaggenroof en levend stratego","onder":"Vlaggenroof & Levend Stratego (2de graad)","labels":["3DE JAAR","4DE JAAR","PE 1","TREFSPELEN","TEAMBUILDING"],"secties":[{"kop":"INFO VOOR DE LEERLING","tekst":"Breng sportkledij en sportschoenen mee (binnenzool). Geen juwelen, brillen af of een sportbril. Neem een drinkbus mee.\n\nDeze les spelen we vlaggenroof in de sportzaal. Je maakt met je team een plan, probeert de vlag van het andere team te stelen en je ploegmaats te bevrijden. Daarna spelen we levend stratego: iedereen krijgt een rang — maarschalk, kolonel, kapitein of mineur."},{"kop":"ORGANISATIE OF VERLOOP","tekst":"**Opwarming (10')**\n\"Iedereen die…\": leerlingen lopen van zijlijn naar zijlijn bij een kenmerk dat je roept (voetbal speelt, meer dan twee talen spreekt, een broer of zus heeft). Laatste rondes huppelend en sprintend. Daarna kettingtik in de halve zaal — twee tikkers, wie getikt wordt haakt aan, bij vier splitst de ketting. Afsluiten met rekken van de beenspieren.\n\n**Kern 1 — vlaggenroof (15')**\nTwee kampen, elk met een vlag in de vlagzone achteraan. Op de eigen helft ben je veilig; op de vijandelijke helft word je getikt en ga je naar de gevangenis. Een teamgenoot bevrijdt je door je aan te tikken, samen mag je vrij terug. Wie de vlag over de middenlijn brengt, wint de ronde.\nDrie ronden van vier minuten, met telkens **één minuut teamoverleg**: wie valt aan, wie verdedigt, wie bevrijdt. Na elke ronde wijst het team een andere kapitein aan.\n\n**Kern 2 — levend stratego (18')**\nZelfde veld, iedereen krijgt een rangkaart: **maarschalk** (1), **kolonel** (2), **kapitein** (3) of **mineur** (4). Bij een tik tonen beide spelers hun kaart: de hoogste rang wint. Wie verliest houdt zijn kaart en komt via de eigen achterlijn opnieuw in het spel. Eén speler per team is **vlagdrager** en mag de vlag verplaatsen binnen de eigen helft; één is **bom** en wint van iedereen — behalve van de mineur, die ontmijnt. Vijf tot zes korte ronden van drie minuten; na elke ronde nieuwe kaarten en kort overleg, zodat iedereen eens een andere rang krijgt. Een ontmijnde bom is op (nieuwe, lage kaart bij de leerkracht); een getikte vlagdrager laat de vlag vallen waar hij staat.\n\n**Slot (7')**\nTwee rondjes uitwandelen, dan kring met drie vragen: wat liep goed in jullie team, wie heeft jou vandaag geholpen, wat doen we volgende keer anders.\n\n**Materiaal**\n2 vlaggen (kegel met lintje) en 2 matjes als vlagzone, 20 hesjes in twee kleuren, 10 kegels voor middenlijn en gevangenissen, rangkaarten maarschalk/kolonel/kapitein/mineur met bom- en vlagdragerkaart (Stratego_rangkaartjes.pdf), regelaffiche met pictogrammen (Vlaggenroof_spelregels_affiche.pdf), fluitje, chronometer.\n\n**Differentiatie**\nDemonstreer het spel eerst in stilte met vier leerlingen; werk daarna met vier kernwoorden (vlag — gevangenis — vrij — tik) en dezelfde pictogrammen op de affiche. De rangkaarten tonen een cijfer én een sterktebalk, dus ook wie de namen niet kent, ziet wie wint. Wie minder vlot loopt, wordt bevrijder of vlagbewaker; wie niet meedoet krijgt een echte functie met materiaal: spelleider met fluitje, strateeg met whiteboardje, tijd- en puntenpost of kaartjespost. Rollen wisselen na elke ronde.\n\n**Veiligheid**\nTikken is een open hand op rug of schouder — niet trekken, niet vastpakken, niet duiken of sliden. Hoeken vrij van toestellen."},{"kop":"DOELEN","tekst":"Kies het leerplan **Lichamelijke opvoeding B - II - DDAA** (2de graad) en vink deze vier aan:\n\n- **2** — De leerlingen passen in verschillende bewegingsdomeinen tactieken en principes toe met respect voor de afgesproken regels en rollen in sport en spel.\n- **8** — De leerlingen nemen in bewegingssituaties verantwoordelijkheid op door regels, afspraken en veiligheidsvoorschriften na te leven.\n- **11** — De leerlingen nemen leiding en aanvaarden leiding in verschillende bewegingsdomeinen.\n- **12** — De leerlingen hanteren bij het uitvoeren van verschillende rollen principes van verantwoord en veilig gedrag."},{"kop":"EVALUATIE","tekst":"Observatie via de rubriek **Inzet & progressie (elke les)** in de evaluatie-app, met bij Onderwerp \"Vlaggenroof — teambuilding\". Geen punten: dit is een beginmeting voor de gouden weken, die je in december met dezelfde criteria herhaalt."}]},{"id":"stratego-loopopbouw","titel":"Conditie & trefspelen: loopopbouw en levend stratego","onder":"Loopopbouw en levend stratego (2de graad)","labels":["3DE JAAR","4DE JAAR","PE 1","TREFSPELEN","CONDITIE"],"secties":[{"kop":"INFO VOOR DE LEERLING","tekst":"Breng sportkledij en sportschoenen mee (binnenzool). Geen juwelen, brillen af of een sportbril. Neem een drinkbus mee.\n\nWe beginnen met zes minuten lopen — elke week komt er een minuut bij, tot we de coopertest doen. Niet snel lopen: blijven gaan. Wandelen mag, stoppen niet.\n\nDaarna twee nieuwe spelen: staartjesroof, waarin je het lintje van de anderen probeert af te pakken, en levend stratego. Daarin krijg je een geheime rang en zie je pas bij een tik wie van wie wint."},{"kop":"ORGANISATIE OF VERLOOP","tekst":"**Opwarming — lopen met wissels (9')**\nZes minuten aan één stuk, één minuut meer dan vorige week. Grote lus door de zaal. Om de ± 45 seconden fluit je en verandert de manier van bewegen:\n\n1. rustig joggen\n2. hoge knieën op de korte zijde, joggen op de lange\n3. achterwaarts op de korte zijde\n4. per twee naast elkaar — tempo van de traagste van de twee\n5. zigzag tussen de kegels\n6. laatste minuut: eigen tempo, maar blijven gaan\n\nDe enige regel die telt: **niemand stopt. Wandelen mag, stilstaan niet.** Benoem dat ook zo. Wat leerlingen op de coopertest doet afhaken is zelden de conditie, wel het opgeven; door te belonen op doorgaan in plaats van op snelheid oefen je precies dat. Loop zelf mee met de groep die het moeilijk heeft.\n\nDaarna drie minuten rekken in kring: kuiten, hamstrings, quadriceps, heupbuigers. Kort en staand houden.\n\n**Nieuw spel — staartjesroof (12')**\nIedereen steekt een lintje achteraan in de broeksband, zodat het als een staart uithangt. Op het startsignaal probeert iedereen de staarten van de anderen af te pakken; je eigen staart afschermen met je handen mag niet.\n\nBen je je staart kwijt, dan loop je naar je kamp, neemt daar een nieuw lintje uit de doos en speelt verder. Je blijft dus altijd meespelen — niemand valt af. Gepakte staarten hou je vast of leg je in je kamp: wie er op het einde het meest heeft, wint.\n\nDrie ronden van drie minuten. Speel de eerste ronde iedereen tegen iedereen, de tweede en derde in twee ploegen met hesjes — dan ontstaat er vanzelf samenwerking en dekking.\n\n*Waarom dit spel: het loopt onafgebroken, dus het telt mee voor de conditieopbouw, en het zit vol korte sprintjes zonder dat het naar training voelt. Het heeft bovendien precies de beweging die je straks bij stratego nodig hebt — je verliest iets, je loopt naar je eigen kamp, je haalt daar een nieuwe en speelt verder. Als je de rangkaarten bovenhaalt, volstaat: \"net als daarnet, maar nu haal je een kaart in plaats van een lintje.\"*\n\n**Kern — levend stratego (22')**\nZelfde veld, nu met een vlag per kamp. Iedereen krijgt een rangkaart in de eigen teamkleur: **maarschalk** (1), **kolonel** (2), **kapitein** (3), **mineur** (4), plus per ploeg één **bom** (wint van iedereen behalve van de mineur), één **spion** (verliest van wie hém tikt, maar wint van de maarschalk als de spion zelf tikt) en één **vlagdrager**.\n\nOp de eigen helft ben je veilig. Bij een tik op de vijandelijke helft tonen beide spelers hun kaart: de hoogste rang wint. Wie verliest, loopt naar het eigen kamp, legt zijn kaart onderaan de stapel en trekt de bovenste — en speelt verder met een nieuwe, onbekende rang. Een ontmijnde bom is op, die speler haalt ook een nieuwe kaart. Een getikte vlagdrager laat de vlag vallen waar hij staat. Wie de vlag van het andere team over de middenlijn brengt, wint de ronde.\n\n**Doe dit voor, leg het niet uit.** Twee leerlingen, één tik, kaarten tonen, verliezer loopt naar het kamp. Dertig seconden en iedereen snapt het.\n\nVier ronden van vier minuten, met telkens een halve minuut teamoverleg: wie valt aan, wie verdedigt, wie bewaakt de vlag. Tussen de ronden alles schudden en opnieuw uitdelen, zodat iedereen andere rollen krijgt.\n\n*Dit blok staat bewust ruim ingepland. Vorige keer sneuvelde stratego door tijdgebrek — houd staartjesroof dus echt op drie ronden.*\n\n**Slot (5')**\nTwee rondjes uitwandelen. Dan kring met drie vragen: wie liep vandaag de volle zes minuten zonder te stoppen, welke rang was het lastigst om mee te spelen, en wat sprak jullie team af dat werkte. Sluit af met het aantal minuten van volgende week (zeven).\n\n**Materiaal**\nLintjes of oude hesjes voor de staarten (één per leerling plus een voorraaddoos per kamp), 2 vlaggen (kegel met lintje) en 2 matjes als vlagzone, 20 hesjes in twee kleuren, 10 kegels voor middenlijn en looplus, rangkaarten in blauw en rood met bom-, spion- en vlagdragerkaart (Stratego_rangkaartjes.pdf), regelaffiche deel 2 (Vlaggenroof_spelregels_affiche.pdf), fluitje, chronometer.\n\n*Geen lintjes in huis? Een hesje dat half in de broeksband hangt werkt even goed.*\n\n**Differentiatie**\nDe rangkaarten tonen een cijfer én een sterktebalk, dus ook wie de namen niet kent ziet meteen wie wint. Doe elke nieuwe regel voor in plaats van ze uit te leggen, en werk met vier kernwoorden: lopen — tik — kaart — kamp. Staartjesroof heeft maar één regel en die zie je meteen: daarom staat het vooraan.\n\nBij een klas waar maar een handvol leerlingen echt meedoet: verklein het veld tot een derde van de zaal, speel drie tegen drie en maak de ronden korter. Wie niet meeloopt krijgt een echte functie met materiaal — staartenbeheerder bij de voorraaddoos, kaartenbeheerder van de stapel in het kamp, tijdbewaker met de chronometer, spelleider met het fluitje, of scheidsrechter bij de middenlijn. Die rollen wisselen na elke ronde, zodat niemand er een hele les in blijft hangen.\n\nWie moeilijk loopt, doet de opwarming met wandel-loopblokjes (één zijde lopen, één zijde wandelen) — dat telt volwaardig mee; de afspraak is doorgaan, niet tempo. Bij staartjesroof kan die leerling in een kleinere zone spelen of de rol van staartenbeheerder nemen.\n\n*Alternatief als staartjesroof niet lukt (te weinig materiaal of een klas die te ruw wordt):* **levend Pac-Man** — iedereen mag enkel op de belijning van de zaal lopen, drie tikkers, wie getikt wordt gaat naar het kamp en komt er na tien tellen weer uit. Ook taalvrij, ook onafgebroken lopen, en de lijnen doen het werk voor je.\n\n**Veiligheid**\nTikken is een open hand op rug of schouder — niet trekken, niet vastpakken, niet duiken of sliden. Bij staartjesroof pak je enkel het lintje, nooit de kledij of de broeksband, en je schermt je eigen staart niet af met je handen. Hoeken vrij van toestellen. Bij de looplus: één looprichting, inhalen aan de buitenkant."},{"kop":"DOELEN","tekst":"Kies het leerplan **Lichamelijke opvoeding B - II - DDAA** (2de graad) en vink deze vier aan:\n\n- **2** — De leerlingen passen in verschillende bewegingsdomeinen tactieken en principes toe met respect voor de afgesproken regels en rollen in sport en spel.\n- **3** — De leerlingen gaan aan de hand van criteria na of ze vorderingen maken.\n- **4** — De leerlingen ontwikkelen kracht, lenigheid, uithouding, snelheid, coördinatie, evenwicht, vormspanning en rompstabiliteit.\n- **13** — De leerlingen verleggen op een veilige wijze hun grenzen.\n\n*Voor 6HV2 en 6SV: hetzelfde lesverloop, maar kies het leerplan **Lichamelijke opvoeding (III-LiOp-ddaa)**. De nummering loopt gelijk.*"},{"kop":"EVALUATIE","tekst":"Observatie via de rubriek **Inzet & progressie (elke les)** in de evaluatie-app, met bij Onderwerp \"Stratego + loopopbouw\". Geen punten. Let bij de opwarming vooral op wie doorgaat zonder te stoppen — dat is het criterium dat je over de acht weken naar de coopertest wil zien groeien, en het is hetzelfde criterium als in de conditierubriek (\"Houdt de opdrachten vol tot het einde\")."}]},{"id":"onderons-park","titel":"Onder ons: Among Us met rangkaarten (park)","onder":"Onder ons: Among Us met rangkaarten, in het park (2de graad)","labels":["3DE JAAR","4DE JAAR","PE 1","TREFSPELEN","TEAMBUILDING","BUITEN"],"secties":[{"kop":"INFO VOOR DE LEERLING","tekst":"Deze les gaan we te voet naar het park. Breng sportkledij en sportschoenen mee, een drinkbus, en kledij die tegen het weer kan.\n\nWe spelen Among Us in het park, maar met de rangkaarten van stratego erbij. Je krijgt twee kaarten: een geheime rol en een geheime rang. De bemanning werkt opdrachten af aan de posten, de bedriegers proberen hen te bevriezen. Word je aangetikt, dan tonen jullie allebei je rang — en pas dan weet je wie wint."},{"kop":"ORGANISATIE OF VERLOOP","tekst":"**Op school — rollen uitdelen (5')**\nVerzamel, tel koppen, overloop de verkeersafspraken en het verzamelpunt in het park. Deel per leerling **twee kaarten** uit: een rolkaart (bemanningslid / technicus / bedrieger) en een rangkaart (maarschalk 1, kolonel 2, kapitein 3, mineur 4). Iedereen kijkt naar zijn eigen kaarten en steekt ze weg. Zo is het uitdelen al gebeurd voor je vertrekt en verlies je in het park geen tijd.\n\n**Verplaatsing (8')**\nPer twee, wachten aan elk kruispunt, koppen tellen bij vertrek en bij aankomst. EHBO-kit mee.\n\n**Terrein afbakenen en opwarming (8')**\nBak het speelveld af met vier herkenningspunten die je benoemt (bank, grote boom, pad, hek) en zet er kegels bij. Eén centrale plek is het **meetingpunt**, daar ligt ook de voorraad rangkaarten. Acht taakposten eromheen, allemaal in het zicht.\n\nOpwarming: **zeven minuten lopen**, één meer dan vorige week — als terreinverkenning. Laat ze in groepjes de grenzen van het veld en de acht taakposten aflopen, om de ± 45 seconden een andere bewegingsvorm op fluitsignaal. Dezelfde afspraak als in de zaal: **niemand stopt, wandelen mag, stilstaan niet.** Zo kennen ze meteen het terrein én is de looptijd gedaan. Kort rekken.\n\n**Kern — drie ronden van zes minuten (20')**\n\n*Bemanningslid:* werk vijf van de acht posten af en laat elke post aftekenen op je taakkaart.\n*Bedrieger:* doe alsof je taken uitvoert en bevries anderen, zonder betrapt te worden.\n*Technicus:* is bemanningslid én hersteller — tien tellen naast een bevroren klasgenoot staan en die speelt weer mee.\n\n**De tik werkt met de rangkaarten.** Wie iemand aantikt, tonen allebei hun rangkaart:\n- **Hoogste rang wint.** Verliest het bemanningslid, dan wordt het bevroren: op één knie, taakkaart voor zich op de grond.\n- **Verliest de bedrieger, dan is hij ontmaskerd.** Hij toont zijn rolkaart, loopt naar het meetingpunt, geeft zijn rolkaart af en trekt een nieuwe rang — hij speelt verder als bemanningslid.\n- Wie verliest, haalt sowieso een **nieuwe rangkaart** aan het meetingpunt. Je speelt dus altijd verder met een onbekende rang.\n\nDit is de kern van de combinatie: een tik is geen zekerheid meer. Een bemanningslid met de maarschalk kan een bedrieger ontmaskeren, dus durven leerlingen elkaar aanspreken in plaats van weg te lopen. En omdat niemand weet welke rang de ander heeft, blijft ook de bedrieger voorzichtig.\n\nWie een bevroren klasgenoot vindt, roept **\"meeting\"**: iedereen komt naar het meetingpunt en blijft staan. Eén minuut overleg, dan wijst iedereen tegelijk aan wie hij verdenkt. Wie de meeste vingers krijgt, doet dertig seconden een oefening naar keuze en speelt daarna weer mee — niemand ligt eruit. Na elke meeting trekt **iedereen** een nieuwe rangkaart.\n\n*De meeting is meteen je koppentelling. Gebruik ze ook zo: tel luidop terwijl ze in de kring staan.*\n\nDe bemanning wint als iedereen zijn vijf posten heeft afgewerkt of als alle bedriegers ontmaskerd zijn; de bedriegers winnen als er meer bevroren dan actieve bemanningsleden zijn. Na elke ronde deel je de rollen opnieuw uit.\n\nVerdeling: ongeveer één bedrieger per zes leerlingen, plus altijd één technicus. Bij twintig leerlingen dus drie bedriegers, één technicus en zestien bemanningsleden. De volledige tabel staat op het laatste blad van het spelmateriaal.\n\n**De acht taakposten in het park** — kies plekken die je vanaf het meetingpunt kan zien:\n\n1. bank: tien keer opstappen\n2. grote boom: vijf keer rond de boom joggen\n3. paaltje: vijftien jumping jacks\n4. randje of lijn: tien passen balanceren\n5. open gras: twintig seconden planken\n6. twee kegels: tien keer zijwaarts heen en weer\n7. springtouw of gewoon huppelen: twintig sprongen\n8. sociale post: geef een high five aan drie klasgenoten die je vandaag nog niet gesproken hebt\n\n**Slot in het park (3')**\nKring, koppen tellen. Drie vragen: waaraan herkende je een bedrieger, hoe voelde het om vals beschuldigd te worden, en wat maakt dat een groep elkaar gelooft. Benoem dat het verdenken bij het spel hoort en in het park blijft. Kaarten inzamelen.\n\n**Verplaatsing terug (6')**\nPer twee, koppen tellen bij vertrek en aankomst.\n\n**Materiaal**\nRolkaarten en taakkaarten per leerling (AmongUs_spelmateriaal.pdf), rangkaarten in één kleur plus een voorraadstapel voor het meetingpunt (Stratego_rangkaartjes.pdf), acht kegels of lintjes om de taakposten te markeren, vier kegels voor de veldgrenzen, stiften of stempels om af te tekenen, twee springtouwen, klaslijst, EHBO-kit, fluitje, chronometer.\n\n**Waarom in het park en niet in de zaal**\nAmong Us wint bij ruimte: verspreide posten, hoeken om uit het zicht te lopen, echte verplaatsing tussen de taken. Stratego wint daar juist niet bij — dat spel heeft een duidelijke middenlijn en twee helften nodig, en die kan je in een park niet fatsoenlijk afbakenen. Daarom is niet stratego zélf meegenomen, maar wel het beste stuk ervan: de rangkaarten als uitkomst van een tik. Eén spel, één set regels, en de kaarten die je al geprint hebt krijgen een tweede leven.\n\n**Als ze stratego nog niet gespeeld hebben**\nDoe het dan niet in één les. De rangkaarten werken hier alleen omdat ze de regel al kennen uit de zaal. Speel eerst de zaalles (Smartschool_lesfiche_Stratego_loopopbouw.md) en zet deze parkles de week erna. Kan dat niet, speel dan gewoon Among Us zonder rangkaarten — de fiche Smartschool_lesfiche_AmongUs.md staat klaar.\n\n**Differentiatie**\nRolkaarten, taakposten en rangkaarten werken met tekeningen, cijfers en een sterktebalk: ook wie nog weinig Nederlands spreekt, weet wat hij moet doen en ziet meteen wie wint. Demonstreer het bevriezen, het herstellen en één duel tijdens de terreinverkenning in plaats van het uit te leggen. Bij de meeting mag aanwijzen volstaan — praten hoeft niet.\n\nBij een klas waar maar een handvol leerlingen echt meedoet: verklein het veld, gebruik vijf taakposten in plaats van acht en maak de ronden korter. Wie liever niet meespeelt, krijgt een echte functie met materiaal — taakpostbeheerder die aftekent, kaartenbeheerder aan het meetingpunt, tijdbewaker of grenswachter bij de kegels. Die rollen staan midden in het spel en wisselen na elke ronde.\n\n**Veiligheid**\nHet veld is afgebakend met vier benoemde punten; de afspraak is dat je **altijd een leerkracht kan zien**. Koppen tellen bij vertrek, bij aankomst, bij elke meeting en bij terugkeer. Bevriezen gebeurt met een open hand op de schouder — niet trekken, niet duwen, niet duiken. Taakposten liggen weg van paden, fietsers en water. Bij een park met publiek: geen posten aan de rand of bij speeltuigen van jonge kinderen.\n\n**Aandachtspunt**\nHet spel draait om bedrog en verdenking. Bij een klas die elkaar nog niet vertrouwt, houd je de meetings kort en stuur je bij zodra beschuldigingen persoonlijk worden: laat aanwijzen in plaats van uitspreken. Merk je dat het bij bepaalde leerlingen te dichtbij komt, dan speel je de laatste ronde zonder bedriegers — enkel de posten, samen tegen de klok."},{"kop":"DOELEN","tekst":"Kies het leerplan **Lichamelijke opvoeding B - II - DDAA** (2de graad) en vink deze vier aan:\n\n- **2** — De leerlingen passen in verschillende bewegingsdomeinen tactieken en principes toe met respect voor de afgesproken regels en rollen in sport en spel.\n- **4** — De leerlingen ontwikkelen kracht, lenigheid, uithouding, snelheid, coördinatie, evenwicht, vormspanning en rompstabiliteit.\n- **8** — De leerlingen nemen in bewegingssituaties verantwoordelijkheid op door regels, afspraken en veiligheidsvoorschriften na te leven.\n- **12** — De leerlingen hanteren bij het uitvoeren van verschillende rollen principes van verantwoord en veilig gedrag.\n\n*Voor 6HV2 en 6SV: hetzelfde lesverloop, maar kies het leerplan **Lichamelijke opvoeding (III-LiOp-ddaa)**. De nummering loopt gelijk.*"},{"kop":"EVALUATIE","tekst":"Observatie via de rubriek **Inzet & progressie (elke les)** in de evaluatie-app, met bij Onderwerp \"Onder ons — park\". Geen punten. De zeven minuten lopen tellen mee in de coopertestopbouw: noteer opnieuw wie doorgaat zonder te stoppen. Buiten lopen ze meestal langer dan in de zaal — vergelijk dat gerust met de zaalweek, dat zegt iets over motivatie in plaats van conditie."}]},{"id":"amongus","titel":"Teambuilding: Among Us in de zaal","onder":"Among Us in de zaal (2de graad)","labels":["3DE JAAR","4DE JAAR","PE 1","TREFSPELEN","TEAMBUILDING"],"secties":[{"kop":"INFO VOOR DE LEERLING","tekst":"Breng sportkledij en sportschoenen mee (binnenzool). Geen juwelen, brillen af of een sportbril. Neem een drinkbus mee.\n\nDeze les spelen we Among Us in de sportzaal. Je krijgt een geheime rol: bemanningslid, technicus of bedrieger. De bemanning werkt opdrachten af aan de posten, de bedriegers proberen hen te bevriezen zonder betrapt te worden. Bij elke meeting overlegt de hele groep wie hij verdenkt."},{"kop":"ORGANISATIE OF VERLOOP","tekst":"**Opwarming (8')**\nVrij inlopen door de zaal met tempowissels op het fluitsignaal. Daarna \"bevries-tik\": twee tikkers, wie getikt wordt gaat op één knie en wordt vrijgespeeld door een klasgenoot die tien tellen naast hem gaat staan. Dat is meteen de kernafspraak van het spel ingeoefend, zonder uitleg. Afsluiten met kort rekken.\n\n**Opbouw (5')**\nAcht taakposten klaarzetten, verspreid door de zaal (kaarten uit het spelmateriaal, met het materiaal erbij). Regelaffiche ophangen aan beide kanten. Taakkaarten uitdelen, rolkaarten schudden en met de rug naar boven laten trekken. Iedereen kijkt naar zijn eigen kaart en steekt ze weg.\n\n**Kern — drie tot vier ronden van vijf minuten (25')**\n*Bemanningslid:* werk vijf van de acht posten af en laat elke post aftekenen op je taakkaart.\n*Bedrieger:* doe alsof je taken uitvoert en bevries anderen met een tik op de schouder, zonder betrapt te worden.\n*Technicus:* is bemanningslid én hersteller — tien tellen naast een bevroren klasgenoot staan en die speelt weer mee.\n\nWie bevroren wordt, gaat op één knie en legt zijn taakkaart voor zich op de grond. Wie een bevroren klasgenoot vindt, roept \"meeting\": iedereen komt naar de kring in het midden en blijft staan. Eén minuut overleg, dan wijst iedereen tegelijk aan wie hij verdenkt. Wie de meeste vingers krijgt, doet dertig seconden een oefening naar keuze en speelt daarna weer mee — niemand ligt eruit.\n\nDe bemanning wint als iedereen zijn vijf posten heeft afgewerkt of als alle bedriegers ontmaskerd zijn; de bedriegers winnen als er meer bevroren dan actieve bemanningsleden zijn. Na elke ronde deel je de rollen opnieuw uit.\n\nVerdeling van de rollen: ongeveer één bedrieger per zes leerlingen, plus altijd één technicus. Bij twintig leerlingen dus drie bedriegers, één technicus en zestien bemanningsleden. De volledige tabel staat op het laatste blad van het spelmateriaal.\n\n**Slot (7')**\nUitwandelen, dan kring met drie vragen: waaraan herkende je een bedrieger, hoe voelde het om vals beschuldigd te worden, en wat maakt dat een groep elkaar gelooft. Sluit af met de vaststelling dat verdenken hier bij het spel hoort en buiten de zaal blijft.\n\n**Materiaal**\nRolkaarten, acht taakpostkaarten, taakkaarten per leerling, twee regelaffiches (alles in de PDF's), stiften of stempels om af te tekenen, ballen, kegels, springtouwen, banken, hoepels, fluitje, chronometer.\n\n**Differentiatie**\nDe rolkaarten en de taakposten werken met tekeningen, dus ook wie nog weinig Nederlands spreekt weet wat hij moet doen. Demonstreer het bevriezen en herstellen tijdens de opwarming in plaats van het uit te leggen. Bij de meeting mag aanwijzen volstaan — praten hoeft niet. Wie liever niet meespeelt, wordt taakpostbeheerder (tekent af) of tijdbewaker; die rollen staan midden in het spel en wisselen na elke ronde.\n\n**Veiligheid**\nBevriezen gebeurt met een open hand op de schouder — niet trekken, niet duwen, niet duiken. Tijdens de meeting blijft iedereen staan. Materiaal aan de posten ligt buiten de looplijnen.\n\n**Aandachtspunt**\nHet spel draait om bedrog en verdenking. Bij een klas die elkaar nog niet vertrouwt, houd je de meetings kort en stuur je bij zodra beschuldigingen persoonlijk worden: laat aanwijzen in plaats van uitspreken, en benoem in het slotgesprek dat het bij het spel hoort. Merk je dat het bij bepaalde leerlingen te dichtbij komt, dan speel je de laatste ronde zonder bedriegers — enkel de posten, samen tegen de klok."},{"kop":"DOELEN","tekst":"Kies het leerplan **Lichamelijke opvoeding B - II - DDAA** (2de graad) en vink aan:\n\n- **2** — De leerlingen passen in verschillende bewegingsdomeinen tactieken en principes toe met respect voor de afgesproken regels en rollen in sport en spel.\n- **8** — De leerlingen nemen in bewegingssituaties verantwoordelijkheid op door regels, afspraken en veiligheidsvoorschriften na te leven.\n- **11** — De leerlingen nemen leiding en aanvaarden leiding in verschillende bewegingsdomeinen.\n- **12** — De leerlingen hanteren bij het uitvoeren van verschillende rollen principes van verantwoord en veilig gedrag."},{"kop":"EVALUATIE","tekst":"Observatie via de rubriek **Inzet & progressie (elke les)** in de evaluatie-app, met bij Onderwerp \"Among Us — teambuilding\". Derde meetmoment van de gouden weken, na de kennismakingsles en vlaggenroof. Geen punten."}]}];
+const LS_LF="lo_lesfiches";
+const LS_LFN="lo_lesnotities";
+let lfOpen=null, lfBewerk=null, lfZoek="";
+function eigenFiches(){try{return JSON.parse(localStorage.getItem(LS_LF))||[];}catch(e){return [];}}
+function saveEigen(a){localStorage.setItem(LS_LF,JSON.stringify(a));}
+function alleFiches(){return LESFICHES_INGEBOUWD.concat(eigenFiches());}
+function ficheById(id){return alleFiches().filter(f=>f.id===id)[0]||null;}
+function alleNotities(){try{return JSON.parse(localStorage.getItem(LS_LFN))||{};}catch(e){return {};}}
+function notitiesVan(id){return (alleNotities()[id]||[]).slice().sort((a,b)=>(b.datum||"").localeCompare(a.datum||""));}
+function notitieToevoegen(id,n){const a=alleNotities();(a[id]=a[id]||[]).push(n);localStorage.setItem(LS_LFN,JSON.stringify(a));}
+function notitieWissen(id,i){const a=alleNotities();if(!a[id])return;const lijst=notitiesVan(id);const doel=lijst[i];
+  a[id]=a[id].filter(x=>!(x.datum===doel.datum&&x.tekst===doel.tekst&&x.klas===doel.klas));
+  localStorage.setItem(LS_LFN,JSON.stringify(a));}
+/* kleine markdown-weergave: **vet**, *cursief*, - opsomming, 1. nummering */
+function lfHtml(t){
+  const esc=x=>x.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const inl=x=>esc(x).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*([^*]+)\*/g,"$1<em>$2</em>");
+  const uit=[];let par=[],ul=[],ol=[];
+  const fp=()=>{if(par.length){uit.push("<p>"+par.map(inl).join("<br>")+"</p>");par=[];}};
+  const fl=()=>{if(ul.length){uit.push("<ul>"+ul.map(x=>"<li>"+inl(x)+"</li>").join("")+"</ul>");ul=[];}
+               if(ol.length){uit.push("<ol>"+ol.map(x=>"<li>"+inl(x)+"</li>").join("")+"</ol>");ol=[];}};
+  (t||"").split("\n").forEach(ln=>{
+    const r=ln.trim();
+    if(!r){fp();fl();return;}
+    const m=r.match(/^[-*]\s+(.*)$/), mo=r.match(/^\d+\.\s+(.*)$/);
+    if(m){fp();ol=[];ul.push(m[1]);return;}
+    if(mo){fp();ul=[];ol.push(mo[1]);return;}
+    fl();par.push(r);});
+  fp();fl();return uit.join("");
+}
+function renderLesfiches(){
+  const box=$("lfbody");if(!box)return;box.innerHTML="";
+  if(lfBewerk!==null){renderLfForm(box);return;}
+  if(lfOpen){renderLfDetail(box);return;}
+  const z=lfZoek.toLowerCase().trim();
+  const lijst=alleFiches().filter(f=>{
+    if(!z)return true;
+    const hooi=(f.titel+" "+(f.labels||[]).join(" ")+" "+(f.secties||[]).map(x=>x.kop+" "+x.tekst).join(" ")).toLowerCase();
+    return hooi.indexOf(z)>=0;});
+  if(!lijst.length){box.innerHTML='<div class="muted">Niets gevonden.</div>';return;}
+  lijst.forEach(f=>{
+    const n=notitiesVan(f.id).length;
+    const r=document.createElement("div");r.className="lfrow";
+    r.innerHTML='<div class="lft">'+f.titel.replace(/</g,"&lt;")+'</div>'+
+      '<div class="lfm">'+(f.labels||[]).slice(0,4).join(" · ")+
+      (f.eigen?' · <span class="lfeigen">eigen</span>':'')+
+      (n?' · '+n+' notitie'+(n===1?'':'s'):'')+'</div>';
+    r.onclick=()=>{lfOpen=f.id;renderLesfiches();window.scrollTo(0,0);};
+    box.appendChild(r);
+  });
+}
+function renderLfDetail(box){
+  const f=ficheById(lfOpen);
+  if(!f){lfOpen=null;renderLesfiches();return;}
+  const terug=document.createElement("button");terug.className="lfterug";terug.textContent="‹ Alle lesfiches";
+  terug.onclick=()=>{lfOpen=null;renderLesfiches();window.scrollTo(0,0);};
+  box.appendChild(terug);
+  const h=document.createElement("div");h.className="lfkop";
+  h.innerHTML='<div class="lfttl">'+f.titel.replace(/</g,"&lt;")+'</div>'+
+    ((f.labels&&f.labels.length)?'<div class="lfm">'+f.labels.join(" · ")+'</div>':'');
+  box.appendChild(h);
+  (f.secties||[]).forEach((sc,i)=>{
+    const open=/VERLOOP|ORGANISATIE/i.test(sc.kop)||(f.eigen&&i===0);
+    const d=document.createElement("div");d.className="lfsec";
+    const k=document.createElement("div");k.className="lfsk";
+    k.innerHTML='<span>'+sc.kop.replace(/</g,"&lt;")+'</span><span class="ch">'+(open?"▾":"▸")+'</span>';
+    const b=document.createElement("div");b.className="lfsb"+(open?"":" collapsed");
+    b.innerHTML=lfHtml(sc.tekst);
+    k.onclick=()=>{const c=b.classList.toggle("collapsed");k.querySelector(".ch").textContent=c?"▸":"▾";};
+    d.appendChild(k);d.appendChild(b);box.appendChild(d);
+  });
+  if(f.eigen){
+    const acts=document.createElement("div");acts.className="lfacts";
+    const e=document.createElement("button");e.className="btn ghost";e.textContent="Bewerken";
+    e.onclick=()=>{lfBewerk=f.id;renderLesfiches();window.scrollTo(0,0);};
+    const w=document.createElement("button");w.className="btn warn";w.textContent="Verwijderen";
+    w.onclick=()=>{if(!confirm("Deze lesfiche verwijderen?"))return;
+      saveEigen(eigenFiches().filter(x=>x.id!==f.id));lfOpen=null;renderLesfiches();toast("Lesfiche verwijderd");};
+    acts.appendChild(e);acts.appendChild(w);box.appendChild(acts);
+  }
+  /* notities */
+  const nc=document.createElement("div");nc.className="lfnot";
+  nc.innerHTML='<div class="critttl" style="margin-bottom:4px">Hoe liep het?</div>'+
+    '<div class="hint" style="margin-bottom:8px">Noteer na de les wat werkte en wat niet. Die notities blijven staan bij een app-update en zitten mee in je back-up.</div>';
+  const lijst=document.createElement("div");
+  const teken=()=>{
+    lijst.innerHTML="";
+    const ns=notitiesVan(f.id);
+    if(!ns.length){lijst.innerHTML='<div class="muted" style="font-size:12px">Nog geen notities.</div>';return;}
+    ns.forEach((n,i)=>{
+      const row=document.createElement("div");row.className="lfnr";
+      row.innerHTML='<div class="lfnm">'+kortDat(n.datum)+(n.klas?(' · '+n.klas):'')+'</div>'+
+        '<div class="lfnt">'+lfHtml(n.tekst)+'</div>';
+      const del=document.createElement("a");del.textContent="wis";del.className="lfnw";
+      del.onclick=()=>{if(!confirm("Deze notitie wissen?"))return;notitieWissen(f.id,i);teken();renderLesfiches===null;};
+      row.appendChild(del);lijst.appendChild(row);
+    });
+  };
+  teken();nc.appendChild(lijst);
+  const ta=document.createElement("textarea");ta.className="lfta";ta.rows=3;
+  ta.placeholder="Bv. 3HS2 — te weinig ruimte, 2 ronden volstonden. Kaarten op voorhand sorteren.";
+  nc.appendChild(ta);
+  const bw=document.createElement("button");bw.className="btn primary";bw.style.cssText="width:100%;margin-top:8px";
+  bw.textContent="Notitie bewaren";
+  bw.onclick=()=>{const t=ta.value.trim();if(!t){toast("Schrijf eerst iets");return;}
+    notitieToevoegen(f.id,{datum:todayISO(),klas:(state&&state.klas)||"",tekst:t});ta.value="";teken();toast("Notitie bewaard");};
+  nc.appendChild(bw);box.appendChild(nc);
+}
+function renderLfForm(box){
+  const nieuw=(lfBewerk==="");
+  const f=nieuw?{titel:"",labels:[],secties:[{kop:"INFO VOOR DE LEERLING",tekst:""},{kop:"ORGANISATIE OF VERLOOP",tekst:""}]}:ficheById(lfBewerk);
+  if(!f){lfBewerk=null;renderLesfiches();return;}
+  const terug=document.createElement("button");terug.className="lfterug";terug.textContent="‹ Annuleren";
+  terug.onclick=()=>{lfBewerk=null;renderLesfiches();window.scrollTo(0,0);};
+  box.appendChild(terug);
+  const mk=(lab,val,rows,ph)=>{
+    const l=document.createElement("label");l.className="fld";l.textContent=lab;box.appendChild(l);
+    let i;
+    if(rows){i=document.createElement("textarea");i.className="lfta";i.rows=rows;}
+    else{i=document.createElement("input");i.type="text";i.className="ginput";i.style.cssText="width:100%;text-align:left";}
+    i.value=val||"";if(ph)i.placeholder=ph;box.appendChild(i);return i;};
+  const it=mk("Titel",f.titel,0,"Bv. Atletiek: verspringen week 1");
+  const il=mk("Labels (gescheiden door ·)",(f.labels||[]).join(" · "),0,"3DE JAAR · PE 2 · ATLETIEK");
+  const sec0=(f.secties||[])[0]||{kop:"INFO VOOR DE LEERLING",tekst:""};
+  const sec1=(f.secties||[])[1]||{kop:"ORGANISATIE OF VERLOOP",tekst:""};
+  const i0=mk("Info voor de leerling",sec0.tekst,4,"Wat meebrengen, waar de les doorgaat, wat het onderwerp is.");
+  const i1=mk("Organisatie of verloop",sec1.tekst,12,"Opwarming, kern, slot, met timing. Gebruik - voor een opsomming.");
+  const ok=document.createElement("button");ok.className="btn primary";ok.style.cssText="width:100%;margin-top:12px";
+  ok.textContent=nieuw?"Lesfiche bewaren":"Wijzigingen bewaren";
+  ok.onclick=()=>{
+    const titel=it.value.trim();if(!titel){toast("Geef de lesfiche een titel");return;}
+    const nieuwe={
+      id:nieuw?("eigen-"+Date.now()):f.id,
+      titel:titel,eigen:true,
+      labels:il.value.split("·").map(x=>x.trim()).filter(Boolean),
+      secties:[{kop:"INFO VOOR DE LEERLING",tekst:i0.value},{kop:"ORGANISATIE OF VERLOOP",tekst:i1.value}]
+    };
+    const a=eigenFiches().filter(x=>x.id!==nieuwe.id);a.push(nieuwe);saveEigen(a);
+    lfBewerk=null;lfOpen=nieuwe.id;renderLesfiches();window.scrollTo(0,0);toast("Lesfiche bewaard");};
+  box.appendChild(ok);
+}
+const LS_ATT="lo_att_";
+function getAtt(klas){try{return JSON.parse(localStorage.getItem(LS_ATT+klas))||{};}catch(e){return {};}}
+function saveAtt(klas,o){localStorage.setItem(LS_ATT+klas,JSON.stringify(o));}
+function setAtt(klas,naam,van,tot){const o=getAtt(klas);if(!tot)delete o[naam];else o[naam]={van:van||todayISO(),tot:tot};saveAtt(klas,o);}
+function attVoor(klas,naam){const a=getAtt(klas)[naam];return (a&&a.tot)?a:null;}
+function attActief(klas,naam,iso){const a=attVoor(klas,naam);if(!a)return null;return (iso>=(a.van||"0000-01-01")&&iso<=a.tot)?a:null;}
+function attVerlopen(klas,naam,iso){const a=attVoor(klas,naam);return (a&&iso>a.tot)?a:null;}
+/* effectieve status: wat je zelf aanduidde wint, anders vult een lopend attest D in */
+function regEff(klas,iso,naam){const v=regGet(klas,iso,naam);if(v)return v;return attActief(klas,naam,iso)?"D":"";}
+function kortDat(iso){const d=parseISO(iso);return d?(d.getDate()+"/"+(d.getMonth()+1)):iso;}
 function regDates(klas){const r=getReg(klas);return Object.keys(r).filter(iso=>Object.keys(r[iso]).length>0).sort();}
 function regScore(klas,naam){
   const r=getReg(klas);const dates=regDates(klas);const tot=dates.length;let deel=0,pos=0;
-  dates.forEach(iso=>{const v=r[iso][naam];if(v==="G"||v==="R"||v==="D"){deel++;if(v==="G"||v==="D")pos++;}});
+  dates.forEach(iso=>{const v=regEff(klas,iso,naam);if(v==="G"||v==="R"||v==="D"){deel++;if(v==="G"||v==="D")pos++;}});
   const deelname=tot>0?deel/tot:0;
   const score=(deelname>=0.5&&deel>0)?Math.round(pos/deel*100)/10:null;
   return {tot,deel,pos,deelname,score};
@@ -1647,7 +1833,7 @@ function regScore(klas,naam){
 function regDatesRange(klas,from,to){return regDates(klas).filter(iso=>iso>=from&&iso<=to);}
 function regScoreRange(klas,naam,from,to){
   const r=getReg(klas);const dates=regDatesRange(klas,from,to);const tot=dates.length;let deel=0,pos=0;
-  dates.forEach(iso=>{const v=r[iso][naam];if(v==="G"||v==="R"||v==="D"){deel++;if(v==="G"||v==="D")pos++;}});
+  dates.forEach(iso=>{const v=regEff(klas,iso,naam);if(v==="G"||v==="R"||v==="D"){deel++;if(v==="G"||v==="D")pos++;}});
   const deelname=tot>0?deel/tot:0;
   const score=(deelname>=0.5&&deel>0)?Math.round(pos/deel*100)/10:null;
   return {tot,deel,pos,deelname,score};
@@ -1662,20 +1848,74 @@ function regCell(v){
 function renderReg(){
   const wrap=$("reglist");if(!wrap)return;wrap.innerHTML="";
   if(regJustSaved===selDate){const note=document.createElement("div");note.className="regsavednote";note.textContent="✓ Opgeslagen — je kan nog aanpassen; kies een andere dag voor een nieuw blad";wrap.appendChild(note);}
+  const lopend=KLASSEN[state.klas].filter(n=>attActief(state.klas,n,selDate));
+  if(lopend.length){
+    const b=document.createElement("div");b.className="attbalk";
+    b.innerHTML='<b>Lopend doktersattest</b> '+lopend.map(n=>n+' <span>t/m '+kortDat(attVoor(state.klas,n).tot)+'</span>').join(' · ');
+    wrap.appendChild(b);
+  }
   KLASSEN[state.klas].forEach(naam=>{
-    const cur=regGet(state.klas,selDate,naam);
+    const expl=regGet(state.klas,selDate,naam);
+    const att=attActief(state.klas,naam,selDate);
+    const verlopen=attVerlopen(state.klas,naam,selDate);
+    const cur=expl||(att?"D":"");
     const row=document.createElement("div");row.className="regrow";
-    const nm=document.createElement("div");nm.className="rn";nm.textContent=naam;
+    const nm=document.createElement("div");nm.className="rn";
+    const nmt=document.createElement("span");nmt.className="rnm";nmt.textContent=naam;nm.appendChild(nmt);
+    if(att||cur==="D"||verlopen){
+      const chip=document.createElement("button");
+      chip.className="attchip"+(att?" on":(verlopen?" op":""));
+      chip.textContent=att?("t/m "+kortDat(att.tot)):(verlopen?("attest liep af "+kortDat(verlopen.tot)):"t/m …");
+      chip.title=att?"Doktersattest loopt tot en met "+att.tot:"Stel in tot wanneer het attest loopt";
+      chip.onclick=e=>{e.stopPropagation();openAttest(state.klas,naam);};
+      nm.appendChild(chip);
+    }
     const dots=document.createElement("div");dots.className="regdots";
     [["G","g",""],["R","r",""],["A","","A"],["D","","D"]].forEach(o=>{
       const b=document.createElement("div");
       if(o[0]==="G"||o[0]==="R"){b.className="rdot "+o[1]+(cur===o[0]?" on":"");}
       else{b.className="rbtn "+(cur===o[0]?(o[0]==="A"?"aon":"don"):"");b.textContent=o[2];}
-      b.onclick=()=>{regJustSaved=null;regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();};
+      b.onclick=()=>{
+        if(o[0]==="D"&&att&&!expl){openAttest(state.klas,naam);return;}
+        regJustSaved=null;regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();
+        if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();};
       dots.appendChild(b);
     });
     row.appendChild(nm);row.appendChild(dots);wrap.appendChild(row);
   });
+}
+function openAttest(klas,naam){
+  const hui=attVoor(klas,naam);
+  const box=$("sheetbody");box.innerHTML="";
+  const grab=document.createElement("div");grab.className="grab";box.appendChild(grab);
+  const h=document.createElement("div");h.className="sheethead";
+  h.innerHTML='<span class="sheetnm">Doktersattest</span>';
+  const done=document.createElement("button");done.className="doneBtn";done.textContent="Sluit";done.onclick=closeSheet;h.appendChild(done);
+  box.appendChild(h);
+  const sub=document.createElement("div");sub.className="sheetnote";
+  sub.textContent=naam+" — zolang het attest loopt, staat deze leerling elke les automatisch op D. Duid je voor een dag zelf iets anders aan, dan telt dat.";
+  box.appendChild(sub);
+  const mk=(lab,id,val)=>{const l=document.createElement("label");l.className="fld";l.textContent=lab;box.appendChild(l);
+    const i=document.createElement("input");i.type="date";i.id=id;i.value=val||"";box.appendChild(i);return i;};
+  const iv=mk("Van","attvan",(hui&&hui.van)||selDate);
+  const it=mk("Tot en met","atttot",(hui&&hui.tot)||"");
+  const ok=document.createElement("button");ok.className="btn primary";ok.style.cssText="width:100%;margin-top:12px";
+  ok.textContent="Attest opslaan";
+  ok.onclick=()=>{
+    if(!it.value){toast("Vul in tot en met welke dag het attest loopt");return;}
+    if(iv.value&&it.value<iv.value){toast("De einddatum ligt voor de startdatum");return;}
+    setAtt(klas,naam,iv.value,it.value);closeSheet();renderReg();
+    if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
+    toast("Attest tot "+kortDat(it.value)+" opgeslagen");};
+  box.appendChild(ok);
+  if(hui){
+    const del=document.createElement("button");del.className="clearbtn";del.textContent="Attest verwijderen";
+    del.onclick=()=>{if(!confirm("Het doktersattest van "+naam+" verwijderen?"))return;
+      setAtt(klas,naam,null,null);closeSheet();renderReg();
+      if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();toast("Attest verwijderd");};
+    box.appendChild(del);
+  }
+  $("backdrop").classList.add("open");$("sheet").classList.add("open");
 }
 function renderRegOverview(){
   const tbl=$("regov");if(!tbl)return;
@@ -1686,7 +1926,7 @@ function renderRegOverview(){
   KLASSEN[state.klas].forEach(naam=>{
     const sc=regScore(state.klas,naam);
     html+='<tr><td class="nm">'+naam+'</td>';
-    dates.forEach(iso=>{html+='<td>'+regCell((r[iso]&&r[iso][naam])||"")+'</td>';});
+    dates.forEach(iso=>{html+='<td>'+regCell(regEff(state.klas,iso,naam))+'</td>';});
     html+='<td>'+(sc.score==null?'<span style="color:#b5772a;font-size:11px">te weinig</span>':'<b style="color:'+(sc.score<5?"#bb3326":"#1c7a45")+'">'+sc.score.toFixed(1)+'</b>')+'</td></tr>';
   });
   if(!dates.length)html+='<tr><td class="nm" style="color:var(--muted)">Nog niets opgenomen voor deze klas.</td></tr>';
@@ -1696,13 +1936,13 @@ function buildRegCSV(){
   const r=getReg(state.klas);const dates=regDates(state.klas);
   const L=[];const push=a=>L.push(a.map(csvEscape).join(";"));
   push(["Register kledij & aanwezigheid","Klas",state.klas]);
-  push(["Legende: G = in orde, R = niet in orde, A = afwezig, D = doktersattest"]);
+  push(["Legende: G = in orde, R = niet in orde, A = afwezig, D = doktersattest (ook automatisch ingevuld zolang een attest loopt)"]);
   push(["Score /10 = (in orde + D) / deelname x 10, vanaf 50% deelname"]);
   push([]);
   push(["Leerling"].concat(dates).concat(["Deelname%","Score/10"]));
   KLASSEN[state.klas].forEach(naam=>{
     const sc=regScore(state.klas,naam);const row=[naam];
-    dates.forEach(iso=>{row.push((r[iso]&&r[iso][naam])||"");});
+    dates.forEach(iso=>{row.push(regEff(state.klas,iso,naam));});
     row.push(Math.round(sc.deelname*100));
     row.push(sc.score==null?"te weinig deelname":sc.score.toFixed(1));
     push(row);
@@ -1731,7 +1971,7 @@ async function buildAfwezigXLSX(from,to){
     styleHead(ws.addRow(hdr));
     KLASSEN[klas].forEach(naam=>{
       const sc=regScoreRange(klas,naam,from,to);const row=[naam];
-      dates.forEach(iso=>row.push((r[iso]&&r[iso][naam])||"·"));
+      dates.forEach(iso=>row.push(regEff(klas,iso,naam)||"·"));
       row.push(Math.round(sc.deelname*100));
       row.push(sc.score==null?"te weinig":Number(sc.score.toFixed(1)));
       const xr=ws.addRow(row);
@@ -1757,85 +1997,11 @@ function buildAfwezigCSV(from,to){
     const dates=regDatesRange(klas,from,to);const r=getReg(klas);
     push([]);push(["Klas",klas]);
     push(["Leerling"].concat(dates).concat(["Deelname%","Score/10"]));
-    KLASSEN[klas].forEach(naam=>{const sc=regScoreRange(klas,naam,from,to);const row=[naam];dates.forEach(iso=>row.push((r[iso]&&r[iso][naam])||""));row.push(Math.round(sc.deelname*100));row.push(sc.score==null?"te weinig":sc.score.toFixed(1));push(row);});
+    KLASSEN[klas].forEach(naam=>{const sc=regScoreRange(klas,naam,from,to);const row=[naam];dates.forEach(iso=>row.push(regEff(klas,iso,naam)));row.push(Math.round(sc.deelname*100));row.push(sc.score==null?"te weinig":sc.score.toFixed(1));push(row);});
   });
   return "﻿"+L.join("\r\n");
 }
 
-const LS_PLANCFG="lo_plan_cfg";const LS_PLAN="lo_plan";
-const LOC_ORDER=["sportzaal","poly","buiten"];
-const LOC_LABEL={sportzaal:"Sportzaal",poly:"Polyzaal",buiten:"Buiten"};
-function getPlanCfg(){try{return JSON.parse(localStorage.getItem(LS_PLANCFG))||{};}catch(e){return {};}}
-function savePlanCfg(o){localStorage.setItem(LS_PLANCFG,JSON.stringify(o));}
-function getPlan(){try{return JSON.parse(localStorage.getItem(LS_PLAN))||{};}catch(e){return {};}}
-function savePlan(o){localStorage.setItem(LS_PLAN,JSON.stringify(o));}
-function mondayOf(d){const x=new Date(d.getTime());const dow=(x.getDay()+6)%7;x.setDate(x.getDate()-dow);x.setHours(12,0,0,0);return x;}
-function planWeeks(startISO,endISO){const out=[];const s=parseISO(startISO),e=parseISO(endISO);if(!s||!e)return out;let m=mondayOf(s);let g=0;while(m<=e&&g<60){out.push(localISO(m));m=new Date(m.getTime()+7*86400000);g++;}return out;}
-function locForIndex(i,beginloc){const off=Math.max(0,LOC_ORDER.indexOf(beginloc));const block=Math.floor(i/2);return LOC_ORDER[(off+block)%3];}
-const VAKANTIES=[
-  {naam:"Herfstvakantie",from:"2026-11-02",to:"2026-11-08"},
-  {naam:"Kerstvakantie",from:"2026-12-21",to:"2027-01-03"},
-  {naam:"Krokusvakantie",from:"2027-02-08",to:"2027-02-14"},
-  {naam:"Paasvakantie",from:"2027-03-29",to:"2027-04-11"}
-];
-function vakantieVoor(iso){for(let i=0;i<VAKANTIES.length;i++){if(iso>=VAKANTIES[i].from&&iso<=VAKANTIES[i].to)return VAKANTIES[i].naam;}return null;}
-function seasonRank(m){if([10,11,0,1].indexOf(m)>=0)return "slecht";if([3,4,5,8].indexOf(m)>=0)return "goed";if([2,9].indexOf(m)>=0)return "matig";return "goed";}
-function planSuggestie(loc,rank){
-  if(loc==="sportzaal")return "Zaalweek — ideaal voor gymnastiek, dans, contact of volleybal/badminton."+(rank==="slecht"?" Benut deze week zeker (buiten is het seizoen nat).":"");
-  if(loc==="buiten"){if(rank==="goed")return "Buitenweek, meestal goed weer — atletiek, voetbal, trefspelen of baseball.";if(rank==="matig")return "Buitenweek, wisselend weer — buiten als het kan, anders looptraining of theorie.";return "Buitenweek in een nat seizoen — kies looptraining/conditie of plan theorie (EHBO).";}
-  return "Polyzaal (beperkt) — EHBO/theorie, conditie met lichaamsgewicht of tafeltennis.";
-}
-const MAAND=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
-function sportSelectHTML(sel,iso){
-  let h='<select class="pwsel gsel" data-iso="'+iso+'" style="width:100%;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.7);padding:9px 8px;text-align:left;text-align-last:left"><option value="">— kies sport —</option>';
-  Object.keys(RUBRIEKEN).forEach(cat=>{h+='<optgroup label="'+RUBRIEKEN[cat].label+'">';
-    RUBRIEKEN[cat].sporten.forEach(sp=>{const val=(cat+"::"+sp).replace(/"/g,"&quot;");h+='<option value="'+val+'"'+(cat+"::"+sp===sel?" selected":"")+'>'+sp+'</option>';});
-    h+='</optgroup>';});
-  return h+'</select>';
-}
-function planLabel(val){if(!val)return "";const i=val.indexOf("::");if(i<0)return val;const cat=val.slice(0,i),sp=val.slice(i+2);return (RUBRIEKEN[cat]?RUBRIEKEN[cat].label:cat)+" – "+sp;}
-function renderPlanner(){
-  const box=$("planlist");if(!box)return;
-  const cfg=getPlanCfg();
-  if(!cfg.start||!cfg.eind||!cfg.beginloc){box.innerHTML='<div class="muted" style="font-size:12px">Stel hierboven je schooljaar en je startlocatie in.</div>';return;}
-  const weeks=planWeeks(cfg.start,cfg.eind);
-  if(!weeks.length){box.innerHTML='<div class="muted" style="font-size:12px">Geen weken in dit bereik (controleer de data).</div>';return;}
-  const plan=getPlan();const now=new Date();const nowM=now.getMonth(),nowY=now.getFullYear();
-  let html="";let lw=0;let curKey=null;
-  weeks.forEach((iso)=>{
-    const d=parseISO(iso);const mk=d.getFullYear()+"-"+d.getMonth();
-    if(mk!==curKey){
-      if(curKey!==null)html+='</div>';
-      const open=(d.getMonth()===nowM&&d.getFullYear()===nowY);
-      html+='<div class="planmonth" data-mk="'+mk+'">'+MAAND[d.getMonth()]+' '+d.getFullYear()+'<span class="pchev">'+(open?"▾":"▸")+'</span></div>';
-      html+='<div class="planmonthbody'+(open?"":" collapsed")+'" data-body="'+mk+'">';
-      curKey=mk;
-    }
-    const vak=vakantieVoor(iso);
-    if(vak){html+='<div class="planweek"><div class="pwhead"><span class="pwk" style="color:var(--muted)">'+d.getDate()+'/'+(d.getMonth()+1)+'</span><span class="locbadge vakb">'+vak+'</span></div></div>';return;}
-    const loc=locForIndex(lw,cfg.beginloc);const rank=seasonRank(d.getMonth());const fase=(lw%2===0)?"Oefenen":"Evaluatie";
-    html+='<div class="planweek"><div class="pwhead"><span class="pwk">week '+(lw+1)+' · '+d.getDate()+'/'+(d.getMonth()+1)+' · <span class="fase '+(lw%2===0?"oef":"eval")+'">'+fase+'</span></span><span class="locbadge '+loc+'">'+LOC_LABEL[loc]+'</span></div>';
-    html+='<div class="pwsug">'+planSuggestie(loc,rank)+'</div>';
-    html+=sportSelectHTML(plan[iso]||"",iso)+'</div>';
-    lw++;
-  });
-  if(curKey!==null)html+='</div>';
-  box.innerHTML=html;
-  box.querySelectorAll(".planmonth").forEach(h=>{h.onclick=()=>{const b=box.querySelector('[data-body="'+h.getAttribute("data-mk")+'"]');if(b){const c=b.classList.toggle("collapsed");const ch=h.querySelector(".pchev");if(ch)ch.textContent=c?"▸":"▾";}};});
-  box.querySelectorAll(".pwsel").forEach(s=>{s.onchange=()=>{const p=getPlan();const iso=s.getAttribute("data-iso");const v=s.value;if(v)p[iso]=v;else delete p[iso];savePlan(p);};});
-}
-function buildPlanCSV(){
-  const cfg=getPlanCfg();if(!cfg.start||!cfg.eind||!cfg.beginloc)return null;
-  const weeks=planWeeks(cfg.start,cfg.eind);if(!weeks.length)return null;
-  const plan=getPlan();const L=[];const push=a=>L.push(a.map(csvEscape).join(";"));
-  push(["JAARPLANNING LO"]);push(["Beurtrol","2 weken sportzaal / 2 weken polyzaal / 2 weken buiten"]);push([]);
-  push(["Week","Week van","Locatie","Fase","Seizoensadvies","Mijn plan"]);
-  let lw=0;
-  weeks.forEach((iso)=>{const d=parseISO(iso);const vak=vakantieVoor(iso);
-    if(vak){push(["",iso,vak,"","",""]);return;}
-    const loc=locForIndex(lw,cfg.beginloc);push([(lw+1),iso,LOC_LABEL[loc],(lw%2===0?"Oefenen":"Evaluatie"),planSuggestie(loc,seasonRank(d.getMonth())),planLabel(plan[iso]||"")]);lw++;});
-  return "﻿"+L.join("\r\n");
-}
 function evalsForKlasCat(klas,cat){
   const out=[];
   for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);
@@ -1933,6 +2099,8 @@ function init(){
   switchTab("afwezigheden");
 
   $("klaschip").onclick=openKlasPicker;
+  $("lfzoek").oninput=()=>{lfZoek=$("lfzoek").value;lfOpen=null;lfBewerk=null;renderLesfiches();};
+  $("lfnieuw").onclick=()=>{lfBewerk="";lfOpen=null;renderLesfiches();window.scrollTo(0,0);};
   $("categorie").onchange=()=>{fillSport($("categorie").value);reloadEvaluation();};
   $("sport").onchange=reloadEvaluation;
   $("spec").onchange=reloadEvaluation;
@@ -1963,15 +2131,11 @@ function init(){
     if(!confirm(items.length+" evaluaties als gedownload markeren? Ze zitten dan niet meer in de volgende bundel."))return;
     markDl(items.map(x=>x.k));updateWeekInfo();renderSaved();toast("Gemarkeerd als gedownload");};
   $("dlall").onclick=()=>{
-    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0||k===LS_FB||k===LS_PLAN||k===LS_PLANCFG)all[k]=localStorage.getItem(k);}
+    const all={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)===0||k.indexOf(LS_REG)===0||k.indexOf("lo_tv_klassen")===0||k.indexOf("lo_tv_geslacht")===0||k===LS_FB||k.indexOf(LS_ATT)===0||k===LS_LF||k===LS_LFN)all[k]=localStorage.getItem(k);}
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
     localStorage.setItem("lo_last_backup",todayISO());updateBackupStatus();$("bubanner").style.display="none";
   };
   $("bunow").onclick=()=>{switchTab("meer");$("dlall").click();};
-  (function(){const cfg=getPlanCfg();if($("plstart")){if(cfg.start)$("plstart").value=cfg.start;if(cfg.eind)$("pleind").value=cfg.eind;if(cfg.beginloc)$("plbegin").value=cfg.beginloc;}})();
-  function savePlanUI(){savePlanCfg({start:$("plstart").value,eind:$("pleind").value,beginloc:$("plbegin").value});renderPlanner();}
-  $("plstart").onchange=savePlanUI;$("pleind").onchange=savePlanUI;$("plbegin").onchange=savePlanUI;$("plgen").onclick=savePlanUI;
-  $("pldl").onclick=()=>{const t=buildPlanCSV();if(!t){toast("Stel eerst je schooljaar in");return;}download("Jaarplanning_LO.csv",t);toast("Jaarplanning gedownload");};
   $("evleer").onchange=renderEvolutie;$("evdom").onchange=renderEvolutie;
   $("evdl").onclick=()=>{if(!state)return;const naam=$("evleer").value,cat=$("evdom").value;if(!naam||!cat){toast("Kies leerling en domein");return;}const t=buildEvolutieCSV(state.klas,naam,cat);if(!t){toast("Geen evaluaties voor dit domein");return;}download(state.klas.replace(/[^\w]+/g,"-")+"_"+naam.replace(/[^\w]+/g,"-")+"_Evolutie_"+(RUBRIEKEN[cat].label.replace(/[^\w]+/g,"-"))+".csv",t);toast("Evolutierapport gedownload");};
   $("fbadd").onclick=()=>{const v=$("fbinput").value.trim();if(!v)return;const a=getFb();a.push({t:nowStamp(),txt:v});saveFb(a);$("fbinput").value="";renderFeedback();toast("Opmerking toegevoegd");};
