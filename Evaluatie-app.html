@@ -430,6 +430,22 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       <span><b style="color:#7a818a">A</b> afwezig</span>
       <span><b style="color:#a07c1e">D</b> attest</span>
     </div>
+      <div class="card" id="sanccard">
+        <div class="critttl" style="margin-bottom:4px">Kledij &mdash; hoe vaak niet in orde</div>
+        <div class="hint" style="margin-bottom:8px"><span id="sancsam"></span> &middot; <a id="sancinst" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">instellen</a></div>
+        <div id="sancinstel" style="display:none">
+          <div class="seg" id="sancseg"></div>
+          <div class="sancperiodes" id="sancper"></div>
+          <div class="row2" style="margin-bottom:9px">
+            <div><label class="fld">Van</label><input type="date" id="sancvan"></div>
+            <div><label class="fld">Tot</label><input type="date" id="sanctot"></div>
+          </div>
+          <label class="fld">Sanctie vanaf</label>
+          <div class="grouped" style="margin-bottom:11px"><div class="grow"><span class="glabel">keer niet in orde</span>
+            <select id="sancdrempel" class="gsel"><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
+        </div>
+        <div id="sanclijst"></div>
+      </div>
     </div>
 
     <div id="deel-evaluatie" style="display:none">
@@ -476,20 +492,6 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       <div class="critttl" style="margin-bottom:8px">Kledij &amp; aanwezigheid</div>
       <div class="ovwrap"><table class="ovtbl" id="regov"></table></div>
   <div class="hint">Score /10 = (in orde + D) &divide; deelname &times; 10, en pas vanaf 50% deelname.</div>
-    </div>
-    <div class="card">
-      <div class="critttl" style="margin-bottom:4px">Kledij &mdash; opvolging &amp; sanctie</div>
-      <div class="hint" style="margin-bottom:9px">Wie stond niet in orde, en hoe vaak? Vanaf de drempel volgt een sanctie. Noteer je die, dan telt de app daarna opnieuw vanaf nul.</div>
-      <div class="seg" id="sancseg"></div>
-      <div class="sancperiodes" id="sancper"></div>
-      <div class="row2" style="margin-bottom:9px">
-        <div><label class="fld">Van</label><input type="date" id="sancvan"></div>
-        <div><label class="fld">Tot</label><input type="date" id="sanctot"></div>
-      </div>
-      <label class="fld">Sanctie vanaf</label>
-      <div class="grouped"><div class="grow"><span class="glabel">keer niet in orde</span>
-        <select id="sancdrempel" class="gsel"><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
-      <div id="sanclijst" style="margin-top:12px"></div>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
@@ -1859,8 +1861,21 @@ function sancRijen(){
   uit.sort((a,b)=>b.n-a.n||a.klas.localeCompare(b.klas)||a.naam.localeCompare(b.naam));
   return uit;
 }
+function toggleSancInstel(){
+  const v=$("sancinstel");if(!v)return;
+  const open=v.style.display!=="none";
+  v.style.display=open?"none":"block";
+  const l=$("sancinst");if(l)l.textContent=open?"instellen":"klaar";
+}
 function renderSanctie(){
   const box=$("sanclijst");if(!box||!state)return;
+  const sam=$("sancsam");
+  if(sam){
+    const van=sancVan(),tot=sancTot();
+    let nm=van+" t/m "+tot;
+    PERIODES.forEach((pp,i)=>{const g=periodeGrenzen(i,selDate);if(g[0]===van&&g[1]===tot)nm=pp[0];});
+    sam.textContent=nm+" \u00b7 sanctie vanaf "+drempel()+"\u00d7"+(sancScope==="alle"?" \u00b7 al mijn klassen":"");
+  }
   const seg=$("sancseg");
   if(seg){seg.innerHTML="";
     [["klas","Deze klas"],["alle","Al mijn klassen"]].forEach(o=>{
@@ -1983,10 +1998,10 @@ function switchTab(t){
   $("strip").style.display=(t==="les")?"flex":"none";
   renderLesbar();
   $("klaschip").style.display=(t==="les"||t==="klas")?"block":"none";
-  if(t==="les"){toonLesDeel();}
+  if(t==="les"){initSanctie();toonLesDeel();}
   if(t==="lesfiches")renderLesfiches();
   if(t!=="klas"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();initSanctie();renderSanctie();}
+  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();initSanctie();}
   if(t==="instellingen"){renderThemaKiezer();renderSaved();updateBackupStatus();}
 }
 
@@ -2017,7 +2032,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v59";
+const APP_VERSION="v60";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -2246,6 +2261,7 @@ function regCell(v){
 }
 function renderReg(){
   const wrap=$("reglist");if(!wrap)return;wrap.innerHTML="";
+  setTimeout(()=>{if($("sanclijst"))renderSanctie();},0);
   if(regJustSaved===selDate){const note=document.createElement("div");note.className="regsavednote";note.textContent="✓ Opgeslagen — je kan nog aanpassen; kies een andere dag voor een nieuw blad";wrap.appendChild(note);}
   const lopend=KLASSEN[state.klas].filter(n=>attActief(state.klas,n,selDate));
   if(lopend.length){
@@ -2495,7 +2511,7 @@ function init(){
   loadKlassen();loadGes();fillKlas();
   const cs=$("categorie");Object.keys(RUBRIEKEN).forEach(id=>{const o=document.createElement("option");o.value=id;o.textContent=RUBRIEKEN[id].label;cs.appendChild(o);});
   cs.value="trefspelen";fillSport("trefspelen");
-  loadOrInit();
+  loadOrInit();initSanctie();
   const ak=autoKlasVoor(selDate);if(ak&&$("klas")&&ak!==$("klas").value){$("klas").value=ak;loadOrInit();}
   refreshAll();renderKlasBeheer();
   switchTab("les");toonLesDeel();
@@ -2504,6 +2520,7 @@ function init(){
   try{if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(themaKeuze()==="auto")pasThemaToe();});}catch(e){}
   $("klaschip").onclick=openKlasPicker;
   $("opzetline").onclick=toggleOpzet;
+  $("sancinst").onclick=toggleSancInstel;
   $("sancvan").onchange=renderSanctie;$("sanctot").onchange=renderSanctie;
   $("sancdrempel").onchange=()=>{setDrempel(parseInt($("sancdrempel").value,10));renderSanctie();};
   $("sanccsv").onclick=()=>{const t=buildSanctieCSV();download("Kledijopvolging_"+sancVan()+"_tot_"+sancTot()+".csv",t);toast("Kledijopvolging gedownload");};
