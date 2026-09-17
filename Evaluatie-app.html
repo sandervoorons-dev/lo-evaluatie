@@ -9,21 +9,20 @@
 <meta name="theme-color" content="#FBF6EA">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" defer></script>
 <title>LO Evaluatie</title>
+<script>(function(){try{var k=localStorage.getItem("lo_thema")||"donker";var d=(k==="donker")||(k==="auto"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-thema",d?"donker":"licht");}catch(e){document.documentElement.setAttribute("data-thema","donker");}})();</script>
 <style>
   :root{
     --accent:#F4C24A; --accent-ink:#5a4a12; --accent-deep:#9a7b1f;
     --dark:#5d594c; --dark-ink:#fbf6ea;
     --ink:#403c33; --muted:#9a917c; --line:rgba(120,100,60,.18);
     --glass:rgba(255,255,255,.68); --glassb:rgba(255,255,255,.72);
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{min-height:100%}
-  body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;
+  body{margin:0;color:var(--ink);font-family:var(--font);font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
     background:linear-gradient(180deg,#FBF6EA 0%,#F5EDD7 50%,#F0E5CB 100%);background-attachment:fixed;min-height:100vh}
   header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(255,255,255,.5);padding:10px 14px}
@@ -165,7 +164,9 @@
   .tabview{display:none}
   .tabview.on{display:block}
   .apphead{display:flex;justify-content:space-between;align-items:center;margin:2px 0 11px;gap:8px}
-  .apptitle{font-family:"Fraunces",Georgia,"Times New Roman",serif;font-size:26px;font-weight:600;color:var(--ink);letter-spacing:-.2px}
+  .day .dn,.scorebadge,.smalltbl,.ovtbl,.opt,.rbtn,.resline,.lu,.attchip,.metinput,
+  input[type=date],#weekinfo,#klassub{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+  .apptitle{font-family:var(--font);font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-.45px}
   .klaschip{font-size:13px;font-weight:600;color:var(--accent-ink);background:var(--accent);border-radius:20px;padding:6px 13px;cursor:pointer;white-space:nowrap;flex-shrink:0}
   .bubanner{display:flex;align-items:center;gap:10px;background:rgba(244,194,74,.22);border:1px solid rgba(244,194,74,.55);border-radius:14px;padding:10px 12px;margin:0 0 12px}
   .butxt{flex:1;display:flex;flex-direction:column;font-size:12px;color:var(--accent-ink);line-height:1.35}
@@ -258,6 +259,127 @@
   .pickrow{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-top:1px solid var(--line);cursor:pointer;font-size:15px;color:var(--ink)}
   .pickrow:first-child{border-top:none}
   .pickrow.on{color:var(--accent-deep);font-weight:600}
+
+/* ================= WEERGAVE: LICHT + DONKER =================
+   Basis hierboven blijft de lichte weergave. Hieronder eerst een aantal
+   verbeteringen die voor beide thema's gelden (geen blur, grotere kleine tekst,
+   ruimere rijen), daarna het volledige donkere thema onder
+   html[data-thema="donker"]. Schakelen gebeurt met pasThemaToe(). */
+
+/* ---- voor beide thema's: scherper en beter leesbaar ---- */
+.card,.studlist{backdrop-filter:none;-webkit-backdrop-filter:none}
+.sheet-inner{backdrop-filter:none;-webkit-backdrop-filter:none}
+.tabbar{backdrop-filter:none;-webkit-backdrop-filter:none}
+header{backdrop-filter:none;-webkit-backdrop-filter:none}
+.hint,label.fld,.seglabel,.todo,.chip,.lfm{font-size:12.5px}
+.muted{font-size:12.5px}
+.day .dw,.lesblok .lu{font-size:10.5px}
+.day .dn{font-size:16px}
+.srow{padding:12px 13px}.snm{font-size:15px}
+.regrow{padding:11px 13px}.rnm{font-size:14.5px}
+.btn{padding:14px;font-size:15px}
+.lfsk{font-size:12px}
+.crit-label .lpd{font-size:11px}
+
+/* ---- licht: minder doorschijnend, iets meer contrast ---- */
+:root{--ink:#2B2924;--muted:#7B7460;--line:rgba(90,75,45,.15);
+      --glass:#FFFDF8;--glassb:rgba(90,75,45,.12);--dark:#3E3A30}
+body{background:#F6F1E4}
+header{background:#FFFDF8}
+.card,.studlist{box-shadow:0 1px 2px rgba(60,50,25,.05),0 6px 16px rgba(60,50,25,.05)}
+.tabbar{background:rgba(255,253,248,.94);border-color:rgba(90,75,45,.12)}
+
+/* ================= DONKER ================= */
+html[data-thema="donker"]{
+  --accent:#F2B441;--accent-ink:#2A1F05;--accent-deep:#F2B441;
+  --dark:#F2B441;--dark-ink:#231B08;
+  --ink:#ECEEF1;--muted:#98A0AA;--line:rgba(255,255,255,.10);
+  --glass:#1E2126;--glassb:rgba(255,255,255,.09);
+}
+html[data-thema="donker"] body{background:#14161A;color:var(--ink)}
+html[data-thema="donker"] header{background:#1E2126;border-color:var(--glassb)}
+html[data-thema="donker"] .card,
+html[data-thema="donker"] .studlist{background:var(--glass);border-color:var(--glassb);box-shadow:none}
+html[data-thema="donker"] .apptitle,
+html[data-thema="donker"] .lft,html[data-thema="donker"] .lfttl,
+html[data-thema="donker"] .glabel,html[data-thema="donker"] .lfsb,
+html[data-thema="donker"] .snm,html[data-thema="donker"] .rnm,
+html[data-thema="donker"] .pwk,html[data-thema="donker"] .resline,
+html[data-thema="donker"] .crit-label,html[data-thema="donker"] .sheetnm,
+html[data-thema="donker"] details summary,html[data-thema="donker"] .critttl,
+html[data-thema="donker"] .fbrow,html[data-thema="donker"] .smalltbl td{color:var(--ink)}
+html[data-thema="donker"] select,
+html[data-thema="donker"] input[type=text],
+html[data-thema="donker"] input[type=date],
+html[data-thema="donker"] input[type=search],
+html[data-thema="donker"] .metinput,
+html[data-thema="donker"] .lfta,
+html[data-thema="donker"] textarea{background:#272B31;color:var(--ink);border-color:var(--glassb)}
+html[data-thema="donker"] select.gsel,
+html[data-thema="donker"] .grow .ginput{background:transparent;border:none}
+html[data-thema="donker"] .btn.ghost{background:#272B31;border:1px solid var(--glassb);color:var(--ink)}
+html[data-thema="donker"] .btn.warn{background:#272B31;border-color:#C4584A;color:#F3A092}
+html[data-thema="donker"] .av{background:#2E333A;color:#B9C1CA}
+html[data-thema="donker"] .chev{color:#6E7782}
+html[data-thema="donker"] .day{background:#22262B;border-color:var(--glassb)}
+html[data-thema="donker"] .day .dw{color:var(--muted)}
+html[data-thema="donker"] .day .dn{color:var(--ink)}
+html[data-thema="donker"] .day.sel{background:var(--accent);border-color:var(--accent)}
+html[data-thema="donker"] .day.sel .dw{color:#6A5514}
+html[data-thema="donker"] .day.sel .dn{color:#231B08}
+html[data-thema="donker"] .daycal{background:#22262B;border-color:var(--glassb);color:var(--muted);box-shadow:6px 0 8px -6px rgba(0,0,0,.6)}
+html[data-thema="donker"] .lesblok{background:#22262B;border-color:var(--glassb)}
+html[data-thema="donker"] .lesblok .lu{color:var(--muted)}
+html[data-thema="donker"] .lesblok .lk{color:var(--ink)}
+html[data-thema="donker"] .lesblok.on{background:var(--accent);border-color:var(--accent)}
+html[data-thema="donker"] .lesblok.on .lu{color:#6A5514}
+html[data-thema="donker"] .lesblok.on .lk{color:#231B08}
+html[data-thema="donker"] .tabbar{background:rgba(30,33,38,.97);border-color:var(--glassb);box-shadow:0 10px 26px rgba(0,0,0,.5)}
+html[data-thema="donker"] .tabitem{background:#272B31;color:#9AA2AC}
+html[data-thema="donker"] .tabitem.on{background:var(--accent);color:#231B08}
+html[data-thema="donker"] .klaschip{background:var(--accent);color:#231B08}
+html[data-thema="donker"] .rbtn{background:#272B31;border-color:var(--glassb);color:#B9C1CA}
+html[data-thema="donker"] .rbtn.aon{background:#6B737D;border-color:#6B737D;color:#fff}
+html[data-thema="donker"] .rbtn.don{background:var(--accent);border-color:var(--accent);color:#231B08}
+html[data-thema="donker"] .pill{background:#272B31;border-color:var(--glassb);color:#8B939C}
+html[data-thema="donker"] .pill.on{background:rgba(242,180,65,.2);border-color:rgba(242,180,65,.5);color:var(--accent)}
+html[data-thema="donker"] .attchip{background:#272B31;border-color:var(--glassb);color:#B9C1CA}
+html[data-thema="donker"] .attchip.on{background:rgba(242,180,65,.22);border-color:rgba(242,180,65,.5);color:var(--accent)}
+html[data-thema="donker"] .attchip.op{color:#E0A45A}
+html[data-thema="donker"] .attbalk,
+html[data-thema="donker"] .bubanner,
+html[data-thema="donker"] .dlundo,
+html[data-thema="donker"] .lfnr{background:rgba(242,180,65,.13);border-color:rgba(242,180,65,.26);color:var(--ink)}
+html[data-thema="donker"] .attbalk b,html[data-thema="donker"] .lfnm{color:var(--accent)}
+html[data-thema="donker"] .attbalk span,html[data-thema="donker"] .geenles span{color:#A9B1BA}
+html[data-thema="donker"] .geenles{border-color:var(--glassb);color:var(--ink)}
+html[data-thema="donker"] .geenles.geel{background:rgba(242,180,65,.18)}
+html[data-thema="donker"] .geenles.groen{background:rgba(95,168,120,.2)}
+html[data-thema="donker"] .geenles.blauw{background:rgba(74,168,204,.2)}
+html[data-thema="donker"] .geenles.vrij{background:#22262B}
+html[data-thema="donker"] .regsavednote{color:#7FD6A8;background:rgba(46,170,110,.16)}
+html[data-thema="donker"] .scorebadge.vold{color:#6DD69B;background:rgba(46,170,110,.18)}
+html[data-thema="donker"] .scorebadge.onv{color:#F3A092;background:rgba(214,80,60,.2)}
+html[data-thema="donker"] .chip.afw{color:#F3A092;background:rgba(214,80,60,.18)}
+html[data-thema="donker"] .chip.att{color:#F2B441;background:rgba(242,180,65,.18)}
+html[data-thema="donker"] .backdrop{background:rgba(0,0,0,.55)}
+html[data-thema="donker"] .sheet-inner{background:#1E2126;border-top-color:var(--glassb);box-shadow:0 -6px 24px rgba(0,0,0,.6)}
+html[data-thema="donker"] .grab{background:rgba(255,255,255,.22)}
+html[data-thema="donker"] .seg{background:#272B31;border-color:var(--glassb)}
+html[data-thema="donker"] .segopt{color:#9AA2AC}
+html[data-thema="donker"] .segopt.on{background:var(--accent);color:#231B08}
+html[data-thema="donker"] .bands{background:#22262B;border-color:rgba(255,255,255,.2);color:#C6CDD4}
+html[data-thema="donker"] .opt.v0{background:#8C3F37;color:#FFE3DF}
+html[data-thema="donker"] .opt.v1{background:#8C6524;color:#FFEEDA}
+html[data-thema="donker"] .opt.v2{background:#4E6B2F;color:#EAF5DC}
+html[data-thema="donker"] .opt.v3{background:#2E6F51;color:#DDF3E8}
+html[data-thema="donker"] .opt.sel{box-shadow:inset 0 0 0 2.5px rgba(255,255,255,.75)}
+html[data-thema="donker"] .doneBtn{background:var(--accent);color:#231B08}
+html[data-thema="donker"] .toast{background:rgba(242,180,65,.96);color:#231B08}
+html[data-thema="donker"] .locbadge.vakb{background:#2E333A;color:#9AA2AC}
+html[data-thema="donker"] .lfeigen,html[data-thema="donker"] .lfterug,
+html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--accent)}
+
 </style>
 </head>
 <body>
@@ -275,15 +397,35 @@
   <div class="datestrip" id="strip"></div>
   <div class="lesbar" id="lesbar"></div>
 
-  <div id="tab-evaluaties" class="tabview">
-    <div class="card grouped">
-      <div class="grow"><span class="glabel">Bewegingsdomein</span><select id="categorie" class="gsel"></select></div>
-      <div class="gdiv"></div>
-      <div class="grow"><span class="glabel">Sport</span><select id="sport" class="gsel"></select></div>
-      <div class="gdiv"></div>
-      <div class="grow"><span class="glabel">Onderwerp</span><input type="text" id="spec" class="ginput" placeholder="optioneel"></div>
+  <div id="tab-les" class="tabview">
+    <div class="seg" id="lesseg"></div>
+
+    <div id="deel-register">
+      <div class="card" style="padding:0"><div id="reglist"></div></div>
+      <button class="btn primary" id="regsave" style="width:100%;margin-bottom:13px">Register opslaan</button>
+      <div class="actions" style="margin-bottom:13px">
+        <button class="btn warn" id="regwis">Dag wissen</button>
+      </div>
+      <div class="hint" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:11px;height:11px;border-radius:50%;background:#2faa57;display:inline-block"></span>in orde</span>
+      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:11px;height:11px;border-radius:50%;background:#d6483c;display:inline-block"></span>niet in orde</span>
+      <span><b style="color:#7a818a">A</b> afwezig</span>
+      <span><b style="color:#a07c1e">D</b> attest</span>
     </div>
-    <div class="card">
+    </div>
+
+    <div id="deel-evaluatie" style="display:none">
+      <div class="card" id="opzetline" style="padding:0;cursor:pointer">
+        <div class="grow" style="min-height:52px"><span class="glabel" id="opzettxt" style="font-weight:600"></span><span style="color:var(--accent-deep);font-size:13px;font-weight:600;white-space:nowrap" id="opzetlink">wijzig &rsaquo;</span></div>
+      </div>
+      <div class="card grouped" id="opzetvelden" style="display:none">
+        <div class="grow"><span class="glabel">Bewegingsdomein</span><select id="categorie" class="gsel"></select></div>
+        <div class="gdiv"></div>
+        <div class="grow"><span class="glabel">Sport</span><select id="sport" class="gsel"></select></div>
+        <div class="gdiv"></div>
+        <div class="grow"><span class="glabel">Onderwerp</span><input type="text" id="spec" class="ginput" placeholder="optioneel"></div>
+      </div>
+      <div class="card">
       <div class="crithead"><span class="critttl clkbl" id="critCollapseBtn">Criteria meenemen <span id="critChev">▾</span></span><span class="uitlegtoggle" id="critUitlegBtn">uitleg ▾</span></div>
       <div class="hint" id="graadinfo" style="margin-top:4px"></div>
       <div id="critBody">
@@ -291,72 +433,31 @@
         <div class="hint collapsed" id="critUitleg">Een uitgezet criterium telt niet mee (niet in totaal, niet in noemer). Laat je een aangezet criterium leeg, dan telt het ook niet mee — kies <b>Onvoldoende</b> als je bewust 0 wil geven. Zet een leerling op <b>Afwezig</b> of <b>Doktersattest</b> via het menu in het focuspaneel; die krijgt dan geen score.</div>
       </div>
     </div>
-    <div id="students"></div>
+      <div id="students"></div>
+      <div class="card">
+        <button class="btn primary" id="saveeval" style="width:100%">Nu al opslaan</button>
+        <div class="muted" id="savestatus" style="margin-top:8px"></div>
+        <button class="btn warn" id="delEval" style="width:100%;margin-top:10px">Evaluatie wissen</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-klas" class="tabview">
+    <div class="card">
+      <div class="critttl" id="klaskop" style="font-size:14px;margin-bottom:4px"></div>
+      <div class="hint" id="klassub" style="margin-top:0"></div>
+    </div>
     <div class="card">
       <details>
-        <summary>Klasoverzicht &amp; scores</summary>
+        <summary>Scores per domein</summary>
         <table class="smalltbl" id="overview"></table>
         <div class="muted" id="klasgem" style="margin-top:6px"></div>
       </details>
     </div>
-    <div class="card">
-      <button class="btn primary" id="saveeval" style="width:100%">Nu al opslaan</button>
-      <div class="muted" id="savestatus" style="margin-top:8px"></div>
-      <div class="actions" style="margin-top:10px">
-        <button class="btn ghost" id="dlcsv">Download (CSV)</button>
-        <button class="btn ghost" id="copyss">Kopieer voor Smartschool</button>
-      </div>
-      <button class="btn warn" id="delEval" style="width:100%;margin-top:10px">Evaluatie wissen</button>
-    </div>
-  </div>
-
-  <div id="tab-afwezigheden" class="tabview">
-    <div class="card" style="padding:0"><div id="reglist"></div></div>
-    <button class="btn primary" id="regsave" style="width:100%;margin-bottom:13px">Afwezigheden opslaan</button>
-    <div class="actions" style="margin-bottom:13px">
-      <button class="btn ghost" id="regovbtn">Overzicht &amp; scores</button>
-      <button class="btn ghost" id="regcsv">Download (CSV)</button>
-      <button class="btn warn" id="regwis">Dag wissen</button>
-    </div>
-    <div class="card" id="regovcard" style="display:none">
-      <div class="critttl" style="margin-bottom:8px">Overzicht periode</div>
+    <div class="card" id="regovcard">
+      <div class="critttl" style="margin-bottom:8px">Kledij &amp; aanwezigheid</div>
       <div class="ovwrap"><table class="ovtbl" id="regov"></table></div>
-      <div class="hint">Score /10 = (in orde + D) ÷ deelname × 10, en pas vanaf 50% deelname.</div>
-    </div>
-    <div class="hint" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
-      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:11px;height:11px;border-radius:50%;background:#2faa57;display:inline-block"></span>in orde</span>
-      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:11px;height:11px;border-radius:50%;background:#d6483c;display:inline-block"></span>niet in orde</span>
-      <span><b style="color:#7a818a">A</b> afwezig</span>
-      <span><b style="color:#a07c1e">D</b> attest</span>
-    </div>
-    <div class="card" style="margin-top:13px">
-      <div class="critttl" style="margin-bottom:6px">Maandoverzicht (alle klassen)</div>
-      <div class="hint" style="margin-bottom:9px">Voor je puntenboek: download in één Excel-bestand de afwezigheidsscores van alle klassen over een periode (een tabblad per klas).</div>
-      <div class="row2" style="margin-bottom:9px">
-        <div><label class="fld">Van</label><input type="date" id="afvan"></div>
-        <div><label class="fld">Tot</label><input type="date" id="aftot"></div>
-      </div>
-      <button class="btn primary" id="afdl" style="width:100%">Download maandoverzicht</button>
-    </div>
-  </div>
-
-  <div id="tab-lesfiches" class="tabview">
-    <div class="card">
-      <input type="search" id="lfzoek" class="ginput" style="width:100%;text-align:left" placeholder="Zoek in je lesfiches…">
-      <div id="lfbody" style="margin-top:10px"></div>
-      <button class="btn ghost" id="lfnieuw" style="width:100%;margin-top:14px">Eigen lesfiche toevoegen</button>
-    </div>
-  </div>
-
-  <div id="tab-meer" class="tabview">
-    <div class="card">
-      <div class="dlundo" id="dlundo" style="display:none"></div>
-      <button class="btn primary" id="dlweek" style="width:100%">Download nieuwe evaluaties</button>
-      <div class="muted" id="weekinfo" style="margin-top:8px"></div>
-      <div class="hint" style="margin-top:6px">Alles wat je nog niet downloadde, komt in één Excel-bestand met een tabblad per klas. Wat je al downloadde, blijft bewaard in de app maar zit er niet meer in. <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles als gedownload markeren</a> · <a id="dlreopen" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles opnieuw klaarzetten</a></div>
-      <div class="critttl" style="margin:14px 0 4px">Of per klas apart</div>
-      <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan — handig om in OneDrive in een map per klas te bewaren.</div>
-      <div id="perklas"></div>
+      <div class="hint">Score /10 = (in orde + D) &divide; deelname &times; 10, en pas vanaf 50% deelname.</div>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
@@ -370,6 +471,48 @@
       <button class="btn primary" id="evdl" style="width:100%;margin-top:10px">Download evolutierapport</button>
     </div>
     <div class="card">
+      <div class="critttl" style="font-size:14px;margin-bottom:4px">Exporteren</div>
+      <div class="hint" style="margin-bottom:10px">Alles wat naar Smartschool of OneDrive moet, staat hier bij elkaar.</div>
+      <div class="dlundo" id="dlundo" style="display:none"></div>
+      <button class="btn primary" id="dlweek" style="width:100%">Download nieuwe evaluaties</button>
+      <div class="muted" id="weekinfo" style="margin-top:8px"></div>
+      <div class="hint" style="margin-top:6px">Alles wat je nog niet downloadde, komt in één Excel-bestand met een tabblad per klas. Wat je al downloadde, blijft bewaard in de app maar zit er niet meer in. <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles als gedownload markeren</a> · <a id="dlreopen" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles opnieuw klaarzetten</a></div>
+      <div class="critttl" style="margin:14px 0 4px">Of per klas apart</div>
+      <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan — handig om in OneDrive in een map per klas te bewaren.</div>
+      <div id="perklas"></div>
+      <div class="critttl" style="margin:16px 0 4px">Register over een periode</div>
+      <div class="hint" style="margin-bottom:9px">Voor je puntenboek: de kledij- en aanwezigheidsscores van alle klassen in &eacute;&eacute;n Excel-bestand, een tabblad per klas.</div>
+      <div class="row2" style="margin-bottom:9px">
+        <div><label class="fld">Van</label><input type="date" id="afvan"></div>
+        <div><label class="fld">Tot</label><input type="date" id="aftot"></div>
+      </div>
+      <button class="btn ghost" id="afdl" style="width:100%">Download maandoverzicht</button>
+      <div class="critttl" style="margin:16px 0 4px">Deze ene evaluatie</div>
+      <div class="hint" style="margin-bottom:9px">De evaluatie die nu openstaat in het tabblad Les.</div>
+      <div class="actions">
+        <button class="btn ghost" id="dlcsv">Download (CSV)</button>
+        <button class="btn ghost" id="copyss">Kopieer voor Smartschool</button>
+      </div>
+      <div class="critttl" style="margin:16px 0 4px">Register van vandaag</div>
+      <button class="btn ghost" id="regcsv" style="width:100%">Download (CSV)</button>
+    </div>
+  </div>
+
+  <div id="tab-lesfiches" class="tabview">
+    <div class="card">
+      <input type="search" id="lfzoek" class="ginput" style="width:100%;text-align:left" placeholder="Zoek in je lesfiches&hellip;">
+      <div id="lfbody" style="margin-top:10px"></div>
+      <button class="btn ghost" id="lfnieuw" style="width:100%;margin-top:14px">Eigen lesfiche toevoegen</button>
+    </div>
+  </div>
+
+  <div id="tab-instellingen" class="tabview">
+    <div class="card">
+      <div class="critttl" style="margin-bottom:6px">Weergave</div>
+      <div class="hint" style="margin-bottom:9px">Donker leest rustig in de sportzaal; licht is beter buiten in fel zonlicht. Automatisch volgt de instelling van je telefoon.</div>
+      <div class="seg" id="themaseg" style="margin-bottom:0"></div>
+    </div>
+    <div class="card">
       <details>
         <summary>Klassen beheren</summary>
         <div class="hint" style="margin-top:6px">Voeg je eigen klassen toe (klasnaam + leerlingen, één per lijn). Werkt enkel op dit toestel. Zo gebruikt elke collega hetzelfde bestand met de eigen klassen.</div>
@@ -380,7 +523,6 @@
       <div class="actions">
         <button class="btn ghost" id="dlall">Download alles (back-up)</button>
         <button class="btn ghost" id="restorebtn">Herstel uit back-up</button>
-        <button class="btn warn" id="reset">Wis deze evaluatie</button>
       </div>
       <input type="file" id="restorefile" accept="application/json,.json" style="display:none">
       <div class="muted" id="bustatus" style="margin-top:9px"></div>
@@ -407,17 +549,16 @@
     </div>
     <div class="muted" id="appversion" style="text-align:center;margin:2px 0 4px;font-size:11px"></div>
   </div>
-</div>
 
 <div class="tabbar">
-  <div class="tabitem" id="tabbtn-evaluaties" onclick="switchTab('evaluaties')">
-    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v2.5h-5z"/><path d="M9 13l2 2 4-4.5"/></svg></span><span class="lbl">Evaluaties</span></div>
-  <div class="tabitem" id="tabbtn-afwezigheden" onclick="switchTab('afwezigheden')">
-    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.4l2.4 2.4 4.7-5.2"/></svg></span><span class="lbl">Afwezigheden</span></div>
+  <div class="tabitem" id="tabbtn-les" onclick="switchTab('les')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v2.5h-5z"/><path d="M9 13l2 2 4-4.5"/></svg></span><span class="lbl">Les</span></div>
+  <div class="tabitem" id="tabbtn-klas" onclick="switchTab('klas')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3.2 3.2 0 100-6.4A3.2 3.2 0 009 11z"/><path d="M3 19.5c0-3 2.7-4.8 6-4.8s6 1.8 6 4.8"/><path d="M16.5 10.8a2.7 2.7 0 100-5.4"/><path d="M18 14.9c2 .5 3 1.9 3 4.6"/></svg></span><span class="lbl">Klas</span></div>
   <div class="tabitem" id="tabbtn-lesfiches" onclick="switchTab('lesfiches')">
     <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z"/></svg></span><span class="lbl">Lesfiches</span></div>
-  <div class="tabitem" id="tabbtn-meer" onclick="switchTab('meer')">
-    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></span><span class="lbl">Meer</span></div>
+  <div class="tabitem" id="tabbtn-instellingen" onclick="switchTab('instellingen')">
+    <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"/><path d="M19.4 14.6a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5v.2a2 2 0 11-4 0v-.1a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.1a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.1a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1h.2a2 2 0 110 4h-.1a1.6 1.6 0 00-1.5 1z"/></svg></span><span class="lbl">Instellingen</span></div>
 </div>
 <div id="backdrop" class="backdrop"></div>
 <div id="sheet" class="sheet"><div class="sheet-inner" id="sheetbody"></div></div>
@@ -508,7 +649,7 @@ function kiesDatum(iso){
 }
 function renderLesbar(){
   const bar=$("lesbar");if(!bar)return;bar.innerHTML="";
-  if(currentTab==="meer"||currentTab==="lesfiches"){bar.style.display="none";return;}
+  if(currentTab!=="les"){bar.style.display="none";return;}
   const g=geenLes(selDate),bl=roosterVoor(selDate);
   if(g){
     const w=document.createElement("div");w.className="geenles "+g.type;
@@ -1621,21 +1762,64 @@ function renderDateStrip(){
   const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
 }
 
+/* ---------- TABBLAD LES: register of evaluatie ---------- */
+let lesDeel="register";
+function toonLesDeel(){
+  const r=$("deel-register"),e=$("deel-evaluatie");
+  if(r)r.style.display=(lesDeel==="register")?"block":"none";
+  if(e)e.style.display=(lesDeel==="evaluatie")?"block":"none";
+  const seg=$("lesseg");
+  if(seg){seg.innerHTML="";
+    [["register","Register"],["evaluatie","Evaluatie"]].forEach(o=>{
+      const b=document.createElement("div");b.textContent=o[1];
+      b.className="segopt"+(lesDeel===o[0]?" on":"");
+      b.onclick=()=>{lesDeel=o[0];toonLesDeel();window.scrollTo(0,0);};
+      seg.appendChild(b);});}
+  if(lesDeel==="register")renderReg();
+  else {renderToggles();renderStudents();renderOverview();updateSaveStatus();}
+  renderOpzet();
+}
+function renderOpzet(){
+  const t=$("opzettxt");if(!t||!state)return;
+  const R=RUBRIEKEN[state.categorie];
+  t.innerHTML=(R?R.label:state.categorie)+' &nbsp;&middot;&nbsp; '+(state.sport||"")+
+    (state.spec?(' &nbsp;&middot;&nbsp; <span style="font-weight:400;color:var(--muted)">'+state.spec.replace(/</g,"&lt;")+'</span>'):"");
+}
+function toggleOpzet(){
+  const v=$("opzetvelden");if(!v)return;
+  const open=v.style.display!=="none";
+  v.style.display=open?"none":"block";
+  const l=$("opzetlink");if(l)l.innerHTML=open?"wijzig \u203a":"klaar";
+}
+/* ---------- TABBLAD KLAS: kopregel ---------- */
+function renderKlasKop(){
+  const k=$("klaskop"),sub=$("klassub");if(!k||!state)return;
+  k.textContent=state.klas+" \u00b7 "+graadVoorKlas(state.klas)+" graad";
+  const n=(KLASSEN[state.klas]||[]).length;
+  let ev=0;for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);
+    if(key.indexOf(LS_PREFIX+state.klas+"|")===0){try{const st=JSON.parse(localStorage.getItem(key));if(st&&st.saved!==false)ev++;}catch(e){}}}
+  const dg=regDates(state.klas);
+  const att=(KLASSEN[state.klas]||[]).filter(nm=>attActief(state.klas,nm,selDate)).length;
+  const d=[n+" leerling"+(n===1?"":"en"),ev+" opgeslagen evaluatie"+(ev===1?"":"s")];
+  d.push(dg.length?("register: "+dg.length+" dag"+(dg.length===1?"":"en")+", sinds "+kortDat(dg[0])):"nog geen register");
+  if(att)d.push(att+" lopend attest"+(att===1?"":"en"));
+  sub.textContent=d.join(" \u00b7 ");
+}
 function switchTab(t){
   currentTab=t;
-  ["evaluaties","afwezigheden","lesfiches","meer"].forEach(x=>{
+  ["les","klas","lesfiches","instellingen"].forEach(x=>{
     const v=document.getElementById("tab-"+x);if(v)v.classList.toggle("on",x===t);
     const b=document.getElementById("tabbtn-"+x);if(b)b.classList.toggle("on",x===t);
   });
-  const zonderDag=(t==="meer"||t==="lesfiches");
-  $("apptitle").textContent=(t==="evaluaties"?"Evaluaties":(t==="afwezigheden"?"Afwezigheden":(t==="lesfiches"?"Lesfiches":"Meer")));
-  $("strip").style.display=zonderDag?"none":"flex";
+  $("apptitle").textContent=(t==="les"?"Les":(t==="klas"?"Klas":(t==="lesfiches"?"Lesfiches":"Instellingen")));
+  $("strip").style.display=(t==="les")?"flex":"none";
   renderLesbar();
-  $("klaschip").style.display=zonderDag?"none":"block";
-  if(t==="afwezigheden")renderReg();
+  $("klaschip").style.display=(t==="les"||t==="klas")?"block":"none";
+  if(t==="les"){toonLesDeel();}
   if(t==="lesfiches")renderLesfiches();
-  if(t!=="meer"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="meer"){populateEv();renderEvolutie();}
+  if(t!=="klas"&&$("dlundo"))$("dlundo").style.display="none";
+  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();}
+  if(t==="instellingen"){renderThemaKiezer();renderSaved();updateBackupStatus();}
 }
 
 function openKlasPicker(){
@@ -1665,7 +1849,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v55";
+const APP_VERSION="v58";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -1838,6 +2022,27 @@ function renderLfForm(box){
     lfBewerk=null;lfOpen=nieuwe.id;renderLesfiches();window.scrollTo(0,0);toast("Lesfiche bewaard");};
   box.appendChild(ok);
 }
+/* ---------- WEERGAVE (licht / donker) ---------- */
+const LS_THEMA="lo_thema";
+function themaKeuze(){return localStorage.getItem(LS_THEMA)||"donker";}
+function systeemDonker(){try{return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;}catch(e){return false;}}
+function pasThemaToe(){
+  const k=themaKeuze();
+  const donker=(k==="donker")||(k==="auto"&&systeemDonker());
+  document.documentElement.setAttribute("data-thema",donker?"donker":"licht");
+  const m=document.querySelector('meta[name="theme-color"]');
+  if(m)m.setAttribute("content",donker?"#14161A":"#F6F1E4");
+  const sb=document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+  if(sb)sb.setAttribute("content",donker?"black-translucent":"default");
+}
+function zetThema(k){localStorage.setItem(LS_THEMA,k);pasThemaToe();renderThemaKiezer();}
+function renderThemaKiezer(){
+  const box=$("themaseg");if(!box)return;box.innerHTML="";
+  [["auto","Automatisch"],["licht","Licht"],["donker","Donker"]].forEach(o=>{
+    const b=document.createElement("div");b.textContent=o[1];
+    b.className="segopt"+(themaKeuze()===o[0]?" on":"");
+    b.onclick=()=>zetThema(o[0]);box.appendChild(b);});
+}
 const LS_ATT="lo_att_";
 function getAtt(klas){try{return JSON.parse(localStorage.getItem(LS_ATT+klas))||{};}catch(e){return {};}}
 function saveAtt(klas,o){localStorage.setItem(LS_ATT+klas,JSON.stringify(o));}
@@ -1904,7 +2109,7 @@ function renderReg(){
       b.onclick=()=>{
         if(o[0]==="D"&&att&&!expl){openAttest(state.klas,naam);return;}
         regJustSaved=null;regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();
-        if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();};
+        if($("regovcard")&&currentTab==="klas")renderRegOverview();};
       dots.appendChild(b);
     });
     row.appendChild(nm);row.appendChild(dots);wrap.appendChild(row);
@@ -1931,14 +2136,14 @@ function openAttest(klas,naam){
     if(!it.value){toast("Vul in tot en met welke dag het attest loopt");return;}
     if(iv.value&&it.value<iv.value){toast("De einddatum ligt voor de startdatum");return;}
     setAtt(klas,naam,iv.value,it.value);closeSheet();renderReg();
-    if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
+    if($("regovcard")&&currentTab==="klas")renderRegOverview();
     toast("Attest tot "+kortDat(it.value)+" opgeslagen");};
   box.appendChild(ok);
   if(hui){
     const del=document.createElement("button");del.className="clearbtn";del.textContent="Attest verwijderen";
     del.onclick=()=>{if(!confirm("Het doktersattest van "+naam+" verwijderen?"))return;
       setAtt(klas,naam,null,null);closeSheet();renderReg();
-      if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();toast("Attest verwijderd");};
+      if($("regovcard")&&currentTab==="klas")renderRegOverview();toast("Attest verwijderd");};
     box.appendChild(del);
   }
   $("backdrop").classList.add("open");$("sheet").classList.add("open");
@@ -2106,8 +2311,9 @@ function buildEvolutieCSV(klas,naam,cat){
 function refreshAll(){
   renderDateStrip();renderLesbar();
   if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">· '+graadVoorKlas(state.klas)+' gr ▾</span>';
-  renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();populateEv();
-  if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();
+  renderOpzet();renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();populateEv();
+  if(currentTab==="klas")renderKlasKop();
+  if($("regovcard")&&currentTab==="klas")renderRegOverview();
 }
 function updateSaveStatus(){const el=$("savestatus");if(!el||!state)return;
   const open=onvolledigeLeerlingen();
@@ -2124,9 +2330,12 @@ function init(){
   loadOrInit();
   const ak=autoKlasVoor(selDate);if(ak&&$("klas")&&ak!==$("klas").value){$("klas").value=ak;loadOrInit();}
   refreshAll();renderKlasBeheer();
-  switchTab("afwezigheden");
+  switchTab("les");toonLesDeel();
 
+  pasThemaToe();renderThemaKiezer();
+  try{if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(themaKeuze()==="auto")pasThemaToe();});}catch(e){}
   $("klaschip").onclick=openKlasPicker;
+  $("opzetline").onclick=toggleOpzet;
   $("lfzoek").oninput=()=>{lfZoek=$("lfzoek").value;lfOpen=null;lfBewerk=null;renderLesfiches();};
   $("lfnieuw").onclick=()=>{lfBewerk="";lfOpen=null;renderLesfiches();window.scrollTo(0,0);};
   $("categorie").onchange=()=>{fillSport($("categorie").value);reloadEvaluation();};
@@ -2163,7 +2372,7 @@ function init(){
     download("LO_backup_"+todayISO()+".json",JSON.stringify(all,null,1),"application/json");toast("Back-up gedownload");
     localStorage.setItem("lo_last_backup",todayISO());updateBackupStatus();$("bubanner").style.display="none";
   };
-  $("bunow").onclick=()=>{switchTab("meer");$("dlall").click();};
+  $("bunow").onclick=()=>{switchTab("instellingen");$("dlall").click();};
   $("evleer").onchange=renderEvolutie;$("evdom").onchange=renderEvolutie;
   $("evdl").onclick=()=>{if(!state)return;const naam=$("evleer").value,cat=$("evdom").value;if(!naam||!cat){toast("Kies leerling en domein");return;}const t=buildEvolutieCSV(state.klas,naam,cat);if(!t){toast("Geen evaluaties voor dit domein");return;}download(state.klas.replace(/[^\w]+/g,"-")+"_"+naam.replace(/[^\w]+/g,"-")+"_Evolutie_"+(RUBRIEKEN[cat].label.replace(/[^\w]+/g,"-"))+".csv",t);toast("Evolutierapport gedownload");};
   $("fbadd").onclick=()=>{const v=$("fbinput").value.trim();if(!v)return;const a=getFb();a.push({t:nowStamp(),txt:v});saveFb(a);$("fbinput").value="";renderFeedback();toast("Opmerking toegevoegd");};
@@ -2188,16 +2397,9 @@ function init(){
       else if(s.count>0)txt+=n+": "+s.beh+"\n";});
     if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast("Gekopieerd"),()=>alert(txt));}else alert(txt);
   };
-  $("reset").onclick=()=>{
-    if(confirm("Alle scores en statussen van deze evaluatie wissen?")){
-      KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);state.status[n]="aanwezig";});
-      saveState();refreshAll();toast("Gewist");
-    }
-  };
-  $("regovbtn").onclick=()=>{const c=$("regovcard");const show=c.style.display==="none";c.style.display=show?"block":"none";if(show)renderRegOverview();};
   $("regcsv").onclick=()=>{download(todayISO()+"_"+state.klas.replace(/[^\w]+/g,"-")+"_Afwezigheden.csv",buildRegCSV());toast("Afwezigheden-CSV gedownload");};
-  $("regwis").onclick=()=>{if(!confirm("Alle aanwezigheden van deze dag wissen voor "+state.klas+"?"))return;const r=getReg(state.klas);delete r[selDate];saveReg(state.klas,r);regJustSaved=null;renderReg();if($("regovcard").style.display!=="none")renderRegOverview();toast("Dag gewist");};
-  $("regsave").onclick=()=>{regJustSaved=selDate;renderReg();if($("regovcard")&&$("regovcard").style.display!=="none")renderRegOverview();toast("Afwezigheden opgeslagen");};
+  $("regwis").onclick=()=>{if(!confirm("Alle aanwezigheden van deze dag wissen voor "+state.klas+"?"))return;const r=getReg(state.klas);delete r[selDate];saveReg(state.klas,r);regJustSaved=null;renderReg();if($("regovcard"))renderRegOverview();toast("Dag gewist");};
+  $("regsave").onclick=()=>{regJustSaved=selDate;renderReg();if($("regovcard")&&currentTab==="klas")renderRegOverview();toast("Register opgeslagen");};
   if($("aftot")){$("aftot").value=todayISO();const _f=new Date(parseISO(todayISO()).getTime()-27*86400000);$("afvan").value=localISO(_f);}
   $("afdl").onclick=async ()=>{let from=$("afvan").value,to=$("aftot").value;if(!from||!to){toast("Kies een periode");return;}if(from>to){const tmp=from;from=to;to=tmp;}
     if(typeof ExcelJS!=="undefined"){try{const blob=await buildAfwezigXLSX(from,to);if(!blob){toast("Geen afwezigheden in deze periode");return;}downloadBlob(from+"_tot_"+to+"_Afwezigheden_overzicht.xlsx",blob);toast("Maandoverzicht (Excel) gedownload");return;}catch(e){console.error(e);}}
