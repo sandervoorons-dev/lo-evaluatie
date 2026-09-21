@@ -118,6 +118,37 @@
   .locbadge.poly{background:rgba(244,194,74,.22);color:#5a4a12}
   .locbadge.buiten{background:rgba(55,138,221,.16);color:#185fa5}
   .locbadge.vakb{background:#eceae3;color:#8a8a80}
+  .histbox{background:rgba(255,255,255,.45);border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin-bottom:12px}
+  .histkop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .histmeer{font-size:11.5px;font-weight:600;color:var(--accent-deep);cursor:pointer;white-space:nowrap}
+  .histmini{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px;padding:2px 0}
+  .hm1{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hm2{font-weight:700;color:var(--ink);white-space:nowrap}
+  .hm2.laag{color:#bb3326}
+  .histrow{border-top:1px solid var(--line);padding:9px 0}
+  .histrow.accent{background:rgba(244,194,74,.16);border-radius:10px;padding:9px 10px;border-top:none;margin-top:4px}
+  .histtop{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .histsp{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .histspec{font-weight:400;color:var(--muted);font-size:12px}
+  .histsc{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+  .histsc.laag{color:#bb3326}
+  .histsub{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .histdet{display:flex;flex-wrap:wrap;gap:4px 9px;margin-top:5px;font-size:11px;color:var(--muted)}
+  .histdet b{color:var(--ink)}
+  .evoweek{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 2px;padding-top:11px;border-top:1px solid var(--line)}
+  .evoweek:first-of-type{margin-top:4px;border-top:none;padding-top:0}
+  .evowt{font-size:13px;font-weight:700;color:var(--ink);line-height:1.35}
+  .evown{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:1px}
+  .evown b{color:var(--accent-deep)}
+  .evorow{display:flex;align-items:center;gap:10px;padding:9px 2px;border-top:1px solid var(--line)}
+  .evol{flex:1;min-width:0;cursor:pointer}
+  .evonm{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .evosp{font-size:11.5px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .evor{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .evobadge{font-size:10.5px;font-weight:700;letter-spacing:.03em;border-radius:20px;padding:3px 9px;
+    background:rgba(120,100,60,.13);color:var(--muted);white-space:nowrap}
+  .evobadge.nieuw{background:rgba(244,194,74,.5);color:var(--accent-ink)}
+  .evoact{font-size:11.5px;color:var(--accent-deep);cursor:pointer;text-decoration:underline;white-space:nowrap}
   .sancrow{display:flex;align-items:center;gap:10px;padding:10px 2px;border-top:1px solid var(--line)}
   .sancrow:first-of-type{border-top:none}
   .sancl{flex:1;min-width:0}
@@ -360,6 +391,11 @@ html[data-thema="donker"] .pill.on{background:rgba(242,180,65,.2);border-color:r
 html[data-thema="donker"] .attchip{background:#272B31;border-color:var(--glassb);color:#B9C1CA}
 html[data-thema="donker"] .attchip.on{background:rgba(242,180,65,.22);border-color:rgba(242,180,65,.5);color:var(--accent)}
 html[data-thema="donker"] .attchip.op{color:#E0A45A}
+html[data-thema="donker"] .histbox{background:#22262B}
+html[data-thema="donker"] .histrow.accent{background:rgba(242,180,65,.14)}
+html[data-thema="donker"] .hm2.laag,html[data-thema="donker"] .histsc.laag{color:#F3A092}
+html[data-thema="donker"] .evobadge{background:#2E333A;color:#9AA2AC}
+html[data-thema="donker"] .evobadge.nieuw{background:rgba(242,180,65,.22);color:var(--accent)}
 html[data-thema="donker"] .sancbadge{background:#2E333A;color:var(--ink)}
 html[data-thema="donker"] .sancbadge.raak{background:rgba(214,80,60,.24);color:#F3A092}
 html[data-thema="donker"] .sancrow.raak .sancnm{color:#F3A092}
@@ -505,6 +541,13 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       <button class="btn primary" id="evdl" style="width:100%;margin-top:10px">Download evolutierapport</button>
     </div>
     <div class="card">
+      <div class="critttl" style="font-size:14px;margin-bottom:4px">Evaluaties &mdash; overzicht</div>
+      <div class="hint" style="margin-bottom:8px" id="evosam"></div>
+      <div class="seg" id="evoseg"></div>
+      <div id="evolijst"></div>
+      <div class="hint" style="margin-top:10px">Tik op een evaluatie om ze opnieuw te openen. Een gedownloade evaluatie blijft gewoon bewaard in de app.</div>
+    </div>
+    <div class="card">
       <div class="critttl" style="font-size:14px;margin-bottom:4px">Exporteren</div>
       <div class="hint" style="margin-bottom:10px">Alles wat naar Smartschool of OneDrive moet, staat hier bij elkaar.</div>
       <div class="dlundo" id="dlundo" style="display:none"></div>
@@ -563,12 +606,6 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       </div>
       <input type="file" id="restorefile" accept="application/json,.json" style="display:none">
       <div class="muted" id="bustatus" style="margin-top:9px"></div>
-    </div>
-    <div class="card">
-      <details>
-        <summary>Opgeslagen evaluaties op dit toestel</summary>
-        <div id="savedlist" style="margin-top:8px"></div>
-      </details>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Opmerkingen over de app</div>
@@ -1357,12 +1394,39 @@ function buildSheet(){
   const head=document.createElement("div");head.className="sheethead";
   const av=document.createElement("div");av.className="av";av.textContent=initials(naam);
   const nm=document.createElement("div");nm.className="sheetnm";nm.textContent=naam;
+  nm.style.cursor="pointer";nm.title="Toon de volledige historiek";
+  nm.onclick=()=>openHistoriek(naam,state.sport);
+  av.style.cursor="pointer";av.onclick=nm.onclick;
   head.appendChild(av);head.appendChild(nm);
   const p=pctOf(sc);
   if(stt==="aanwezig"&&p!=null){const bd=document.createElement("span");bd.className="scorebadge "+(p<0.5?"onv":"vold");bd.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max);head.appendChild(bd);}
   const done=document.createElement("button");done.className="doneBtn";done.textContent="Gereed";done.onclick=closeSheet;
   head.appendChild(done);
   box.appendChild(head);
+  /* eerdere resultaten, deze sport eerst */
+  (function(){
+    const hist=leerlingGeschiedenis(naam).filter(x=>x.k!==keyFor(state.klas,state.datum,sportLabel()));
+    if(!hist.length)return;
+    const zelfde=hist.filter(x=>x.sport===state.sport);
+    const b=document.createElement("div");b.className="histbox";
+    const kop=document.createElement("div");kop.className="histkop";
+    kop.innerHTML='<span>'+(zelfde.length
+        ? ("Eerder met "+(state.sport||"deze sport").replace(/</g,"&lt;")+": "+zelfde.length+"\u00d7")
+        : ((state.sport||"deze sport").replace(/</g,"&lt;")+" nog niet gedaan"))+'</span>'+
+      '<a class="histmeer">volledige historiek \u203a</a>';
+    kop.querySelector(".histmeer").onclick=()=>openHistoriek(naam,state.sport);
+    b.appendChild(kop);
+    const toon=(zelfde.length?zelfde:hist).slice(0,3);
+    toon.forEach(x=>{
+      const r=histRegel(x);
+      const l=document.createElement("div");l.className="histmini";
+      l.innerHTML='<span class="hm1">'+kortDat(x.datum)+' \u00b7 '+x.klas+
+        (zelfde.length?'':(' \u00b7 '+(x.sport||x.domein).replace(/</g,"&lt;")))+'</span>'+
+        '<span class="hm2'+((r.pct!=null&&r.pct<50)?' laag':'')+'">'+r.tekst+'</span>';
+      b.appendChild(l);
+    });
+    box.appendChild(b);
+  })();
   const seg=document.createElement("div");seg.className="seg";
   STATUS.forEach(s=>{const o=document.createElement("div");o.className="segopt"+(stt===s.v?" on":"");o.textContent=s.l;
     o.onclick=()=>{state.status[naam]=s.v;saveState();autoOpslaan();renderStudents();renderOverview();if(s.v!=="aanwezig"){gotoStudent(1);}else{buildSheet();}};seg.appendChild(o);});
@@ -1685,36 +1749,7 @@ async function buildWeekXLSX(lijst){
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
 
 /* ---------- SAVED LIST ---------- */
-function renderSaved(){
-  const box=$("savedlist");box.innerHTML="";
-  const items=[];
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(k.indexOf(LS_PREFIX)!==0)continue;
-    try{const st=JSON.parse(localStorage.getItem(k));if(st&&st.saved===false)continue;items.push({k,st});}catch(e){}
-  }
-  items.sort((a,b)=>(b.st.datum||"").localeCompare(a.st.datum||""));
-  if(!items.length){box.innerHTML='<div class="muted">Nog geen opgeslagen evaluaties.</div>';return;}
-  items.forEach(it=>{
-    const row=document.createElement("div");row.className="savedrow";
-    const lbl=document.createElement("div");
-    const sp=it.st.sport||"";
-    lbl.innerHTML=(isDl(it.k)?"":'<span style="color:var(--accent-deep);font-weight:700">nieuw</span> · ')+
-      (it.st.datum+" · "+it.st.klas+" · "+sp+(it.st.spec?(" – "+it.st.spec):"")).replace(/</g,"&lt;");
-    const acts=document.createElement("div");
-    const dl=document.createElement("a");dl.textContent="download";dl.style.marginRight="12px";
-    dl.onclick=()=>{const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";download(fname(),buildCSV());state=cur;
-      markDl([it.k]);showDlUndo([it.k],"1 evaluatie gedownload");updateWeekInfo();renderSaved();};
-    if(isDl(it.k)){const re=document.createElement("a");re.textContent="opnieuw";re.style.marginRight="12px";
-      re.title="Zet deze evaluatie terug bij de nog te downloaden evaluaties";
-      re.onclick=()=>{unmarkDl(it.k);updateWeekInfo();renderSaved();toast("Terug in de lijst");};
-      acts.appendChild(re);}
-    const del=document.createElement("a");del.textContent="wis";del.style.color="#c33";
-    del.onclick=()=>{if(confirm("Deze evaluatie wissen?")){localStorage.removeItem(it.k);renderSaved();}};
-    acts.appendChild(dl);acts.appendChild(del);
-    row.appendChild(lbl);row.appendChild(acts);box.appendChild(row);
-  });
-}
+function renderSaved(){renderEvOverzicht();}
 
 /* ---------- INIT / EVENTS ---------- */
 function fillSport(cat){
@@ -1799,6 +1834,187 @@ function renderDateStrip(){
   const s=strip.querySelector(".day.sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
 }
 
+/* ---------- HISTORIEK VAN EEN LEERLING ----------
+   Zoekt op naam door ALLE opgeslagen evaluaties, ook die van vorige schooljaren
+   en van klassen die niet meer bestaan. Zo blijft een leerling die van het 4de
+   naar het 5de gaat gewoon opvolgbaar. */
+function leerlingGeschiedenis(naam){
+  const uit=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
+    let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
+    if(!st||!st.datum||st.saved===false)continue;
+    if(!st.data||!st.data[naam])continue;
+    const stt=(st.status&&st.status[naam])||"aanwezig";
+    const R=RUBRIEKEN[st.categorie];
+    let beh=0,max=0,tel=0,det=[];
+    if(R){
+      const cs=(R.type==="meting")
+        ? ((R.onderdelen[st.sport]||{techniek:[]}).techniek||[]).map((t,ix)=>({key:"t"+ix,naam:t.naam,max:3}))
+        : R.criteria;
+      cs.forEach(c=>{
+        if(st.enabled&&st.enabled[c.key]===false)return;
+        const v=st.data[naam][c.key];
+        if(v==null)return;
+        beh+=v;max+=c.max;tel++;det.push({naam:c.naam,v,max:c.max});
+      });
+    }
+    uit.push({k,datum:st.datum,klas:st.klas,categorie:st.categorie,
+      domein:R?R.label:st.categorie,sport:st.sport||"",spec:st.spec||"",
+      status:stt,beh,max,tel,det,meting:(st.data[naam].__meting||"")});
+  }
+  uit.sort((a,b)=>(b.datum||"").localeCompare(a.datum||""));
+  return uit;
+}
+function schooljaarVan(iso){const d=parseISO(iso);if(!d)return "";
+  const j=d.getFullYear(),m=d.getMonth();
+  const start=(m>=7)?j:j-1;return start+"-"+String(start+1).slice(2);}
+function histRegel(h){
+  const pct=h.max>0?Math.round(h.beh/h.max*100):null;
+  const op10=h.max>0?(Math.round(h.beh/h.max*100)/10).toFixed(1):null;
+  const sc=(h.status!=="aanwezig")?statusLabel(h.status)
+    :(h.max>0?(op10+"/10 \u00b7 "+h.beh+"/"+h.max):"niet gescoord");
+  return {tekst:sc,pct:pct};
+}
+function openHistoriek(naam,accentSport){
+  const box=$("sheetbody");box.innerHTML="";
+  const grab=document.createElement("div");grab.className="grab";box.appendChild(grab);
+  const h=document.createElement("div");h.className="sheethead";
+  const av=document.createElement("div");av.className="av";av.textContent=initials(naam);
+  const nm=document.createElement("div");nm.className="sheetnm";nm.textContent=naam;
+  h.appendChild(av);h.appendChild(nm);
+  const terug=document.createElement("button");terug.className="doneBtn";terug.textContent="Sluit";terug.onclick=closeSheet;
+  h.appendChild(terug);box.appendChild(h);
+  const alles=leerlingGeschiedenis(naam);
+  if(!alles.length){const e=document.createElement("div");e.className="sheetnote";
+    e.textContent="Nog geen opgeslagen evaluaties voor deze leerling op dit toestel.";box.appendChild(e);return;}
+  const jaren={};alles.forEach(x=>{(jaren[schooljaarVan(x.datum)]=jaren[schooljaarVan(x.datum)]||[]).push(x);});
+  const note=document.createElement("div");note.className="sheetnote";
+  note.innerHTML=alles.length+" evaluatie"+(alles.length===1?"":"s")+" over "+Object.keys(jaren).length+
+    " schooljaar"+(Object.keys(jaren).length===1?"":"en")+(accentSport?(" \u00b7 <b>"+accentSport.replace(/</g,"&lt;")+"</b> staat bovenaan"):"");
+  box.appendChild(note);
+  const volgorde=Object.keys(jaren).sort().reverse();
+  volgorde.forEach(jr=>{
+    const kop=document.createElement("div");kop.className="seglabel";kop.style.marginTop="12px";
+    kop.textContent="Schooljaar "+jr;box.appendChild(kop);
+    let lijst=jaren[jr];
+    if(accentSport)lijst=lijst.slice().sort((a,b)=>((b.sport===accentSport)-(a.sport===accentSport))||b.datum.localeCompare(a.datum));
+    lijst.forEach(x=>{
+      const r=histRegel(x);
+      const d=document.createElement("div");d.className="histrow"+((accentSport&&x.sport===accentSport)?" accent":"");
+      const top=document.createElement("div");top.className="histtop";
+      top.innerHTML='<div class="histsp">'+(x.sport||x.domein).replace(/</g,"&lt;")+
+        (x.spec?(' <span class="histspec">'+x.spec.replace(/</g,"&lt;")+'</span>'):'')+'</div>'+
+        '<div class="histsc'+((r.pct!=null&&r.pct<50)?' laag':'')+'">'+r.tekst+'</div>';
+      const sub=document.createElement("div");sub.className="histsub";
+      sub.textContent=kortDat(x.datum)+" \u00b7 "+x.klas+" \u00b7 "+x.domein+(x.meting?(" \u00b7 "+x.meting):"");
+      d.appendChild(top);d.appendChild(sub);
+      if(x.det.length){
+        const det=document.createElement("div");det.className="histdet";
+        det.innerHTML=x.det.map(c=>'<span>'+c.naam.replace(/</g,"&lt;")+' <b>'+c.v+'/'+c.max+'</b></span>').join("");
+        d.appendChild(det);
+      }
+      box.appendChild(d);
+    });
+  });
+  $("backdrop").classList.add("open");$("sheet").classList.add("open");
+}
+/* ---------- OVERZICHT VAN ALLE EVALUATIES ----------
+   Gegroepeerd per week, met per evaluatie of ze al gedownload is.
+   Een gedownloade evaluatie blijft gewoon in de app staan; enkel de
+   downloadwachtrij ("nieuwe evaluaties") laat ze weg. */
+let evoScope="alles";
+function alleEvaluaties(){
+  const uit=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);if(k.indexOf(LS_PREFIX)!==0)continue;
+    let st=null;try{st=JSON.parse(localStorage.getItem(k));}catch(e){}
+    if(!st||!st.datum||st.saved===false)continue;
+    uit.push({k,st,dl:isDl(k)});
+  }
+  uit.sort((a,b)=>(b.st.datum||"").localeCompare(a.st.datum||"")||(a.st.klas||"").localeCompare(b.st.klas||""));
+  return uit;
+}
+function weekLabel(maISO){
+  const ma=parseISO(maISO);if(!ma)return maISO;
+  const zo=new Date(ma.getTime()+6*86400000);
+  const vandaagMa=weekRange(todayISO())[0];
+  const pre=(maISO===vandaagMa)?"Deze week · ":((maISO===weekRange(localISO(new Date(parseISO(vandaagMa).getTime()-7*86400000)))[0])?"Vorige week · ":"");
+  return pre+kortDat(maISO)+" – "+kortDat(localISO(zo));
+}
+function openEvaluatie(it){
+  saveState();
+  $("klas").value=it.st.klas;
+  selDate=it.st.datum;
+  $("categorie").value=it.st.categorie||"trefspelen";
+  fillSport($("categorie").value);
+  $("sport").value=it.st.sport||"";
+  $("spec").value=it.st.spec||"";
+  lesDeel="evaluatie";
+  reloadEvaluation();
+  switchTab("les");
+  window.scrollTo(0,0);
+}
+function renderEvOverzicht(){
+  const box=$("evolijst");if(!box)return;box.innerHTML="";
+  const seg=$("evoseg");
+  if(seg){seg.innerHTML="";
+    [["alles","Al mijn klassen"],["klas","Deze klas"]].forEach(o=>{
+      const b=document.createElement("div");b.textContent=o[1];
+      b.className="segopt"+(evoScope===o[0]?" on":"");
+      b.onclick=()=>{evoScope=o[0];renderEvOverzicht();};seg.appendChild(b);});}
+  let lijst=alleEvaluaties();
+  if(evoScope==="klas"&&state)lijst=lijst.filter(x=>x.st.klas===state.klas);
+  const sam=$("evosam");
+  if(sam){
+    const open=lijst.filter(x=>!x.dl).length;
+    sam.innerHTML=lijst.length
+      ? ("<b>"+lijst.length+"</b> evaluatie"+(lijst.length===1?"":"s")+" bewaard · "+
+         (open?('<b style="color:var(--accent-deep)">'+open+" nog te downloaden</b>"):"alles gedownload"))
+      : "Nog geen opgeslagen evaluaties.";
+  }
+  if(!lijst.length)return;
+  /* per week groeperen */
+  const weken={};
+  lijst.forEach(it=>{const ma=weekRange(it.st.datum)[0];(weken[ma]=weken[ma]||[]).push(it);});
+  Object.keys(weken).sort().reverse().forEach(ma=>{
+    const items=weken[ma];
+    const open=items.filter(x=>!x.dl);
+    const kop=document.createElement("div");kop.className="evoweek";
+    const t=document.createElement("div");t.className="evowt";
+    t.innerHTML=weekLabel(ma)+'<span class="evown">'+items.length+" evaluatie"+(items.length===1?"":"s")+
+      (open.length?(' · <b>'+open.length+" nieuw</b>"):' · gedownload')+'</span>';
+    kop.appendChild(t);
+    if(open.length){
+      const dl=document.createElement("button");dl.className="sancbtn";dl.textContent="download week";
+      dl.onclick=async()=>{const ok=await downloadBundel(open,"");toast(ok?"Week gedownload":"Downloaden lukte niet");};
+      kop.appendChild(dl);
+    }
+    box.appendChild(kop);
+    items.forEach(it=>{
+      const r=document.createElement("div");r.className="evorow"+(it.dl?"":" nieuw");
+      const l=document.createElement("div");l.className="evol";
+      const sp=(it.st.sport||"")+(it.st.spec?(" – "+it.st.spec):"");
+      l.innerHTML='<div class="evonm">'+kortDat(it.st.datum)+' · '+it.st.klas.replace(/</g,"&lt;")+'</div>'+
+        '<div class="evosp">'+sp.replace(/</g,"&lt;")+'</div>';
+      l.onclick=()=>openEvaluatie(it);
+      const rr=document.createElement("div");rr.className="evor";
+      const bad=document.createElement("div");bad.className="evobadge"+(it.dl?"":" nieuw");
+      bad.textContent=it.dl?"gedownload":"nieuw";
+      if(it.dl&&getDl()[it.k])bad.title="Gedownload op "+kortDat(getDl()[it.k]);
+      rr.appendChild(bad);
+      const a=document.createElement("a");a.className="evoact";
+      a.textContent=it.dl?"opnieuw":"download";
+      a.onclick=()=>{
+        if(it.dl){unmarkDl(it.k);updateWeekInfo();renderEvOverzicht();toast("Terug in de lijst");return;}
+        const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";
+        download(fname(),buildCSV());state=cur;
+        markDl([it.k]);showDlUndo([it.k],"1 evaluatie gedownload");updateWeekInfo();renderEvOverzicht();};
+      rr.appendChild(a);
+      r.appendChild(l);r.appendChild(rr);box.appendChild(r);
+    });
+  });
+}
 /* ---------- KLEDIJ-OPVOLGING EN SANCTIES ----------
    Telt hoe vaak een leerling "niet in orde" (R) stond binnen een periode.
    Vanaf de drempel (standaard 3) volgt een sanctie. Noteer je een sanctie,
@@ -2001,7 +2217,7 @@ function switchTab(t){
   if(t==="les"){initSanctie();toonLesDeel();}
   if(t==="lesfiches")renderLesfiches();
   if(t!=="klas"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();initSanctie();}
+  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();initSanctie();renderEvOverzicht();}
   if(t==="instellingen"){renderThemaKiezer();renderSaved();updateBackupStatus();}
 }
 
@@ -2032,7 +2248,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v60";
+const APP_VERSION="v62";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
