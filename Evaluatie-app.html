@@ -86,10 +86,30 @@
   .opt.v1{background:#eebf85;color:#6e4a12}
   .opt.v2{background:#bdd79b;color:#3c581d}
   .opt.v3{background:#8cc6a6;color:#1f5a3e}
+  .opt.w0{background:#e0918a;color:#63201a}
+  .opt.w1{background:#e8b183;color:#6b4312}
+  .opt.w2{background:#e8cd8d;color:#6b551a}
+  .opt.w3{background:#cbdca0;color:#47601f}
+  .opt.w4{background:#a6d0a4;color:#2c5c34}
+  .opt.w5{background:#8cc6a6;color:#1f5a3e}
   .opt.sel{box-shadow:inset 0 0 0 2.5px rgba(20,50,30,.5)}
   .bands{display:none;background:rgba(255,255,255,.6);border:1px dashed rgba(120,140,120,.4);border-radius:9px;
     padding:8px;margin-top:7px;font-size:12px;line-height:1.45;color:#374B3F}
   .bands.show{display:block}
+  .wlbox{border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+  .wlnorm{font-size:11.5px;color:var(--accent-deep);font-weight:600;margin:-4px 0 8px}
+  .wlrij{display:flex;align-items:center;gap:10px;padding:5px 0}
+  .wllab{flex:0 0 62px;font-size:13px;color:var(--ink);font-weight:600}
+  .wlinp{flex:0 0 92px;padding:9px 10px;border:1px solid rgba(120,100,60,.28);border-radius:10px;
+    font-size:16px;background:rgba(255,255,255,.7);color:var(--ink);text-align:center;font-variant-numeric:tabular-nums}
+  .wlpt{flex:1;text-align:right;font-variant-numeric:tabular-nums}
+  .wlpt b{font-size:16px;font-weight:700;color:var(--ink)}
+  .wlpt b.wlvol{color:#1c7a45}.wlpt b.wllaag{color:#bb3326}
+  .wlleeg{color:var(--muted);font-size:16px}
+  .wlsub{display:block;font-size:10.5px;color:var(--muted);margin-top:-1px}
+  .wltot{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;padding-top:8px;
+    border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .wltot b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
   .metinput{margin-top:0}
   .resline{font-size:12.5px;color:var(--ink);margin-top:9px;font-weight:600;line-height:1.4}
   .clearbtn{display:block;width:100%;background:none;border:none;color:var(--muted);font-size:12px;margin-top:13px;text-decoration:underline;cursor:pointer}
@@ -391,6 +411,9 @@ html[data-thema="donker"] .pill.on{background:rgba(242,180,65,.2);border-color:r
 html[data-thema="donker"] .attchip{background:#272B31;border-color:var(--glassb);color:#B9C1CA}
 html[data-thema="donker"] .attchip.on{background:rgba(242,180,65,.22);border-color:rgba(242,180,65,.5);color:var(--accent)}
 html[data-thema="donker"] .attchip.op{color:#E0A45A}
+html[data-thema="donker"] .wlinp{background:#272B31;color:var(--ink);border-color:var(--glassb)}
+html[data-thema="donker"] .wlpt b.wlvol{color:#6DD69B}
+html[data-thema="donker"] .wlpt b.wllaag{color:#F3A092}
 html[data-thema="donker"] .histbox{background:#22262B}
 html[data-thema="donker"] .histrow.accent{background:rgba(242,180,65,.14)}
 html[data-thema="donker"] .hm2.laag,html[data-thema="donker"] .histsc.laag{color:#F3A092}
@@ -427,6 +450,12 @@ html[data-thema="donker"] .opt.v0{background:#8C3F37;color:#FFE3DF}
 html[data-thema="donker"] .opt.v1{background:#8C6524;color:#FFEEDA}
 html[data-thema="donker"] .opt.v2{background:#4E6B2F;color:#EAF5DC}
 html[data-thema="donker"] .opt.v3{background:#2E6F51;color:#DDF3E8}
+html[data-thema="donker"] .opt.w0{background:#8C3F37;color:#FFE3DF}
+html[data-thema="donker"] .opt.w1{background:#8A5A28;color:#FFE9D5}
+html[data-thema="donker"] .opt.w2{background:#7E6A26;color:#FBF0D2}
+html[data-thema="donker"] .opt.w3{background:#5D6F2C;color:#EDF6DA}
+html[data-thema="donker"] .opt.w4{background:#40703F;color:#E1F3E0}
+html[data-thema="donker"] .opt.w5{background:#2E6F51;color:#DDF3E8}
 html[data-thema="donker"] .opt.sel{box-shadow:inset 0 0 0 2.5px rgba(255,255,255,.75)}
 html[data-thema="donker"] .doneBtn{background:var(--accent);color:#231B08}
 html[data-thema="donker"] .toast{background:rgba(242,180,65,.96);color:#231B08}
@@ -775,6 +804,7 @@ function saveKlassen(){localStorage.setItem(LS_KLASSEN,JSON.stringify(KLASSEN));
 
 const LABELS3 = ["Onvoldoende","Zwak","Goed","Zeer goed"];
 const LABELS2 = ["Niet in orde","Deels in orde","In orde"];
+const LABELS5 = ["Weigert","Na aandringen","Zonder inspanning","Met pauzes","Houdt vol","Voluit"];
 const STATUS  = [{v:"aanwezig",l:"Aanwezig"},{v:"afwezig",l:"Afwezig"},{v:"attest",l:"Doktersattest"}];
 /* Kledij wordt niet meer bij de evaluaties gescoord (zit al in het afwezigheden-register); banden bewaard voor het geval ze terugkomen. */
 const KLEDIJ_BANDS = ["Geen sportkledij bij.","Sportkledij onvolledig (bv. geen sportschoenen) of werkt onveilig.","Sportkledij aan en werkt veilig."];
@@ -1121,6 +1151,23 @@ const RUBRIEKEN = {
       }
     }
   },
+  waterloop:{
+    label:"Waterloop (3 \u00d7 1 km)",
+    type:"ronden",
+    rubriek:"Waterloop: drie ronden op tijd + inzet",
+    sporten:["Waterloop 3 \u00d7 1 km"],
+    ronden:3,
+    normen:[[660,"Standaard 11:00"],[780,"Aangepast 13:00"]],
+    stap:15, perRonde:5, bodem:1, maxBoven:240,
+    lpdTijd:"LPD 4 (fysieke capaciteiten)",
+    inzet:{key:"inzet",naam:"Inzet & grenzen verleggen",lpd:"LPD 13",max:5,
+      bands:["Weigert deel te nemen.",
+             "Doet enkel mee na herhaald aandringen en stopt telkens opnieuw.",
+             "Komt in beweging, maar wandelt zonder merkbare inspanning en moet geregeld aangespoord worden.",
+             "Doet mee en maakt de afstand af, maar neemt meerdere pauzes of laat het tempo zakken zodra er niemand kijkt.",
+             "Zet zich de hele loop in en houdt vol, met hooguit \u00e9\u00e9n korte adempauze die hij zelf weer be\u00ebindigt.",
+             "Gaat van begin tot eind voluit binnen zijn eigen kunnen: geen onnodige pauzes, houdt een tempo aan dat hij volhoudt en blijft doorgaan wanneer het zwaar wordt."]}
+  },
   conditietest:{
     label:"Conditie \u2013 testen (meting)",
     type:"meting",
@@ -1199,6 +1246,7 @@ function statusLabel(v){const s=STATUS.find(x=>x.v===v);return s?s.l:"Aanwezig";
 function curRubriek(){return RUBRIEKEN[state.categorie];}
 function crits(){
   const r=curRubriek();
+  if(r.type==="ronden")return [r.inzet];
   if(r.type==="meting"){const od=r.onderdelen[state.sport];if(!od)return [];return od.techniek.map((t,i)=>({key:"t"+i,naam:t.naam,max:3,bands:t.bands}));}
   return r.criteria;
 }
@@ -1210,6 +1258,37 @@ const LS_GES="lo_tv_geslacht"; let GES={};
 function loadGes(){try{GES=JSON.parse(localStorage.getItem(LS_GES))||{};}catch(e){GES={};}}
 function getGes(naam){return GES[state.klas+"|"+naam]||"";}
 function setGes(naam,v){GES[state.klas+"|"+naam]=v;localStorage.setItem(LS_GES,JSON.stringify(GES));}
+/* ---------- WATERLOOP: tijd -> punten ----------
+   5 punten op de eigen norm, daarna een kwart punt minder per begonnen 15 seconden,
+   met een bodem van 1 punt zolang de ronde is uitgelopen. Zelfde helling voor elke norm. */
+function parseTijd(str){
+  if(str==null)return null;
+  const t=(""+str).trim();
+  if(!t)return null;
+  let m=t.match(/^(\d{1,3})[:.'](\d{1,2})$/);
+  if(m)return parseInt(m[1],10)*60+parseInt(m[2],10);
+  m=t.match(/^(\d{1,3})$/);
+  if(m)return parseInt(m[1],10)*60;
+  return null;
+}
+function fmtPt(p){return (Math.round(p*100)/100).toFixed(2).replace(/0+$/,"").replace(/\.$/,"").replace(".",",");}
+function tijdTekst(sec){if(sec==null)return "";return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0");}
+function rondePunt(sec,norm,R){
+  if(sec==null)return null;
+  const stap=R.stap||15, max=R.perRonde||5, bodem=(R.bodem==null?1:R.bodem);
+  if(sec<=norm+stap-1)return max;
+  return Math.max(bodem, max-0.25*Math.floor((sec-norm)/stap));
+}
+function normVan(naam){
+  const v=state.data[naam]&&state.data[naam].__norm;
+  const n=parseInt(v,10);
+  return (n>0)?n:(curRubriek().normen[0][0]);
+}
+function rondeTijden(naam){
+  const R=curRubriek(),uit=[];
+  for(let i=1;i<=(R.ronden||3);i++)uit.push(parseTijd(state.data[naam]["__r"+i]));
+  return uit;
+}
 /* meting parsen + atletiek-omzetting meting -> /10 (lineaire interpolatie + extrapolatie, clamp 0-10) */
 function parseMeting(str){
   if(str==null)return null;
@@ -1231,7 +1310,11 @@ function atlPunt(od,gesl,meting){
 function ensureStudent(st,naam){
   if(!st.data[naam])st.data[naam]={};
   const r=RUBRIEKEN[st.categorie];
-  if(r.type==="meting"){
+  if(r.type==="ronden"){
+    for(let i=1;i<=(r.ronden||3);i++)if(st.data[naam]["__r"+i]===undefined)st.data[naam]["__r"+i]="";
+    if(st.data[naam].__norm===undefined)st.data[naam].__norm=r.normen[0][0];
+    if(st.data[naam][r.inzet.key]===undefined)st.data[naam][r.inzet.key]=null;
+  }else if(r.type==="meting"){
     if(st.data[naam].__meting===undefined)st.data[naam].__meting="";
     for(let i=0;i<3;i++)if(st.data[naam]["t"+i]===undefined)st.data[naam]["t"+i]=null;
   }else{
@@ -1248,7 +1331,8 @@ function hasContent(st){
 function defaultEnabled(cat){
   try{const s=JSON.parse(localStorage.getItem(LS_ENABLED+"_"+cat));if(s)return Object.assign({},s);}catch(e){}
   const en={};const r=RUBRIEKEN[cat];
-  if(r.type==="meting"){for(let i=0;i<3;i++)en["t"+i]=true;}
+  if(r.type==="ronden"){en[r.inzet.key]=true;}
+  else if(r.type==="meting"){for(let i=0;i<3;i++)en["t"+i]=true;}
   else r.criteria.forEach(c=>en[c.key]=true);
   return en;
 }
@@ -1263,6 +1347,7 @@ function leerlingKlaar(naam){
   if(!cs.length)return false;
   for(let i=0;i<cs.length;i++){const v=state.data[naam][cs[i].key];if(v===null||v===undefined)return false;}
   if(curRubriek().type==="meting"&&!(state.data[naam].__meting||"").trim())return false;
+  if(curRubriek().type==="ronden"){const t=rondeTijden(naam);if(t.some(x=>x==null))return false;}
   return true;
 }
 function onvolledigeLeerlingen(){
@@ -1301,7 +1386,8 @@ function loadOrInit(){
     st.graad=graad;
   }
   const r0=RUBRIEKEN[st.categorie];
-  if(r0.type==="meting"){for(let i=0;i<3;i++)if(st.enabled["t"+i]===undefined)st.enabled["t"+i]=true;}
+  if(r0.type==="ronden"){if(st.enabled[r0.inzet.key]===undefined)st.enabled[r0.inzet.key]=true;}
+  else if(r0.type==="meting"){for(let i=0;i<3;i++)if(st.enabled["t"+i]===undefined)st.enabled["t"+i]=true;}
   else r0.criteria.forEach(c=>{if(st.enabled[c.key]===undefined)st.enabled[c.key]=true;});
   KLASSEN[klas].forEach(n=>ensureStudent(st,n));
   state=st;
@@ -1311,6 +1397,18 @@ function loadOrInit(){
 function scoreFor(naam){
   const stt=state.status[naam]||"aanwezig";
   if(stt!=="aanwezig")return {beh:0,max:0,count:0,pct:0,score10:0,status:stt};
+  if(curRubriek().type==="ronden"){
+    const R=curRubriek(),norm=normVan(naam),tijden=rondeTijden(naam);
+    const punten=tijden.map(t=>rondePunt(t,norm,R));
+    const gelopen=punten.filter(x=>x!=null);
+    const tijdTot=gelopen.length?punten.reduce((a,b)=>a+(b||0),0):null;
+    const iv=state.data[naam][R.inzet.key];
+    const inzet=(iv==null)?null:iv;
+    const totaal=Math.round(((tijdTot||0)+(inzet||0))*100)/100;
+    return {type:"ronden",norm,tijden,punten,tijdTot,inzet,totaal,
+            maxTijd:(R.ronden||3)*(R.perRonde||5),maxTot:(R.ronden||3)*(R.perRonde||5)+R.inzet.max,
+            count:gelopen.length+(inzet==null?0:1),status:"aanwezig"};
+  }
   if(curRubriek().type==="meting"){
     let tb=0,tm=0,tc=0;
     crits().forEach(c=>{if(!state.enabled[c.key])return;const v=state.data[naam][c.key];if(v==null)return;tb+=v;tm+=c.max;tc++;});
@@ -1337,7 +1435,9 @@ function renderToggles(){
   const gi=$("graadinfo");
   if(gi){
     const R=curRubriek();
-    gi.innerHTML=(R.type==="meting")
+    gi.innerHTML=(R.type==="ronden")
+      ? "Vul de drie rondetijden in (mm:ss); de app rekent de punten. <b>"+((R.ronden||3)*(R.perRonde||5))+" punten</b> voor de tijden + <b>"+R.inzet.max+"</b> voor inzet."
+      : (R.type==="meting")
       ? "Techniekcriteria en prestatietabel zijn <b>gelijk voor alle graden</b>; de omzetting hangt af van M/J per leerling."
       : "Scorebanden van de <b>"+state.graad+" graad</b> — afgeleid uit klas "+state.klas+".";
   }
@@ -1354,7 +1454,8 @@ function renderToggles(){
 
 let sheetNaam=null;
 function initials(naam){const p=(""+naam).trim().split(/\s+/);return (((p[0]||"")[0]||"")+((p[1]||"")[0]||"")).toUpperCase();}
-function pctOf(sc){if(sc.type==="meting"){return (sc.techn10!=null||sc.prest10!=null)?(sc.totaal/20):null;}return (sc.count>0)?(sc.beh/sc.max):null;}
+function pctOf(sc){if(sc.type==="ronden"){return sc.count>0?(sc.totaal/sc.maxTot):null;}
+  if(sc.type==="meting"){return (sc.techn10!=null||sc.prest10!=null)?(sc.totaal/20):null;}return (sc.count>0)?(sc.beh/sc.max):null;}
 function renderStudents(){
   const wrap=$("students");wrap.innerHTML="";
   const card=document.createElement("div");card.className="studlist";
@@ -1370,7 +1471,7 @@ function renderStudents(){
     else{
       const p=pctOf(sc);
       if(p==null){const s=document.createElement("span");s.className="todo";s.textContent="Nog te scoren";tr.appendChild(s);}
-      else{const b=document.createElement("span");b.className="scorebadge "+(p<0.5?"onv":"vold");b.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max);tr.appendChild(b);}
+      else{const b=document.createElement("span");b.className="scorebadge "+(p<0.5?"onv":"vold");b.textContent=(sc.type==="meting"||sc.type==="ronden")?(sc.totaal.toFixed(1)+"/"+(sc.maxTot||20)):(sc.beh+"/"+sc.max);tr.appendChild(b);}
     }
     const ch=document.createElement("span");ch.className="chev";ch.textContent="›";tr.appendChild(ch);
     row.appendChild(av);row.appendChild(nm);row.appendChild(tr);
@@ -1399,7 +1500,7 @@ function buildSheet(){
   av.style.cursor="pointer";av.onclick=nm.onclick;
   head.appendChild(av);head.appendChild(nm);
   const p=pctOf(sc);
-  if(stt==="aanwezig"&&p!=null){const bd=document.createElement("span");bd.className="scorebadge "+(p<0.5?"onv":"vold");bd.textContent=(sc.type==="meting")?(sc.totaal.toFixed(1)+"/20"):(sc.beh+"/"+sc.max);head.appendChild(bd);}
+  if(stt==="aanwezig"&&p!=null){const bd=document.createElement("span");bd.className="scorebadge "+(p<0.5?"onv":"vold");bd.textContent=(sc.type==="meting"||sc.type==="ronden")?(sc.totaal.toFixed(1)+"/"+(sc.maxTot||20)):(sc.beh+"/"+sc.max);head.appendChild(bd);}
   const done=document.createElement("button");done.className="doneBtn";done.textContent="Gereed";done.onclick=closeSheet;
   head.appendChild(done);
   box.appendChild(head);
@@ -1440,6 +1541,64 @@ function buildSheet(){
       b.onclick=()=>{setGes(naam,g===o[0]?"":o[0]);buildSheet();renderStudents();renderOverview();};gseg.appendChild(b);});
     box.appendChild(gseg);
   }
+  /* ---- waterloop: norm + rondetijden ---- */
+  if(curRubriek().type==="ronden"){
+    const R=curRubriek();
+    const wrap=document.createElement("div");wrap.className="wlbox";
+    const nl=document.createElement("div");nl.className="seglabel";nl.textContent="Norm per ronde";
+    wrap.appendChild(nl);
+    const seg=document.createElement("div");seg.className="seg";seg.style.marginBottom="9px";
+    const huidig=normVan(naam);
+    const opties=R.normen.concat([[null,"Eigen"]]);
+    const eigen=!R.normen.some(o=>o[0]===huidig);
+    opties.forEach(o=>{
+      const b=document.createElement("div");b.textContent=o[1];
+      const aan=(o[0]===null)?eigen:(o[0]===huidig&&!eigen);
+      b.className="segopt"+(aan?" on":"");
+      b.onclick=()=>{
+        if(o[0]===null){
+          const inv=prompt("Eigen norm per ronde (mm:ss)",tijdTekst(huidig));
+          const sec=parseTijd(inv);
+          if(sec==null||sec<120||sec>3600){if(inv!==null)toast("Geef een tijd als 12:30");return;}
+          state.data[naam].__norm=sec;
+        } else state.data[naam].__norm=o[0];
+        saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
+      seg.appendChild(b);});
+    wrap.appendChild(seg);
+    if(eigen){
+      const e=document.createElement("div");e.className="wlnorm";
+      e.textContent="Eigen norm: "+tijdTekst(huidig)+" per ronde";wrap.appendChild(e);
+    }
+    const tl=document.createElement("div");tl.className="seglabel";tl.textContent="Rondetijden (mm:ss)";
+    wrap.appendChild(tl);
+    let som=0,ingevuld=0;
+    for(let i=1;i<=(R.ronden||3);i++){
+      const rij=document.createElement("div");rij.className="wlrij";
+      const lab=document.createElement("span");lab.className="wllab";lab.textContent="Ronde "+i;
+      const inp=document.createElement("input");inp.type="text";inp.className="wlinp";
+      inp.inputMode="numeric";inp.placeholder="11:30";
+      inp.value=state.data[naam]["__r"+i]||"";
+      inp.onchange=()=>{
+        const sec=parseTijd(inp.value);
+        state.data[naam]["__r"+i]=(sec==null)?"":tijdTekst(sec);
+        if(inp.value.trim()&&sec==null)toast("Geef een tijd als 11:30");
+        saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
+      const uit=document.createElement("span");uit.className="wlpt";
+      const sec=parseTijd(state.data[naam]["__r"+i]);
+      const pnt=rondePunt(sec,huidig,R);
+      if(pnt==null)uit.innerHTML='<span class="wlleeg">\u2013</span>';
+      else{som+=pnt;ingevuld++;
+        const boven=Math.max(0,sec-huidig);
+        uit.innerHTML='<b class="'+(pnt>=R.perRonde?"wlvol":(pnt<=R.bodem?"wllaag":""))+'">'+
+          fmtPt(pnt)+'</b><span class="wlsub">'+(boven?("+"+tijdTekst(boven)):"op norm")+'</span>';}
+      rij.appendChild(lab);rij.appendChild(inp);rij.appendChild(uit);
+      wrap.appendChild(rij);
+    }
+    const tot=document.createElement("div");tot.className="wltot";
+    tot.innerHTML='<span>Tijden</span><b>'+(ingevuld?fmtPt(som):"\u2013")+' / '+((R.ronden||3)*R.perRonde)+'</b>';
+    wrap.appendChild(tot);
+    box.appendChild(wrap);
+  }
   crits().forEach(c=>{
     if(!state.enabled[c.key])return;
     const block=document.createElement("div");block.className="critblock";
@@ -1447,14 +1606,14 @@ function buildSheet(){
     const _lpd=lpdFor(c);cn.innerHTML='<span>'+c.naam+(_lpd?' <span class="lpd">'+_lpd+'</span>':'')+'</span>';
     const info=document.createElement("span");info.className="info";info.textContent="banden";
     const bands=document.createElement("div");bands.className="bands";
-    const labels=c.max===3?LABELS3:LABELS2;
+    const labels=(c.max===5)?LABELS5:(c.max===3?LABELS3:LABELS2);
     bands.innerHTML=bandsFor(c).map((tx,i)=>"<b>"+i+" "+labels[i]+":</b> "+tx).join("<br>");
     info.onclick=()=>bands.classList.toggle("show");
     cn.appendChild(info);block.appendChild(cn);
     const opts=document.createElement("div");opts.className="opts";
     labels.forEach((lab,i)=>{
       const o=document.createElement("div");
-      const cc=(c.max===2)?["v0","v1","v3"][i]:("v"+i);
+      const cc=(c.max===2)?["v0","v1","v3"][i]:((c.max===5)?("w"+i):("v"+i));
       o.className="opt "+cc+(state.data[naam][c.key]===i?" sel":"");
       o.textContent=i; o.title=lab;
       o.onclick=()=>{state.data[naam][c.key]=(state.data[naam][c.key]===i)?null:i;saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
@@ -1463,6 +1622,14 @@ function buildSheet(){
     block.appendChild(opts);block.appendChild(bands);
     box.appendChild(block);
   });
+  if(curRubriek().type==="ronden"){
+    const res=document.createElement("div");res.className="resline";
+    const d=[];
+    d.push("Tijden "+(sc.tijdTot!=null?fmtPt(sc.tijdTot):"\u2013")+"/"+sc.maxTijd);
+    d.push("Inzet "+(sc.inzet!=null?fmtPt(sc.inzet):"\u2013")+"/"+curRubriek().inzet.max);
+    d.push("Totaal "+(sc.count>0?fmtPt(sc.totaal):"\u2013")+"/"+sc.maxTot);
+    res.textContent=d.join("   \u00b7   ");box.appendChild(res);
+  }
   if(curRubriek().type==="meting"){
     const od=curRubriek().onderdelen[state.sport];
     const ml=document.createElement("div");ml.className="seglabel";ml.style.marginTop="9px";ml.textContent="Meting ("+(od?od.eenheid:"")+")";box.appendChild(ml);
@@ -1481,7 +1648,8 @@ function buildSheet(){
     box.appendChild(res);
   }
   const clr=document.createElement("button");clr.className="clearbtn";clr.textContent="scores leeg maken";
-  clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);if(curRubriek().type==="meting")state.data[naam].__meting="";saveState();buildSheet();renderStudents();renderOverview();};
+  clr.onclick=()=>{crits().forEach(c=>state.data[naam][c.key]=null);if(curRubriek().type==="meting")state.data[naam].__meting="";
+    if(curRubriek().type==="ronden"){for(let i=1;i<=(curRubriek().ronden||3);i++)state.data[naam]["__r"+i]="";}saveState();buildSheet();renderStudents();renderOverview();};
   box.appendChild(clr);
   addSheetNav(box);
 }
@@ -1511,6 +1679,35 @@ function buildCSV(){
   const L=[];
   const push=arr=>L.push(arr.map(csvEscape).join(";"));
   const R=curRubriek();
+  if(R.type==="ronden"){
+    push(["RUBRIEK",R.label]);
+    push(["Klas",state.klas,"Datum",state.datum]);
+    push(["Details/periode",state.spec||""]);
+    push([]);
+    push(["Punten per ronde: "+R.perRonde+" op de eigen norm, daarna 0,25 minder per begonnen "+R.stap+" seconden, bodem "+R.bodem+" als de ronde is uitgelopen."]);
+    push(["Leerplandoelen: "+(R.lpdTijd||"LPD 4")+" voor de tijden, "+R.inzet.lpd+" voor inzet."]);
+    push([]);
+    push(["Inzet & grenzen verleggen (0-"+R.inzet.max+")"]);
+    R.inzet.bands.forEach((t,i)=>push([i,t]));
+    push([]);
+    push(["SCORES"]);
+    const kop=["Leerling","Status","Norm"];
+    for(let i=1;i<=(R.ronden||3);i++)kop.push("Ronde "+i,"Pt "+i);
+    kop.push("Punten tijden (/"+(R.ronden||3)*R.perRonde+")","Inzet (/"+R.inzet.max+")","Totaal (/"+((R.ronden||3)*R.perRonde+R.inzet.max)+")");
+    push(kop);
+    KLASSEN[state.klas].forEach(naam=>{
+      const stt=state.status[naam]||"aanwezig";const absent=stt!=="aanwezig";const sc=scoreFor(naam);
+      const row=[naam,statusLabel(stt),tijdTekst(absent?normVan(naam):sc.norm)];
+      for(let i=1;i<=(R.ronden||3);i++){
+        const t=absent?null:sc.tijden[i-1];
+        row.push(t==null?"":tijdTekst(t), (absent||sc.punten[i-1]==null)?"":sc.punten[i-1]);
+      }
+      if(absent)row.push("","","");
+      else row.push(sc.tijdTot==null?"":sc.tijdTot, sc.inzet==null?"":sc.inzet, sc.count>0?sc.totaal:"");
+      push(row);
+    });
+    return "\ufeff"+L.join("\r\n");
+  }
   if(R.type==="meting"){
     const od=R.onderdelen[state.sport];
     push(["RUBRIEK",curRubriek().label+" – "+state.sport]);
@@ -1701,7 +1898,29 @@ async function buildWeekXLSX(lijst){
       const hd=ws.addRow([(R.type==="meting"?(R.label+" – "+st.sport):R.rubriek)+"   ·   "+st.datum+(st.spec?("   ·   "+st.spec):"")+(R.type==="meting"?"":("   ·   "+st.graad+" graad"))]);
       hd.font={bold:true,size:12,color:{argb:TAUPE}};hd.eachCell(c=>{c.fill={type:"pattern",pattern:"solid",fgColor:{argb:GOLD}};});
       ws.addRow([]);
-      if(R.type==="meting"){
+      if(R.type==="ronden"){
+        ws.addRow(["Punten per ronde: "+R.perRonde+" op de eigen norm, daarna 0,25 minder per begonnen "+R.stap+" seconden, bodem "+R.bodem+" als de ronde is uitgelopen."]).font={bold:true};
+        ws.addRow(["Leerplandoelen: "+(R.lpdTijd||"LPD 4")+" voor de tijden, "+R.inzet.lpd+" voor inzet."]);
+        ws.addRow([]);
+        styleHead(ws.addRow(["Inzet & grenzen verleggen","Omschrijving"]));
+        R.inzet.bands.forEach((t,i)=>wrapRow(ws.addRow([i,t])));
+        ws.addRow([]);
+        const kop=["Leerling","Status","Norm"];
+        for(let i=1;i<=(R.ronden||3);i++)kop.push("Ronde "+i,"Pt "+i);
+        kop.push("Punten tijden","Inzet","Totaal/"+((R.ronden||3)*R.perRonde+R.inzet.max));
+        styleHead(ws.addRow(kop));
+        KLASSEN[st.klas].forEach(naam=>{
+          const stt=state.status[naam]||"aanwezig";const absent=stt!=="aanwezig";const sc=scoreFor(naam);
+          const row=[naam,statusLabel(stt),tijdTekst(absent?normVan(naam):sc.norm)];
+          for(let i=1;i<=(R.ronden||3);i++){
+            const t=absent?null:sc.tijden[i-1];
+            row.push(t==null?"":tijdTekst(t),(absent||sc.punten[i-1]==null)?"":sc.punten[i-1]);
+          }
+          if(absent)row.push("","","");
+          else row.push(sc.tijdTot==null?"":sc.tijdTot,sc.inzet==null?"":sc.inzet,sc.count>0?sc.totaal:"");
+          ws.addRow(row).eachCell(c=>bord(c));
+        });
+      }else if(R.type==="meting"){
         const od=R.onderdelen[st.sport];
         ws.addRow(["Techniek-criteria (elk 0-3 → samen /10) — Leerplandoel: "+(R.lpdTechniek||"LPD 1")]).font={bold:true};
         styleHead(ws.addRow(["Criterium","0","1","2","3"]));
@@ -1848,7 +2067,19 @@ function leerlingGeschiedenis(naam){
     const stt=(st.status&&st.status[naam])||"aanwezig";
     const R=RUBRIEKEN[st.categorie];
     let beh=0,max=0,tel=0,det=[];
-    if(R){
+    if(R&&R.type==="ronden"){
+      const norm=parseInt(st.data[naam].__norm,10)||R.normen[0][0];
+      for(let i=1;i<=(R.ronden||3);i++){
+        const sec=parseTijd(st.data[naam]["__r"+i]);
+        const pn=rondePunt(sec,norm,R);
+        if(pn==null)continue;
+        beh+=pn;max+=R.perRonde;tel++;
+        det.push({naam:"Ronde "+i+" ("+tijdTekst(sec)+")",v:pn,max:R.perRonde});
+      }
+      const iv=st.data[naam][R.inzet.key];
+      if(iv!=null){beh+=iv;max+=R.inzet.max;tel++;det.push({naam:R.inzet.naam,v:iv,max:R.inzet.max});}
+    }
+    else if(R){
       const cs=(R.type==="meting")
         ? ((R.onderdelen[st.sport]||{techniek:[]}).techniek||[]).map((t,ix)=>({key:"t"+ix,naam:t.naam,max:3}))
         : R.criteria;
@@ -2248,7 +2479,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v62";
+const APP_VERSION="v63";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -2657,6 +2888,21 @@ function renderEvolutie(){
   if(!evs.length){box.innerHTML='<div class="muted" style="font-size:12px">Nog geen evaluaties voor dit domein bij deze klas.</div>';return;}
   const R=RUBRIEKEN[cat];const cur=state;
   let html='<div class="muted" style="font-size:11.5px;margin-bottom:6px">'+naam+' · '+R.label+' · '+evs.length+' meetmoment'+(evs.length===1?"":"en")+'</div><div class="ovwrap"><table class="ovtbl">';
+  if(R.type==="ronden"){
+    html+='<tr><th class="nm"></th>';
+    evs.forEach(st=>{const d=parseISO(st.datum);html+='<th>'+(d?(d.getDate()+"/"+(d.getMonth()+1)):st.datum)+'</th>';});
+    html+='</tr>';
+    const rij=(lab,fn)=>{html+='<tr><td class="nm">'+lab+'</td>';
+      evs.forEach(st=>{state=st;const stt=(st.status&&st.status[naam])||"aanwezig";
+        html+='<td>'+((stt!=="aanwezig")?"\u2013":fn(scoreFor(naam),st))+'</td>';});
+      state=cur;html+='</tr>';};
+    for(let i=1;i<=(R.ronden||3);i++)rij("Ronde "+i,(sc)=>{const t=sc.tijden[i-1];return t==null?"\u00b7":tijdTekst(t);});
+    rij("Punten tijden",(sc)=>sc.tijdTot==null?"\u00b7":fmtPt(sc.tijdTot)+"/"+sc.maxTijd);
+    rij("Inzet",(sc)=>sc.inzet==null?"\u00b7":fmtPt(sc.inzet)+"/"+R.inzet.max);
+    rij("Norm",(sc)=>tijdTekst(sc.norm));
+    rij("Totaal",(sc)=>sc.count>0?("<b>"+fmtPt(sc.totaal)+"/"+sc.maxTot+"</b>"):"\u00b7");
+    html+='</table></div>';box.innerHTML=html;return;
+  }
   if(R.type!=="meting"){
     html+='<tr><th class="nm">Criterium</th>';
     evs.forEach(st=>{const d=parseISO(st.datum);html+='<th>'+(d?(d.getDate()+"/"+(d.getMonth()+1)):st.datum)+'</th>';});
@@ -2689,6 +2935,19 @@ function buildEvolutieCSV(klas,naam,cat){
   push(["EVOLUTIERAPPORT"]);push(["Leerling",naam,"Klas",klas]);push(["Bewegingsdomein",R.label]);
   push(["Meetmomenten",evs.map(s=>s.datum+(s.sport?(" ("+s.sport+")"):"")).join(" · ")]);
   push([]);
+  if(R.type==="ronden"){
+    push([""].concat(evs.map(s=>s.datum)));
+    const rij=(lab,fn)=>{const row=[lab];
+      evs.forEach(st=>{state=st;const stt=(st.status&&st.status[naam])||"aanwezig";
+        row.push(stt!=="aanwezig"?statusLabel(stt):fn(scoreFor(naam),st));});
+      state=cur;push(row);};
+    for(let i=1;i<=(R.ronden||3);i++)rij("Ronde "+i,(sc)=>{const t=sc.tijden[i-1];return t==null?"":tijdTekst(t);});
+    rij("Punten tijden",(sc)=>sc.tijdTot==null?"":sc.tijdTot);
+    rij("Inzet",(sc)=>sc.inzet==null?"":sc.inzet);
+    rij("Norm per ronde",(sc)=>tijdTekst(sc.norm));
+    rij("Totaal op "+((R.ronden||3)*R.perRonde+R.inzet.max),(sc)=>sc.count>0?sc.totaal:"");
+    return "\ufeff"+L.join("\r\n");
+  }
   if(R.type!=="meting"){
     push(["Criterium"].concat(evs.map(s=>s.datum)).concat(["Verschil begin→laatst","Leerplandoel"]));
     R.criteria.forEach(c=>{const row=[c.naam];let first=null,last=null;
