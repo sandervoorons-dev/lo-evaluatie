@@ -155,6 +155,17 @@
   .histsub{font-size:11.5px;color:var(--muted);margin-top:1px}
   .histdet{display:flex;flex-wrap:wrap;gap:4px 9px;margin-top:5px;font-size:11px;color:var(--muted)}
   .histdet b{color:var(--ink)}
+  .evomaand{display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer;
+    background:var(--glass);border:1px solid var(--glassb);border-radius:10px;padding:10px 12px;margin:10px 0 0;
+    font:inherit;color:var(--ink)}
+  .evomaand:hover{border-color:var(--accent-deep)}
+  .evomaand .pijl{font-size:11px;color:var(--muted);transition:transform .15s;flex-shrink:0}
+  .evomaand.open .pijl{transform:rotate(90deg)}
+  .evomaand .mtt{flex:1;min-width:0}
+  .evomnm{display:block;font-size:13.5px;font-weight:700}
+  .evomsub{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
+  .evomsub b{color:var(--accent-deep)}
+  .evomlijf{padding:0 2px 6px}
   .evoweek{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 2px;padding-top:11px;border-top:1px solid var(--line)}
   .evoweek:first-of-type{margin-top:4px;border-top:none;padding-top:0}
   .evowt{font-size:13px;font-weight:700;color:var(--ink);line-height:1.35}
@@ -574,51 +585,39 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       </details>
     </div>
     <div class="card">
-      <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
-      <div class="hint" style="margin-bottom:9px">Toont per criterium hoe een leerling evolueert over de meetmomenten binnen een domein (begin → laatste). Kies de klas bovenaan. Herleidbaar tot de gedateerde evaluaties; download het rapport als bewijs.</div>
-      <div class="grouped">
-        <div class="grow"><span class="glabel">Leerling</span><select id="evleer" class="gsel"></select></div>
-        <div class="gdiv"></div>
-        <div class="grow"><span class="glabel">Domein</span><select id="evdom" class="gsel"></select></div>
-      </div>
-      <div id="evout" style="margin-top:11px"></div>
-      <button class="btn primary" id="evdl" style="width:100%;margin-top:10px">Download evolutierapport</button>
-    </div>
-    <div class="card">
-      <div class="critttl" style="font-size:14px;margin-bottom:4px">Evaluaties &mdash; overzicht</div>
-      <div class="hint" style="margin-bottom:8px" id="evosam"></div>
+      <div class="critttl" style="font-size:14px;margin-bottom:4px">Evaluaties</div>
+      <div class="hint" style="margin-bottom:9px" id="evosam"></div>
+      <div class="dlundo" id="dlundo" style="display:none"></div>
+      <button class="btn primary" id="dlweek" style="width:100%">Download alles wat nieuw is</button>
+      <div class="hint" style="margin-top:7px">E&eacute;n Excel-bestand met een tabblad per klas. <a id="dlreopen" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles opnieuw klaarzetten</a> &middot; <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">alles als gedownload markeren</a></div>
+      <div class="critttl" style="margin:15px 0 4px">Of per klas apart</div>
+      <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan &mdash; handig voor een map per klas in OneDrive.</div>
+      <div id="perklas"></div>
+      <div class="critttl" style="margin:16px 0 6px">Wat staat er in de app</div>
       <div class="seg" id="evoseg"></div>
       <div id="evolijst"></div>
       <div class="hint" style="margin-top:10px">Tik op een evaluatie om ze opnieuw te openen. Een gedownloade evaluatie blijft gewoon bewaard in de app.</div>
+      <div class="muted" id="weekinfo" style="display:none"></div>
     </div>
     <div class="card">
-      <div class="critttl" style="font-size:14px;margin-bottom:4px">Exporteren</div>
-      <div class="hint" style="margin-bottom:10px">Alles wat naar Smartschool of OneDrive moet, staat hier bij elkaar.</div>
-      <div class="dlundo" id="dlundo" style="display:none"></div>
-      <button class="btn primary" id="dlweek" style="width:100%">Download nieuwe evaluaties</button>
-      <div class="muted" id="weekinfo" style="margin-top:8px"></div>
-      <div class="hint" style="margin-top:6px">Alles wat je nog niet downloadde, komt in één Excel-bestand met een tabblad per klas. Wat je al downloadde, blijft bewaard in de app maar zit er niet meer in. <a id="dlreset" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles als gedownload markeren</a> · <a id="dlreopen" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">Alles opnieuw klaarzetten</a></div>
-      <div class="critttl" style="margin:14px 0 4px">Of per klas apart</div>
-      <div class="hint" style="margin-bottom:6px">E&eacute;n bestand per klas, met de klasnaam vooraan — handig om in OneDrive in een map per klas te bewaren.</div>
-      <div id="perklas"></div>
-      <div class="critttl" style="margin:16px 0 4px">Register over een periode</div>
-      <div class="hint" style="margin-bottom:9px">Voor je puntenboek: de kledij- en aanwezigheidsscores van alle klassen in &eacute;&eacute;n Excel-bestand, een tabblad per klas.</div>
+      <div class="critttl" style="font-size:14px;margin-bottom:4px">Register &amp; rapporten</div>
+      <div class="hint" style="margin-bottom:10px">Alles wat niet over de evaluaties zelf gaat.</div>
+      <div class="critttl" style="margin:0 0 4px">Register over een periode</div>
+      <div class="hint" style="margin-bottom:9px">Voor je puntenboek: kledij en aanwezigheid van alle klassen in &eacute;&eacute;n Excel-bestand, een tabblad per klas.</div>
       <div class="row2" style="margin-bottom:9px">
         <div><label class="fld">Van</label><input type="date" id="afvan"></div>
         <div><label class="fld">Tot</label><input type="date" id="aftot"></div>
       </div>
       <button class="btn ghost" id="afdl" style="width:100%">Download maandoverzicht</button>
-      <div class="critttl" style="margin:16px 0 4px">Deze ene evaluatie</div>
-      <div class="hint" style="margin-bottom:9px">De evaluatie die nu openstaat in het tabblad Les.</div>
+      <div class="critttl" style="margin:16px 0 4px">Kledijopvolging</div>
+      <div class="hint" style="margin-bottom:9px">De tellingen en sancties uit de periode die je bij het register koos &mdash; voor de leerlingbegeleiding of de klassenraad.</div>
+      <button class="btn ghost" id="sanccsv" style="width:100%">Download (CSV)</button>
+      <div class="critttl" style="margin:16px 0 4px">Register van vandaag</div>
+      <div class="hint" style="margin-bottom:9px">De klas en de dag die nu openstaan in het tabblad Les.</div>
       <div class="actions">
-        <button class="btn ghost" id="dlcsv">Download (CSV)</button>
+        <button class="btn ghost" id="regcsv">Register (CSV)</button>
         <button class="btn ghost" id="copyss">Kopieer voor Smartschool</button>
       </div>
-      <div class="critttl" style="margin:16px 0 4px">Register van vandaag</div>
-      <button class="btn ghost" id="regcsv" style="width:100%">Download (CSV)</button>
-      <div class="critttl" style="margin:16px 0 4px">Kledijopvolging</div>
-      <div class="hint" style="margin-bottom:9px">De lijst met tellingen en sancties uit de periode die je hierboven koos &mdash; voor de leerlingbegeleiding of de klassenraad.</div>
-      <button class="btn ghost" id="sanccsv" style="width:100%">Download (CSV)</button>
     </div>
   </div>
 
@@ -2170,6 +2169,7 @@ function openHistoriek(naam,accentSport){
    Een gedownloade evaluatie blijft gewoon in de app staan; enkel de
    downloadwachtrij ("nieuwe evaluaties") laat ze weg. */
 let evoScope="alles";
+let evoDicht={};  /* maandsleutel -> true = dichtgeklapt */
 function alleEvaluaties(){
   const uit=[];
   for(let i=0;i<localStorage.length;i++){
@@ -2180,6 +2180,14 @@ function alleEvaluaties(){
   }
   uit.sort((a,b)=>(b.st.datum||"").localeCompare(a.st.datum||"")||(a.st.klas||"").localeCompare(b.st.klas||""));
   return uit;
+}
+const MAANDNAMEN=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
+function maandSleutel(iso){return (iso||"").slice(0,7);}
+function maandLabel(sleutel){
+  const j=parseInt(sleutel.slice(0,4),10), m=parseInt(sleutel.slice(5,7),10);
+  const nu=todayISO().slice(0,7);
+  const naam=(MAANDNAMEN[m-1]||sleutel)+" "+j;
+  return (sleutel===nu?"Deze maand · ":"")+naam.charAt(0).toUpperCase()+naam.slice(1);
 }
 function weekLabel(maISO){
   const ma=parseISO(maISO);if(!ma)return maISO;
@@ -2220,44 +2228,78 @@ function renderEvOverzicht(){
       : "Nog geen opgeslagen evaluaties.";
   }
   if(!lijst.length)return;
-  /* per week groeperen */
-  const weken={};
-  lijst.forEach(it=>{const ma=weekRange(it.st.datum)[0];(weken[ma]=weken[ma]||[]).push(it);});
-  Object.keys(weken).sort().reverse().forEach(ma=>{
-    const items=weken[ma];
-    const open=items.filter(x=>!x.dl);
-    const kop=document.createElement("div");kop.className="evoweek";
-    const t=document.createElement("div");t.className="evowt";
-    t.innerHTML=weekLabel(ma)+'<span class="evown">'+items.length+" evaluatie"+(items.length===1?"":"s")+
-      (open.length?(' · <b>'+open.length+" nieuw</b>"):' · gedownload')+'</span>';
-    kop.appendChild(t);
-    if(open.length){
-      const dl=document.createElement("button");dl.className="sancbtn";dl.textContent="download week";
-      dl.onclick=async()=>{const ok=await downloadBundel(open,"");toast(ok?"Week gedownload":"Downloaden lukte niet");};
-      kop.appendChild(dl);
-    }
+
+  /* Eerst per maand, daarin per week. Voorbije maanden staan dichtgeklapt,
+     behalve als er in die maand nog iets te downloaden valt. */
+  const maanden={};
+  lijst.forEach(it=>{const mk=maandSleutel(it.st.datum);(maanden[mk]=maanden[mk]||[]).push(it);});
+  const nuMaand=todayISO().slice(0,7);
+
+  Object.keys(maanden).sort().reverse().forEach(mk=>{
+    const mitems=maanden[mk];
+    const mopen=mitems.filter(x=>!x.dl);
+    const standaardOpen=(mk===nuMaand)||(mopen.length>0);
+    const dicht=(evoDicht[mk]===undefined)?!standaardOpen:evoDicht[mk];
+
+    const kop=document.createElement("button");
+    kop.type="button";kop.className="evomaand"+(dicht?"":" open");
+    kop.innerHTML='<span class="pijl">&#9654;</span><span class="mtt">'+
+      '<span class="evomnm">'+maandLabel(mk)+'</span>'+
+      '<span class="evomsub">'+mitems.length+" evaluatie"+(mitems.length===1?"":"s")+
+      (mopen.length?(' · <b>'+mopen.length+" nog te downloaden</b>"):" · alles gedownload")+'</span></span>';
+    kop.onclick=()=>{evoDicht[mk]=!dicht;renderEvOverzicht();};
     box.appendChild(kop);
-    items.forEach(it=>{
-      const r=document.createElement("div");r.className="evorow"+(it.dl?"":" nieuw");
-      const l=document.createElement("div");l.className="evol";
-      const sp=(it.st.sport||"")+(it.st.spec?(" – "+it.st.spec):"");
-      l.innerHTML='<div class="evonm">'+kortDat(it.st.datum)+' · '+it.st.klas.replace(/</g,"&lt;")+'</div>'+
-        '<div class="evosp">'+sp.replace(/</g,"&lt;")+'</div>';
-      l.onclick=()=>openEvaluatie(it);
-      const rr=document.createElement("div");rr.className="evor";
-      const bad=document.createElement("div");bad.className="evobadge"+(it.dl?"":" nieuw");
-      bad.textContent=it.dl?"gedownload":"nieuw";
-      if(it.dl&&getDl()[it.k])bad.title="Gedownload op "+kortDat(getDl()[it.k]);
-      rr.appendChild(bad);
-      const a=document.createElement("a");a.className="evoact";
-      a.textContent=it.dl?"opnieuw":"download";
-      a.onclick=()=>{
-        if(it.dl){unmarkDl(it.k);updateWeekInfo();renderEvOverzicht();toast("Terug in de lijst");return;}
-        const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";
-        download(fname(),buildCSV());state=cur;
-        markDl([it.k]);showDlUndo([it.k],"1 evaluatie gedownload");updateWeekInfo();renderEvOverzicht();};
-      rr.appendChild(a);
-      r.appendChild(l);r.appendChild(rr);box.appendChild(r);
+    if(dicht)return;
+
+    const lijf=document.createElement("div");lijf.className="evomlijf";
+    box.appendChild(lijf);
+
+    if(mopen.length>1){
+      const md=document.createElement("button");md.className="sancbtn";md.style.margin="8px 0 0";
+      md.textContent="download deze maand ("+mopen.length+")";
+      md.onclick=async()=>{const ok=await downloadBundel(mopen,"");toast(ok?"Maand gedownload":"Downloaden lukte niet");};
+      lijf.appendChild(md);
+    }
+
+    /* per week groeperen binnen de maand */
+    const weken={};
+    mitems.forEach(it=>{const ma=weekRange(it.st.datum)[0];(weken[ma]=weken[ma]||[]).push(it);});
+    Object.keys(weken).sort().reverse().forEach(ma=>{
+      const items=weken[ma];
+      const open=items.filter(x=>!x.dl);
+      const wk=document.createElement("div");wk.className="evoweek";
+      const t=document.createElement("div");t.className="evowt";
+      t.innerHTML=weekLabel(ma)+'<span class="evown">'+items.length+" evaluatie"+(items.length===1?"":"s")+
+        (open.length?(' · <b>'+open.length+" nieuw</b>"):' · gedownload')+'</span>';
+      wk.appendChild(t);
+      if(open.length){
+        const dl=document.createElement("button");dl.className="sancbtn";dl.textContent="download week";
+        dl.onclick=async()=>{const ok=await downloadBundel(open,"");toast(ok?"Week gedownload":"Downloaden lukte niet");};
+        wk.appendChild(dl);
+      }
+      lijf.appendChild(wk);
+      items.forEach(it=>{
+        const r=document.createElement("div");r.className="evorow"+(it.dl?"":" nieuw");
+        const l=document.createElement("div");l.className="evol";
+        const sp=(it.st.sport||"")+(it.st.spec?(" \u2013 "+it.st.spec):"");
+        l.innerHTML='<div class="evonm">'+kortDat(it.st.datum)+' \u00b7 '+it.st.klas.replace(/</g,"&lt;")+'</div>'+
+          '<div class="evosp">'+sp.replace(/</g,"&lt;")+'</div>';
+        l.onclick=()=>openEvaluatie(it);
+        const rr=document.createElement("div");rr.className="evor";
+        const bad=document.createElement("div");bad.className="evobadge"+(it.dl?"":" nieuw");
+        bad.textContent=it.dl?"gedownload":"nieuw";
+        if(it.dl&&getDl()[it.k])bad.title="Gedownload op "+kortDat(getDl()[it.k]);
+        rr.appendChild(bad);
+        const a=document.createElement("a");a.className="evoact";
+        a.textContent=it.dl?"opnieuw":"download";
+        a.onclick=()=>{
+          if(it.dl){unmarkDl(it.k);updateWeekInfo();renderEvOverzicht();toast("Terug in de lijst");return;}
+          const cur=state;state=it.st;if(!state.categorie)state.categorie="trefspelen";
+          download(fname(),buildCSV());state=cur;
+          markDl([it.k]);showDlUndo([it.k],"1 evaluatie gedownload");updateWeekInfo();renderEvOverzicht();};
+        rr.appendChild(a);
+        r.appendChild(l);r.appendChild(rr);lijf.appendChild(r);
+      });
     });
   });
 }
@@ -2465,7 +2507,7 @@ function switchTab(t){
   if(t==="les"){initSanctie();toonLesDeel();if($("regovcard"))renderRegOverview();}
   if(t==="lesfiches")renderLesfiches();
   if(t!=="klas"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="klas"){renderKlasKop();renderOverview();populateEv();renderEvolutie();updateWeekInfo();renderEvOverzicht();}
+  if(t==="klas"){renderKlasKop();renderOverview();updateWeekInfo();renderEvOverzicht();}
   if(t==="instellingen"){renderThemaKiezer();renderSaved();updateBackupStatus();}
 }
 
@@ -2496,7 +2538,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v64";
+const APP_VERSION="v65";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -2908,6 +2950,10 @@ function evalsForKlasCat(klas,cat){
   out.sort((a,b)=>(a.datum||"").localeCompare(b.datum||""));
   return out;
 }
+/* PARKEERPLAATS - evolutie per leerling.
+   De kaart staat sinds v65 niet meer op het tabblad Klas (te veel ruis zolang er
+   weinig meetmomenten zijn). De functies blijven staan zodat we ze later in een
+   keer weer kunnen aanzetten; ze doen niets zolang de elementen er niet zijn. */
 function populateEv(){
   const ls=$("evleer"),ds=$("evdom");if(!ls||!ds||!state)return;
   const curL=ls.value;
@@ -3005,7 +3051,7 @@ function buildEvolutieCSV(klas,naam,cat){
 function refreshAll(){
   renderDateStrip();renderLesbar();
   if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">· '+graadVoorKlas(state.klas)+' gr ▾</span>';
-  renderOpzet();renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();populateEv();
+  renderOpzet();renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();
   if(currentTab==="klas")renderKlasKop();
   if($("regovcard"))renderRegOverview();
 }
@@ -3049,7 +3095,6 @@ function init(){
   $("delEval").onclick=()=>{if(!state)return;if(!confirm("Deze evaluatie volledig wissen (scores én status)? Dit kan niet ongedaan worden gemaakt."))return;
     KLASSEN[state.klas].forEach(n=>{crits().forEach(c=>state.data[n][c.key]=null);if(curRubriek().type==="meting")state.data[n].__meting="";state.status[n]="aanwezig";});
     state.saved=false;localStorage.removeItem(keyFor(state.klas,state.datum,sportLabel()));refreshAll();toast("Evaluatie gewist");};
-  $("dlcsv").onclick=()=>{saveState();download(fname(),buildCSV());toast("CSV gedownload");};
   $("dlweek").onclick=async ()=>{
     const items=nieuweEvaluaties();
     if(!items.length){toast("Alles is al gedownload");return;}
@@ -3072,8 +3117,6 @@ function init(){
     localStorage.setItem("lo_last_backup",todayISO());updateBackupStatus();$("bubanner").style.display="none";
   };
   $("bunow").onclick=()=>{switchTab("instellingen");$("dlall").click();};
-  $("evleer").onchange=renderEvolutie;$("evdom").onchange=renderEvolutie;
-  $("evdl").onclick=()=>{if(!state)return;const naam=$("evleer").value,cat=$("evdom").value;if(!naam||!cat){toast("Kies leerling en domein");return;}const t=buildEvolutieCSV(state.klas,naam,cat);if(!t){toast("Geen evaluaties voor dit domein");return;}download(state.klas.replace(/[^\w]+/g,"-")+"_"+naam.replace(/[^\w]+/g,"-")+"_Evolutie_"+(RUBRIEKEN[cat].label.replace(/[^\w]+/g,"-"))+".csv",t);toast("Evolutierapport gedownload");};
   $("fbadd").onclick=()=>{const v=$("fbinput").value.trim();if(!v)return;const a=getFb();a.push({t:nowStamp(),txt:v});saveFb(a);$("fbinput").value="";renderFeedback();toast("Opmerking toegevoegd");};
   $("fbcsv").onclick=()=>{if(!getFb().length){toast("Geen opmerkingen");return;}download("Opmerkingen_app_"+todayISO()+".csv",buildFbCSV());toast("Opmerkingen gedownload");};
   if($("appversion"))$("appversion").textContent="LO Evaluatie · versie "+APP_VERSION;
