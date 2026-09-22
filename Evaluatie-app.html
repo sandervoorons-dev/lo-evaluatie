@@ -169,6 +169,18 @@
     background:rgba(120,100,60,.13);color:var(--muted);white-space:nowrap}
   .evobadge.nieuw{background:rgba(244,194,74,.5);color:var(--accent-ink)}
   .evoact{font-size:11.5px;color:var(--accent-deep);cursor:pointer;text-decoration:underline;white-space:nowrap}
+  .ovtbl th.inper{color:var(--accent-deep);font-weight:700}
+  .ovtbl td.tel{font-variant-numeric:tabular-nums}
+  .telbad{display:inline-block;min-width:22px;padding:2px 6px;border-radius:20px;font-size:11.5px;font-weight:700;
+    background:rgba(120,100,60,.14);color:var(--ink)}
+  .telbad.raak{background:rgba(214,80,60,.22);color:#bb3326;cursor:pointer}
+  .telleeg{color:#c4ccc2}
+  .ovtbl tr.raakrij td.nm{color:#bb3326;font-weight:600}
+  .sancwaar{margin-top:10px;background:rgba(214,80,60,.12);border:1px solid rgba(214,80,60,.3);border-radius:12px;
+    padding:9px 12px;font-size:12px;line-height:1.5}
+  .sancwaar b{display:block;color:#bb3326;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
+  .sancwaar span{display:block;color:var(--ink)}
+  .sancwaar .sancuitleg{color:var(--muted);font-size:11px;margin-top:3px}
   .sancrow{display:flex;align-items:center;gap:10px;padding:10px 2px;border-top:1px solid var(--line)}
   .sancrow:first-of-type{border-top:none}
   .sancl{flex:1;min-width:0}
@@ -419,6 +431,12 @@ html[data-thema="donker"] .histrow.accent{background:rgba(242,180,65,.14)}
 html[data-thema="donker"] .hm2.laag,html[data-thema="donker"] .histsc.laag{color:#F3A092}
 html[data-thema="donker"] .evobadge{background:#2E333A;color:#9AA2AC}
 html[data-thema="donker"] .evobadge.nieuw{background:rgba(242,180,65,.22);color:var(--accent)}
+html[data-thema="donker"] .telbad{background:#2E333A;color:var(--ink)}
+html[data-thema="donker"] .telbad.raak{background:rgba(214,80,60,.26);color:#F3A092}
+html[data-thema="donker"] .ovtbl tr.raakrij td.nm{color:#F3A092}
+html[data-thema="donker"] .sancwaar{background:rgba(214,80,60,.15);border-color:rgba(214,80,60,.35)}
+html[data-thema="donker"] .sancwaar b{color:#F3A092}
+html[data-thema="donker"] .telleeg{color:#565C64}
 html[data-thema="donker"] .sancbadge{background:#2E333A;color:var(--ink)}
 html[data-thema="donker"] .sancbadge.raak{background:rgba(214,80,60,.24);color:#F3A092}
 html[data-thema="donker"] .sancrow.raak .sancnm{color:#F3A092}
@@ -495,8 +513,8 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
       <span><b style="color:#7a818a">A</b> afwezig</span>
       <span><b style="color:#a07c1e">D</b> attest</span>
     </div>
-      <div class="card" id="sanccard">
-        <div class="critttl" style="margin-bottom:4px">Kledij &mdash; hoe vaak niet in orde</div>
+      <div class="card" id="regovcard">
+        <div class="critttl" style="margin-bottom:4px">Overzicht kledij &amp; aanwezigheid</div>
         <div class="hint" style="margin-bottom:8px"><span id="sancsam"></span> &middot; <a id="sancinst" style="color:var(--accent-deep);cursor:pointer;text-decoration:underline">instellen</a></div>
         <div id="sancinstel" style="display:none">
           <div class="seg" id="sancseg"></div>
@@ -509,6 +527,8 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
           <div class="grouped" style="margin-bottom:11px"><div class="grow"><span class="glabel">keer niet in orde</span>
             <select id="sancdrempel" class="gsel"><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
         </div>
+        <div class="ovwrap"><table class="ovtbl" id="regov"></table></div>
+        <div class="hint">Score /10 = (in orde + D) &divide; deelname &times; 10, vanaf 50% deelname. De kolom <b>&times;</b> telt hoe vaak iemand niet in orde was in de gekozen periode.</div>
         <div id="sanclijst"></div>
       </div>
     </div>
@@ -552,11 +572,6 @@ html[data-thema="donker"] .info,html[data-thema="donker"] .lfsk{color:var(--acce
         <table class="smalltbl" id="overview"></table>
         <div class="muted" id="klasgem" style="margin-top:6px"></div>
       </details>
-    </div>
-    <div class="card" id="regovcard">
-      <div class="critttl" style="margin-bottom:8px">Kledij &amp; aanwezigheid</div>
-      <div class="ovwrap"><table class="ovtbl" id="regov"></table></div>
-  <div class="hint">Score /10 = (in orde + D) &divide; deelname &times; 10, en pas vanaf 50% deelname.</div>
     </div>
     <div class="card">
       <div class="critttl" style="margin-bottom:6px">Evolutie per leerling</div>
@@ -2328,7 +2343,7 @@ function renderSanctie(){
     [["klas","Deze klas"],["alle","Al mijn klassen"]].forEach(o=>{
       const b=document.createElement("div");b.textContent=o[1];
       b.className="segopt"+(sancScope===o[0]?" on":"");
-      b.onclick=()=>{sancScope=o[0];renderSanctie();};seg.appendChild(b);});}
+      b.onclick=()=>{sancScope=o[0];renderRegOverview();renderSanctie();};seg.appendChild(b);});}
   const pb=$("sancper");
   if(pb){pb.innerHTML="";
     const hp=huidigePeriode(selDate);
@@ -2336,17 +2351,19 @@ function renderSanctie(){
       const g=periodeGrenzen(i,selDate);
       const b=document.createElement("div");b.textContent=pp[0];
       b.className="pill"+((sancVan()===g[0]&&sancTot()===g[1])?" on":" off");
-      b.onclick=()=>{$("sancvan").value=g[0];$("sanctot").value=g[1];renderSanctie();};
+      b.onclick=()=>{$("sancvan").value=g[0];$("sanctot").value=g[1];renderRegOverview();renderSanctie();};
       pb.appendChild(b);});}
   box.innerHTML="";
   const d=drempel(),rijen=sancRijen();
-  const raak=rijen.filter(r=>r.raak).length;
-  const kop=document.createElement("div");kop.className="hint";kop.style.marginBottom="9px";
-  kop.innerHTML=rijen.length
-    ? ("<b>"+raak+"</b> leerling"+(raak===1?"":"en")+" op of boven de drempel van "+d+"&times;, "+
-       rijen.length+" met minstens &eacute;&eacute;n keer niet in orde.")
-    : "Niemand stond niet in orde in deze periode.";
-  box.appendChild(kop);
+  const raak=rijen.filter(r=>r.raak);
+  if(raak.length){
+    const w=document.createElement("div");w.className="sancwaar";
+    w.innerHTML='<b>'+raak.length+' leerling'+(raak.length===1?"":"en")+' op of boven '+d+'&times;</b>'+
+      '<span>'+raak.map(r=>r.naam+" ("+r.n+"\u00d7)").join(" \u00b7 ")+'</span>'+
+      '<span class="sancuitleg">Tik op het rode cijfer in de kolom \u00d7 om een sanctie te noteren.</span>';
+    box.appendChild(w);
+  }
+  return;
   rijen.forEach(r=>{
     const row=document.createElement("div");row.className="sancrow"+(r.raak?" raak":"");
     const l=document.createElement("div");l.className="sancl";
@@ -2445,10 +2462,10 @@ function switchTab(t){
   $("strip").style.display=(t==="les")?"flex":"none";
   renderLesbar();
   $("klaschip").style.display=(t==="les"||t==="klas")?"block":"none";
-  if(t==="les"){initSanctie();toonLesDeel();}
+  if(t==="les"){initSanctie();toonLesDeel();if($("regovcard"))renderRegOverview();}
   if(t==="lesfiches")renderLesfiches();
   if(t!=="klas"&&$("dlundo"))$("dlundo").style.display="none";
-  if(t==="klas"){renderKlasKop();renderOverview();renderRegOverview();populateEv();renderEvolutie();updateWeekInfo();initSanctie();renderEvOverzicht();}
+  if(t==="klas"){renderKlasKop();renderOverview();populateEv();renderEvolutie();updateWeekInfo();renderEvOverzicht();}
   if(t==="instellingen"){renderThemaKiezer();renderSaved();updateBackupStatus();}
 }
 
@@ -2479,7 +2496,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v63";
+const APP_VERSION="v64";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
@@ -2708,7 +2725,7 @@ function regCell(v){
 }
 function renderReg(){
   const wrap=$("reglist");if(!wrap)return;wrap.innerHTML="";
-  setTimeout(()=>{if($("sanclijst"))renderSanctie();},0);
+  setTimeout(()=>{if($("regovcard")){renderRegOverview();renderSanctie();}},0);
   if(regJustSaved===selDate){const note=document.createElement("div");note.className="regsavednote";note.textContent="✓ Opgeslagen — je kan nog aanpassen; kies een andere dag voor een nieuw blad";wrap.appendChild(note);}
   const lopend=KLASSEN[state.klas].filter(n=>attActief(state.klas,n,selDate));
   if(lopend.length){
@@ -2740,7 +2757,7 @@ function renderReg(){
       b.onclick=()=>{
         if(o[0]==="D"&&att&&!expl){openAttest(state.klas,naam);return;}
         regJustSaved=null;regSet(state.klas,selDate,naam,cur===o[0]?null:o[0]);renderReg();
-        if($("regovcard")&&currentTab==="klas")renderRegOverview();};
+        if($("regovcard"))renderRegOverview();};
       dots.appendChild(b);
     });
     row.appendChild(nm);row.appendChild(dots);wrap.appendChild(row);
@@ -2767,32 +2784,50 @@ function openAttest(klas,naam){
     if(!it.value){toast("Vul in tot en met welke dag het attest loopt");return;}
     if(iv.value&&it.value<iv.value){toast("De einddatum ligt voor de startdatum");return;}
     setAtt(klas,naam,iv.value,it.value);closeSheet();renderReg();
-    if($("regovcard")&&currentTab==="klas")renderRegOverview();
+    if($("regovcard"))renderRegOverview();
     toast("Attest tot "+kortDat(it.value)+" opgeslagen");};
   box.appendChild(ok);
   if(hui){
     const del=document.createElement("button");del.className="clearbtn";del.textContent="Attest verwijderen";
     del.onclick=()=>{if(!confirm("Het doktersattest van "+naam+" verwijderen?"))return;
       setAtt(klas,naam,null,null);closeSheet();renderReg();
-      if($("regovcard")&&currentTab==="klas")renderRegOverview();toast("Attest verwijderd");};
+      if($("regovcard"))renderRegOverview();toast("Attest verwijderd");};
     box.appendChild(del);
   }
   $("backdrop").classList.add("open");$("sheet").classList.add("open");
 }
 function renderRegOverview(){
   const tbl=$("regov");if(!tbl)return;
-  const r=getReg(state.klas);const dates=regDates(state.klas);
+  const dates=regDates(state.klas);
+  const van=sancVan(),tot=sancTot(),dr=drempel();
   let html='<tr><th class="nm">Leerling</th>';
-  dates.forEach(iso=>{const d=parseISO(iso);html+='<th>'+(d?(d.getDate()+"/"+(d.getMonth()+1)):iso)+'</th>';});
-  html+='<th>Score</th></tr>';
+  dates.forEach(iso=>{const d=parseISO(iso);
+    const inPer=(iso>=van&&iso<=tot);
+    html+='<th'+(inPer?' class="inper"':'')+'>'+(d?(d.getDate()+"/"+(d.getMonth()+1)):iso)+'</th>';});
+  html+='<th>\u00d7</th><th>Score</th></tr>';
   KLASSEN[state.klas].forEach(naam=>{
     const sc=regScore(state.klas,naam);
-    html+='<tr><td class="nm">'+naam+'</td>';
+    const strikes=kledijStrikes(state.klas,naam,van,tot);
+    const raak=strikes.length>=dr;
+    html+='<tr'+(raak?' class="raakrij"':'')+'><td class="nm">'+naam+'</td>';
     dates.forEach(iso=>{html+='<td>'+regCell(regEff(state.klas,iso,naam))+'</td>';});
+    html+='<td class="tel">'+(strikes.length
+      ? ('<span class="telbad'+(raak?' raak':'')+'" data-n="'+naam.replace(/"/g,"&quot;")+'">'+strikes.length+'</span>')
+      : '<span class="telleeg">\u00b7</span>')+'</td>';
     html+='<td>'+(sc.score==null?'<span style="color:#b5772a;font-size:11px">te weinig</span>':'<b style="color:'+(sc.score<5?"#bb3326":"#1c7a45")+'">'+sc.score.toFixed(1)+'</b>')+'</td></tr>';
   });
   if(!dates.length)html+='<tr><td class="nm" style="color:var(--muted)">Nog niets opgenomen voor deze klas.</td></tr>';
   tbl.innerHTML=html;
+  tbl.querySelectorAll(".telbad.raak").forEach(el=>{
+    el.onclick=()=>{
+      const naam=el.getAttribute("data-n");
+      const dagen=kledijStrikes(state.klas,naam,sancVan(),sancTot());
+      if(!dagen.length)return;
+      const tm=dagen[dagen.length-1];
+      if(!confirm("Sanctie noteren voor "+naam+"?\n\n"+dagen.length+" keer niet in orde: "+dagen.map(kortDat).join(", ")+
+                  ".\nDaarmee zijn die afgehandeld en begint de teller opnieuw."))return;
+      sanctieToevoegen(state.klas,naam,tm);renderRegOverview();renderSanctie();toast("Sanctie genoteerd");};
+  });
 }
 function buildRegCSV(){
   const r=getReg(state.klas);const dates=regDates(state.klas);
@@ -2972,7 +3007,7 @@ function refreshAll(){
   if($("klaschip"))$("klaschip").innerHTML=state.klas+' <span class="cv">· '+graadVoorKlas(state.klas)+' gr ▾</span>';
   renderOpzet();renderToggles();renderStudents();renderOverview();renderReg();renderSaved();updateSaveStatus();updateWeekInfo();populateEv();
   if(currentTab==="klas")renderKlasKop();
-  if($("regovcard")&&currentTab==="klas")renderRegOverview();
+  if($("regovcard"))renderRegOverview();
 }
 function updateSaveStatus(){const el=$("savestatus");if(!el||!state)return;
   const open=onvolledigeLeerlingen();
@@ -2996,8 +3031,9 @@ function init(){
   $("klaschip").onclick=openKlasPicker;
   $("opzetline").onclick=toggleOpzet;
   $("sancinst").onclick=toggleSancInstel;
-  $("sancvan").onchange=renderSanctie;$("sanctot").onchange=renderSanctie;
-  $("sancdrempel").onchange=()=>{setDrempel(parseInt($("sancdrempel").value,10));renderSanctie();};
+  const versSanc=()=>{renderRegOverview();renderSanctie();};
+  $("sancvan").onchange=versSanc;$("sanctot").onchange=versSanc;
+  $("sancdrempel").onchange=()=>{setDrempel(parseInt($("sancdrempel").value,10));versSanc();};
   $("sanccsv").onclick=()=>{const t=buildSanctieCSV();download("Kledijopvolging_"+sancVan()+"_tot_"+sancTot()+".csv",t);toast("Kledijopvolging gedownload");};
   $("lfzoek").oninput=()=>{lfZoek=$("lfzoek").value;lfOpen=null;lfBewerk=null;renderLesfiches();};
   $("lfnieuw").onclick=()=>{lfBewerk="";lfOpen=null;renderLesfiches();window.scrollTo(0,0);};
@@ -3062,7 +3098,7 @@ function init(){
   };
   $("regcsv").onclick=()=>{download(todayISO()+"_"+state.klas.replace(/[^\w]+/g,"-")+"_Afwezigheden.csv",buildRegCSV());toast("Afwezigheden-CSV gedownload");};
   $("regwis").onclick=()=>{if(!confirm("Alle aanwezigheden van deze dag wissen voor "+state.klas+"?"))return;const r=getReg(state.klas);delete r[selDate];saveReg(state.klas,r);regJustSaved=null;renderReg();if($("regovcard"))renderRegOverview();toast("Dag gewist");};
-  $("regsave").onclick=()=>{regJustSaved=selDate;renderReg();if($("regovcard")&&currentTab==="klas")renderRegOverview();toast("Register opgeslagen");};
+  $("regsave").onclick=()=>{regJustSaved=selDate;renderReg();if($("regovcard"))renderRegOverview();toast("Register opgeslagen");};
   if($("aftot")){$("aftot").value=todayISO();const _f=new Date(parseISO(todayISO()).getTime()-27*86400000);$("afvan").value=localISO(_f);}
   $("afdl").onclick=async ()=>{let from=$("afvan").value,to=$("aftot").value;if(!from||!to){toast("Kies een periode");return;}if(from>to){const tmp=from;from=to;to=tmp;}
     if(typeof ExcelJS!=="undefined"){try{const blob=await buildAfwezigXLSX(from,to);if(!blob){toast("Geen afwezigheden in deze periode");return;}downloadBlob(from+"_tot_"+to+"_Afwezigheden_overzicht.xlsx",blob);toast("Maandoverzicht (Excel) gedownload");return;}catch(e){console.error(e);}}
