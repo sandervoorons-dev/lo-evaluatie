@@ -741,6 +741,7 @@ const LS_SEED="lo_tv_klassen_seed";
    inleest bij Instellingen > Back-up inlezen. Een lege app werkt gewoon: dan is
    er geen vooraf ingevulde klas en telt elke weekdag als lesdag. */
 const LS_SCHOOL="lo_school_v1";
+const LS_SCHOOLHINT="lo_school_hint";
 const LESUREN_STANDAARD=[["08:30","09:20"],["09:20","10:10"],["10:25","11:15"],["11:15","12:05"],
                          ["13:05","13:55"],["13:55","14:45"],["15:00","15:50"],["15:50","16:40"]];
 let SCHOOL={};
@@ -810,9 +811,21 @@ function renderLesbar(){
     bar.appendChild(row);
   }else if(!g){
     const d=parseISO(selDate),wd=d?d.getDay():0;
-    /* Er is wel een rooster van de school, maar de app weet nog niet wie je bent.
-       Zonder die keuze kan ze je klassen niet vooraf aanduiden. */
-    if(!curLk()&&Object.keys(ROOSTER_()).length){
+    /* Er zijn wel klassen, maar geen schoolinstellingen. Dan kan de app niet weten
+       welke dagen vrij zijn of welke klas je wanneer hebt, en dat is niet te zien
+       aan het scherm: het lijkt gewoon of die functies er niet zijn. Daarom een
+       zichtbare verwijzing naar het inlezen van het schoolbestand. */
+    if(!schoolIngesteld()&&!leegOnthaal()&&localStorage.getItem(LS_SCHOOLHINT)!=="weg"){
+      const w=document.createElement("div");w.className="geenles vrij";w.style.cursor="pointer";
+      w.innerHTML='<b>Rooster en vrije dagen ontbreken</b><span>lees je schoolbestand in bij Instellingen &rsaquo; Back-up inlezen</span>';
+      w.onclick=()=>{switchTab("instellingen");setTimeout(()=>{const f=$("restorefile");if(f)f.click();},250);};
+      const x=document.createElement("a");x.textContent="verbergen";
+      x.style.cssText="display:block;font-size:11px;color:var(--muted);text-decoration:underline;margin-top:5px";
+      x.onclick=(ev)=>{ev.stopPropagation();localStorage.setItem(LS_SCHOOLHINT,"weg");renderLesbar();};
+      w.appendChild(x);
+      bar.appendChild(w);
+    }
+    else if(!curLk()&&Object.keys(ROOSTER_()).length){
       const w=document.createElement("div");w.className="geenles vrij";w.style.cursor="pointer";
       w.innerHTML='<b>Kies je naam</b><span>dan duidt de app je klassen vanzelf aan</span>';
       w.onclick=()=>openKlasPicker();
@@ -2846,7 +2859,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v69";
+const APP_VERSION="v70";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
