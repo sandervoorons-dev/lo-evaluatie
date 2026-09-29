@@ -750,10 +750,17 @@ function loadSchool(){
   if(!SCHOOL||typeof SCHOOL!=="object")SCHOOL={};
 }
 loadSchool();
+/* De schoolkalender en de lesuren bevatten geen persoonsgegevens: enkel datums,
+   vakantienamen en beluren. Die mogen dus gewoon in de app zitten, zoals vroeger.
+   Alleen de klaslijsten (leerlingnamen) en het lessenrooster (wie welke klas heeft)
+   blijven buiten de code, want dat bestand komt op een publieke website terecht.
+   Staat er wel een schoolbestand ingelezen, dan gaat dat voor — zo kan een andere
+   school of een volgend schooljaar zijn eigen kalender meebrengen. */
+const GEENLES_STANDAARD={"2026-09-01":["blauw","Opstartdag"],"2026-09-11":["blauw","OLVI in connectie 1"],"2026-09-25":["blauw","Sportdag"],"2026-09-28":["blauw","KR-dag 1 (afstandsonderwijs)"],"2026-11-01":["geel","Allerheiligen"],"2026-11-02":["geel","Herfstvakantie"],"2026-11-03":["geel","Herfstvakantie"],"2026-11-04":["geel","Herfstvakantie"],"2026-11-05":["geel","Herfstvakantie"],"2026-11-06":["geel","Herfstvakantie"],"2026-11-11":["geel","Wapenstilstand"],"2026-11-18":["blauw","Leerlingencontact 1 + rapport 2"],"2026-12-15":["blauw","Kerstontbijt + KR"],"2026-12-16":["groen","KR — leerlingen thuis"],"2026-12-17":["groen","KR — leerlingen thuis"],"2026-12-18":["blauw","KR + pedagogisch project + oudercontact 2"],"2026-12-21":["geel","Kerstvakantie"],"2026-12-22":["geel","Kerstvakantie"],"2026-12-23":["geel","Kerstvakantie"],"2026-12-24":["geel","Kerstvakantie"],"2026-12-25":["geel","Kerstvakantie"],"2026-12-26":["geel","Kerstvakantie"],"2026-12-27":["geel","Kerstvakantie"],"2026-12-28":["geel","Kerstvakantie"],"2026-12-29":["geel","Kerstvakantie"],"2026-12-30":["geel","Kerstvakantie"],"2026-12-31":["geel","Kerstvakantie"],"2027-01-01":["geel","Kerstvakantie"],"2027-01-02":["geel","Kerstvakantie"],"2027-01-03":["geel","Kerstvakantie"],"2027-02-02":["blauw","OLVI in connectie 2"],"2027-02-04":["blauw","KR-dag 2 (afstandsonderwijs)"],"2027-02-08":["geel","Krokusvakantie"],"2027-02-09":["geel","Krokusvakantie"],"2027-02-10":["geel","Krokusvakantie"],"2027-02-11":["geel","Krokusvakantie"],"2027-02-12":["geel","Krokusvakantie"],"2027-02-13":["geel","Krokusvakantie"],"2027-02-14":["geel","Krokusvakantie"],"2027-02-24":["blauw","Leerlingencontact 2 (afstandsonderwijs)"],"2027-03-24":["blauw","KR (afstandsonderwijs)"],"2027-03-25":["blauw","KR (afstandsonderwijs)"],"2027-03-26":["blauw","KR + pedagogisch project + oudercontact 3"],"2027-03-29":["geel","Paasvakantie"],"2027-03-30":["geel","Paasvakantie"],"2027-03-31":["geel","Paasvakantie"],"2027-04-01":["geel","Paasvakantie"],"2027-04-02":["geel","Paasvakantie"],"2027-04-03":["geel","Paasvakantie"],"2027-04-04":["geel","Paasvakantie"],"2027-04-05":["geel","Paasvakantie"],"2027-04-06":["geel","Paasvakantie"],"2027-04-07":["geel","Paasvakantie"],"2027-04-08":["geel","Paasvakantie"],"2027-04-09":["geel","Paasvakantie"],"2027-04-10":["geel","Paasvakantie"],"2027-04-11":["geel","Paasvakantie"],"2027-05-01":["geel","Feest van de arbeid"],"2027-05-06":["geel","Hemelvaart"],"2027-05-07":["geel","Brugdag"],"2027-05-17":["geel","Pinkstermaandag + Offerfeest"],"2027-05-19":["blauw","Leerlingencontact 3 + rapport 6"],"2027-06-04":["blauw","OLVI in connectie 3"],"2027-06-23":["blauw","Cultuurdag"],"2027-06-24":["groen","DKR — leerlingen thuis"],"2027-06-25":["groen","DKR — leerlingen thuis"],"2027-06-28":["groen","DKR + proclamatie"],"2027-06-29":["blauw","DKR + oudercontact 4 + rapport 7"],"2027-06-30":["blauw","Laatste schooldag — leerlingencontact 4"],"2027-07-01":["geel","Zomervakantie"],"2027-07-02":["geel","Zomervakantie"],"2027-07-03":["geel","Zomervakantie"],"2027-07-04":["geel","Zomervakantie"],"2027-07-05":["geel","Zomervakantie"],"2027-07-06":["geel","Zomervakantie"],"2027-07-07":["geel","Zomervakantie"],"2027-07-08":["geel","Zomervakantie"],"2027-07-09":["geel","Zomervakantie"],"2027-07-10":["geel","Zomervakantie"],"2027-07-11":["geel","Zomervakantie"],"2027-07-12":["geel","Zomervakantie"],"2027-07-13":["geel","Zomervakantie"],"2027-07-14":["geel","Zomervakantie"],"2027-07-15":["geel","Zomervakantie"],"2027-07-16":["geel","Zomervakantie"],"2027-07-17":["geel","Zomervakantie"],"2027-07-18":["geel","Zomervakantie"],"2027-07-19":["geel","Zomervakantie"],"2027-07-20":["geel","Zomervakantie"],"2027-07-21":["geel","Zomervakantie"],"2027-07-22":["geel","Zomervakantie"],"2027-07-23":["geel","Zomervakantie"],"2027-07-24":["geel","Zomervakantie"],"2027-07-25":["geel","Zomervakantie"],"2027-07-26":["geel","Zomervakantie"],"2027-07-27":["geel","Zomervakantie"],"2027-07-28":["geel","Zomervakantie"],"2027-07-29":["geel","Zomervakantie"],"2027-07-30":["geel","Zomervakantie"],"2027-07-31":["geel","Zomervakantie"],"2027-08-01":["geel","Zomervakantie"],"2027-08-02":["geel","Zomervakantie"],"2027-08-03":["geel","Zomervakantie"],"2027-08-04":["geel","Zomervakantie"],"2027-08-05":["geel","Zomervakantie"],"2027-08-06":["geel","Zomervakantie"],"2027-08-07":["geel","Zomervakantie"],"2027-08-08":["geel","Zomervakantie"],"2027-08-09":["geel","Zomervakantie"],"2027-08-10":["geel","Zomervakantie"],"2027-08-11":["geel","Zomervakantie"],"2027-08-12":["geel","Zomervakantie"],"2027-08-13":["geel","Zomervakantie"],"2027-08-14":["geel","Zomervakantie"],"2027-08-15":["geel","Zomervakantie"],"2027-08-16":["geel","Zomervakantie"],"2027-08-17":["geel","Zomervakantie"],"2027-08-18":["geel","Zomervakantie"],"2027-08-19":["geel","Zomervakantie"],"2027-08-20":["geel","Zomervakantie"],"2027-08-21":["geel","Zomervakantie"],"2027-08-22":["geel","Zomervakantie"],"2027-08-23":["geel","Zomervakantie"],"2027-08-24":["geel","Zomervakantie"],"2027-08-25":["geel","Zomervakantie"],"2027-08-26":["geel","Zomervakantie"],"2027-08-27":["geel","Zomervakantie"],"2027-08-28":["geel","Zomervakantie"],"2027-08-29":["geel","Zomervakantie"],"2027-08-30":["geel","Zomervakantie"],"2027-08-31":["geel","Zomervakantie"]};
 function schoolIngesteld(){return !!(SCHOOL&&(SCHOOL.rooster||SCHOOL.geenles||SCHOOL.lesuren));}
 function LESUREN_(){const a=SCHOOL.lesuren;return (Array.isArray(a)&&a.length)?a:LESUREN_STANDAARD;}
 function ROOSTER_(){return SCHOOL.rooster||{};}
-function GEENLES_(){return SCHOOL.geenles||{};}
+function GEENLES_(){const g=SCHOOL.geenles;return (g&&Object.keys(g).length)?g:GEENLES_STANDAARD;}
 function KLAS_LK_(){return SCHOOL.klas_lk||{};}
 function LK_LIST_(){
   const uit=(SCHOOL.leerkrachten||[]).slice();
@@ -815,9 +822,9 @@ function renderLesbar(){
        welke dagen vrij zijn of welke klas je wanneer hebt, en dat is niet te zien
        aan het scherm: het lijkt gewoon of die functies er niet zijn. Daarom een
        zichtbare verwijzing naar het inlezen van het schoolbestand. */
-    if(!schoolIngesteld()&&!leegOnthaal()&&localStorage.getItem(LS_SCHOOLHINT)!=="weg"){
+    if(!Object.keys(ROOSTER_()).length&&!leegOnthaal()&&localStorage.getItem(LS_SCHOOLHINT)!=="weg"){
       const w=document.createElement("div");w.className="geenles vrij";w.style.cursor="pointer";
-      w.innerHTML='<b>Rooster en vrije dagen ontbreken</b><span>lees je schoolbestand in bij Instellingen &rsaquo; Back-up inlezen</span>';
+      w.innerHTML='<b>Je lessenrooster ontbreekt</b><span>lees je schoolbestand in bij Instellingen &rsaquo; Back-up inlezen</span>';
       w.onclick=()=>{switchTab("instellingen");setTimeout(()=>{const f=$("restorefile");if(f)f.click();},250);};
       const x=document.createElement("a");x.textContent="verbergen";
       x.style.cssText="display:block;font-size:11px;color:var(--muted);text-decoration:underline;margin-top:5px";
@@ -1321,14 +1328,32 @@ function setGes(naam,v){GES[state.klas+"|"+naam]=v;localStorage.setItem(LS_GES,J
 /* ---------- WATERLOOP: tijd -> punten ----------
    5 punten op de eigen norm, daarna een kwart punt minder per begonnen 15 seconden,
    met een bodem van 1 punt zolang de ronde is uitgelopen. Zelfde helling voor elke norm. */
+/* Tijden invoeren op een telefoon: het cijferklavier heeft vaak geen dubbelpunt.
+   Daarom aanvaarden we ook gewoon cijfers na elkaar, zoals op een chronometer:
+     11:30  11.30  11,30  11'30  11 30   ->  11 min 30 sec
+     1130   (3 of 4 cijfers: de laatste twee zijn seconden)
+     11     (1 of 2 cijfers: minuten, dus 11:00)
+   Seconden boven de 59 zijn een tikfout en worden geweigerd, zodat je het merkt
+   in plaats van een stil verkeerd punt te krijgen. */
 function parseTijd(str){
   if(str==null)return null;
-  const t=(""+str).trim();
+  let t=(""+str).trim();
   if(!t)return null;
-  let m=t.match(/^(\d{1,3})[:.'](\d{1,2})$/);
-  if(m)return parseInt(m[1],10)*60+parseInt(m[2],10);
-  m=t.match(/^(\d{1,3})$/);
-  if(m)return parseInt(m[1],10)*60;
+  let m=t.match(/^(\d{1,3})\s*[:.,'\u2019\s]\s*(\d{1,2})$/);
+  if(m){
+    const sec=parseInt(m[2],10);
+    if(sec>59)return null;
+    return parseInt(m[1],10)*60+sec;
+  }
+  m=t.match(/^(\d{1,4})$/);
+  if(m){
+    const c=m[1];
+    if(c.length<=2)return parseInt(c,10)*60;          /* 11  -> 11:00 */
+    const min=parseInt(c.slice(0,c.length-2),10);
+    const sec=parseInt(c.slice(-2),10);
+    if(sec>59)return null;                             /* 1175 is een tikfout */
+    return min*60+sec;                                 /* 1130 -> 11:30 */
+  }
   return null;
 }
 /* Het punt dat in Smartschool Skore ingegeven moet worden: de behaalde score op
@@ -1668,7 +1693,7 @@ function buildSheet(){
         if(o[0]===null){
           const inv=prompt("Eigen norm per ronde (mm:ss)",tijdTekst(huidig));
           const sec=parseTijd(inv);
-          if(sec==null||sec<120||sec>3600){if(inv!==null)toast("Geef een tijd als 12:30");return;}
+          if(sec==null||sec<120||sec>3600){if(inv!==null)toast("Geef een tijd als 12:30, of typ gewoon 1230");return;}
           state.data[naam].__norm=sec;
         } else state.data[naam].__norm=o[0];
         saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
@@ -1702,12 +1727,12 @@ function buildSheet(){
       const lab=document.createElement("span");lab.className="wllab";
       lab.textContent=door?("Na "+i):("Ronde "+i);
       const inp=document.createElement("input");inp.type="text";inp.className="wlinp";
-      inp.inputMode="numeric";inp.placeholder=door?tijdTekst(huidig*i):"11:30";
+      inp.inputMode="decimal";inp.placeholder=door?tijdTekst(huidig*i):"11:30";
       inp.value=state.data[naam]["__r"+i]||"";
       inp.onchange=()=>{
         const sec=parseTijd(inp.value);
         state.data[naam]["__r"+i]=(sec==null)?"":tijdTekst(sec);
-        if(inp.value.trim()&&sec==null)toast("Geef een tijd als 11:30");
+        if(inp.value.trim()&&sec==null)toast("Geef een tijd als 11:30, of typ gewoon 1130");
         saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
       const uit=document.createElement("span");uit.className="wlpt";
       const sec=laps[i-1];
@@ -2909,7 +2934,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v71";
+const APP_VERSION="v73";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
