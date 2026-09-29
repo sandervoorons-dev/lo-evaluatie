@@ -1364,11 +1364,28 @@ function normVan(naam){
   const n=parseInt(v,10);
   return (n>0)?n:(curRubriek().normen[0][0]);
 }
-function rondeTijden(naam){
-  const R=curRubriek(),uit=[];
-  for(let i=1;i<=(R.ronden||3);i++)uit.push(parseTijd(state.data[naam]["__r"+i]));
+/* Twee manieren om de tijden te noteren:
+   - "ronde"  : je geeft per ronde de rondetijd (chronometer per ronde opnieuw);
+   - "door"   : je laat de chronometer doorlopen en noteert de stand bij elke
+                doorkomst. De app trekt er dan zelf de rondetijden uit.
+   Oude evaluaties hebben geen tijdmodus en blijven dus "ronde". */
+function tijdModus(st){return (st&&st.tijdmodus==="door")?"door":"ronde";}
+function rondeTijdenVan(st,naam,R){
+  const n=(R.ronden||3), d=(st.data&&st.data[naam])||{}, ruw=[];
+  for(let i=1;i<=n;i++)ruw.push(parseTijd(d["__r"+i]));
+  if(tijdModus(st)!=="door")return ruw;
+  /* doorlopende standen -> rondetijden. Een ontbrekende of niet-oplopende stand
+     maakt die ene ronde onbruikbaar, niet de hele reeks. */
+  const uit=[];let vorige=0,vorigeOk=true;
+  for(let i=0;i<n;i++){
+    const t=ruw[i];
+    if(t==null){uit.push(null);vorigeOk=false;continue;}
+    uit.push((!vorigeOk||t<=vorige)?null:(t-vorige));
+    vorige=t;vorigeOk=true;
+  }
   return uit;
 }
+function rondeTijden(naam){return rondeTijdenVan(state,naam,curRubriek());}
 /* meting parsen + atletiek-omzetting meting -> /10 (lineaire interpolatie + extrapolatie, clamp 0-10) */
 function parseMeting(str){
   if(str==null)return null;
@@ -1661,14 +1678,31 @@ function buildSheet(){
       const e=document.createElement("div");e.className="wlnorm";
       e.textContent="Eigen norm: "+tijdTekst(huidig)+" per ronde";wrap.appendChild(e);
     }
-    const tl=document.createElement("div");tl.className="seglabel";tl.textContent="Rondetijden (mm:ss)";
+    const door=(tijdModus(state)==="door");
+    const tl=document.createElement("div");tl.className="seglabel";
+    tl.textContent=door?"Stand van de chrono bij elke doorkomst (mm:ss)":"Rondetijden (mm:ss)";
     wrap.appendChild(tl);
+    /* Laat de chronometer doorlopen? Dan noteer je standen, geen rondetijden. */
+    const mseg=document.createElement("div");mseg.className="seg";mseg.style.margin="0 0 9px";
+    [["ronde","Tijd per ronde"],["door","Chrono loopt door"]].forEach(o=>{
+      const b=document.createElement("div");b.textContent=o[1];
+      b.className="segopt"+((tijdModus(state)===o[0])?" on":"");
+      b.onclick=()=>{state.tijdmodus=o[0];saveState();buildSheet();renderStudents();renderOverview();};
+      mseg.appendChild(b);});
+    wrap.appendChild(mseg);
+    if(door){
+      const u=document.createElement("div");u.className="wlnorm";
+      u.textContent="Noteer de stand bij elke doorkomst. De app rekent de rondetijden er zelf uit.";
+      wrap.appendChild(u);
+    }
+    const laps=rondeTijden(naam);
     let som=0,ingevuld=0;
     for(let i=1;i<=(R.ronden||3);i++){
       const rij=document.createElement("div");rij.className="wlrij";
-      const lab=document.createElement("span");lab.className="wllab";lab.textContent="Ronde "+i;
+      const lab=document.createElement("span");lab.className="wllab";
+      lab.textContent=door?("Na "+i):("Ronde "+i);
       const inp=document.createElement("input");inp.type="text";inp.className="wlinp";
-      inp.inputMode="numeric";inp.placeholder="11:30";
+      inp.inputMode="numeric";inp.placeholder=door?tijdTekst(huidig*i):"11:30";
       inp.value=state.data[naam]["__r"+i]||"";
       inp.onchange=()=>{
         const sec=parseTijd(inp.value);
@@ -1676,13 +1710,26 @@ function buildSheet(){
         if(inp.value.trim()&&sec==null)toast("Geef een tijd als 11:30");
         saveState();autoOpslaan();buildSheet();renderStudents();renderOverview();};
       const uit=document.createElement("span");uit.className="wlpt";
-      const sec=parseTijd(state.data[naam]["__r"+i]);
+      const sec=laps[i-1];
+      const ingetikt=parseTijd(state.data[naam]["__r"+i]);
       const pnt=rondePunt(sec,huidig,R);
-      if(pnt==null)uit.innerHTML='<span class="wlleeg">\u2013</span>';
+      if(pnt==null){
+        /* Bij een doorlopende chrono kan een stand wel ingevuld zijn en toch
+           onbruikbaar: lager dan de vorige, of de vorige ontbreekt. */
+        if(door&&ingetikt!=null){
+          /* De stand is ingevuld maar levert geen rondetijd op. Zeg waarom:
+             ofwel ontbreekt de vorige stand, ofwel gaat deze achteruit. */
+          const vorigeStand=(i>1)?parseTijd(state.data[naam]["__r"+(i-1)]):0;
+          const reden=(i>1&&vorigeStand==null)?"vorige stand ontbreekt":"moet later zijn dan de vorige";
+          uit.innerHTML='<span class="wllaag" style="font-size:10.5px;line-height:1.25">'+reden+'</span>';
+        }
+        else uit.innerHTML='<span class="wlleeg">\u2013</span>';
+      }
       else{som+=pnt;ingevuld++;
         const boven=Math.max(0,sec-huidig);
         uit.innerHTML='<b class="'+(pnt>=R.perRonde?"wlvol":(pnt<=R.bodem?"wllaag":""))+'">'+
-          fmtPt(pnt)+'</b><span class="wlsub">'+(boven?("+"+tijdTekst(boven)):"op norm")+'</span>';}
+          fmtPt(pnt)+'</b><span class="wlsub">'+
+          (door?("ronde "+tijdTekst(sec)):(boven?("+"+tijdTekst(boven)):"op norm"))+'</span>';}
       rij.appendChild(lab);rij.appendChild(inp);rij.appendChild(uit);
       wrap.appendChild(rij);
     }
@@ -1777,6 +1824,7 @@ function buildCSV(){
     push(["Details/periode",state.spec||""]);
     push([]);
     push(["Punten per ronde: "+R.perRonde+" op de eigen norm, daarna 0,25 minder per begonnen "+R.stap+" seconden, bodem "+R.bodem+" als de ronde is uitgelopen."]);
+    if(tijdModus(state)==="door")push(["De tijden zijn ingegeven als doorlopende stand van de chronometer; de kolommen Ronde tonen de rondetijd die de app daaruit berekend heeft."]);
     push(["Leerplandoelen: "+(R.lpdTijd||"LPD 4")+" voor de tijden, "+R.inzet.lpd+" voor inzet."]);
     push([]);
     push(["Inzet & grenzen verleggen (0-"+R.inzet.max+")"]);
@@ -1998,6 +2046,7 @@ async function buildWeekXLSX(lijst){
       ws.addRow([]);
       if(R.type==="ronden"){
         ws.addRow(["Punten per ronde: "+R.perRonde+" op de eigen norm, daarna 0,25 minder per begonnen "+R.stap+" seconden, bodem "+R.bodem+" als de ronde is uitgelopen."]).font={bold:true};
+        if(tijdModus(st)==="door")ws.addRow(["De tijden zijn ingegeven als doorlopende stand van de chronometer; de kolommen Ronde tonen de rondetijd die de app daaruit berekend heeft."]).font={italic:true,color:{argb:TAUPE}};
         ws.addRow(["Leerplandoelen: "+(R.lpdTijd||"LPD 4")+" voor de tijden, "+R.inzet.lpd+" voor inzet."]);
         ws.addRow([]);
         styleHead(ws.addRow(["Inzet & grenzen verleggen","Omschrijving"]));
@@ -2364,8 +2413,9 @@ function leerlingGeschiedenis(naam){
     let beh=0,max=0,tel=0,det=[];
     if(R&&R.type==="ronden"){
       const norm=parseInt(st.data[naam].__norm,10)||R.normen[0][0];
+      const _laps=rondeTijdenVan(st,naam,R);
       for(let i=1;i<=(R.ronden||3);i++){
-        const sec=parseTijd(st.data[naam]["__r"+i]);
+        const sec=_laps[i-1];
         const pn=rondePunt(sec,norm,R);
         if(pn==null)continue;
         beh+=pn;max+=R.perRonde;tel++;
@@ -2859,7 +2909,7 @@ function openKlasPicker(){
 
 /* ---------- AFWEZIGHEDEN-REGISTER ---------- */
 const LS_REG="lo_reg_";
-const APP_VERSION="v70";
+const APP_VERSION="v71";
 const LS_FB="lo_feedback";
 function getFb(){try{return JSON.parse(localStorage.getItem(LS_FB))||[];}catch(e){return [];}}
 function saveFb(a){localStorage.setItem(LS_FB,JSON.stringify(a));}
